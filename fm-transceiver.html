@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FM Transceiver | Denys Shlyakhtovskyy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+
+    <h1>FM Transceiver</h1>
+
+    <p>
+      A low-power FM transceiver system designed around the Silicon Labs
+      Si4027 RF transceiver IC, focusing on RF hardware integration,
+      mixed-signal PCB design, and digital control of RF devices.
+    </p>
+
+    <h2>Project Objective</h2>
+    <p>
+      The objective of this project was to design and integrate a
+      functional FM transmitter and receiver using a commercially
+      available RF transceiver IC, while developing practical experience
+      with RF-aware PCB layout and digital configuration of RF hardware.
+    </p>
+
+    <h2>System Overview</h2>
+    <p>
+      The system consists of a custom-designed PCB hosting the Si4027
+      transceiver IC, supporting RF passives, audio input and output
+      stages, and a digital control interface. The board is housed in a
+      dedicated enclosure with external user controls and indicators.
+    </p>
+
+    <img src="assets/images/fm-transceiver-board.jpg"
+         alt="FM transceiver PCB using Si4027"
+         width="100%">
+
+    <h2>Transceiver IC Selection</h2>
+    <p>
+      The Silicon Labs Si4027 was selected due to its integrated FM
+      transmit and receive functionality, low power operation, and
+      suitability for short-range RF experimentation without requiring
+      fully discrete RF stages.
+    </p>
+
+    <h2>PCB Design & Hardware Integration</h2>
+    <p>
+      The PCB was designed with attention to RF layout considerations,
+      including component placement around the transceiver, separation
+      of analog, digital, and RF sections, and grounding strategies to
+      reduce noise coupling. External connectors were provided for
+      control, audio I/O, and system testing.
+    </p>
+
+    <h2>Digital Control & Initialization</h2>
+    <p>
+      The Si4027 is configured through a serial digital control interface
+      requiring correct timing, polarity, and configuration bit
+      selection during device initialization. Firmware was developed to
+      handle device startup and register configuration.
+    </p>
+
+    <h2>Integration Issue & Root Cause</h2>
+    <p>
+      During system integration, the transceiver failed to initialize
+      correctly. Investigation identified an incorrect configuration of
+      the control interface polarity bit, resulting in invalid
+      communication with the Si4027 during initialization. As a result,
+      the RF device could not be brought into an operational state
+      within the available project timeline.
+    </p>
+
+    <h2>Debugging & Engineering Takeaways</h2>
+    <ul>
+      <li>Strict adherence to RF IC digital interface timing and polarity requirements is critical</li>
+      <li>Small configuration errors can prevent full system bring-up despite correct hardware</li>
+      <li>Early validation of control interfaces can reduce late-stage integration risk</li>
+    </ul>
+
+    <h2>Future Work</h2>
+    <ul>
+      <li>Correct control interface polarity configuration and reattempt device initialization</li>
+      <li>Validate digital signaling using logic analysis during bring-up</li>
+      <li>Characterize RF performance after successful initialization</li>
+    </ul>
+
+    <p>
+      <a href="projects.html">← Back to projects</a>
+    </p>
+
+  </div>
+</body>
+</html>
