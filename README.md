@@ -9,11 +9,16 @@ embedded systems, instrumentation, hardware design, and data-driven measurement.
 ## Live Site
 https://denyshlya.github.io/portfolio/
 
-## Featured Project
+## Featured Projects
 **Ski Pressure Testing System**  
 A distributed force measurement system designed to characterize ski camber and
-pressure distribution using 50+ sensors, custom electronics, embedded firmware,
+pressure distribution using 135 sensors, custom electronics, embedded firmware,
 and a PC-based analysis pipeline.
+
+**FM Transceiver**  
+An RF compliant FM Transceiver pair enabling voice communication over short distances.
+Featuring a custom PCB controlled by a PIC24 MCU and Si4012 RF IC, custom enclosure, display and 18650 rechargable battery.
+
 
 ## Technologies Used
 - HTML / CSS (static site)
