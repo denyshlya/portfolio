@@ -1,27 +1,26 @@
+/* =========
+   Base
+   ========= */
+:root {
+  --bg: #fafafa;
+  --text: #222;
+  --muted: #555;
+  --border: #e5e5e5;
+  --card: #f2f2f2;
+  --link: #0066cc;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
                Roboto, Helvetica, Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background: #fafafa;
-  color: #222;
-}
-
-a.back {
-  display: inline-block;
-  margin: 8px 0 24px 0;   
-  font-size: 0.875rem;   
-  color: #58a6ff;        
-  text-decoration: none;
-  line-height: 1.5;
-}
-
-a.back:hover {
-  text-decoration: underline;
-}
-
-a.back:hover {
-  text-decoration: underline;
+  background: var(--bg);
+  color: var(--text);
 }
 
 .container {
@@ -30,30 +29,118 @@ a.back:hover {
   padding: 40px 20px;
 }
 
+/* =========
+   Typography
+   ========= */
 h1 {
   font-size: 2.2rem;
-  margin-bottom: 0.2em;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
 }
 
 h2 {
-  margin-top: 2.5rem;
+  margin: 2.2rem 0 0.6rem 0;
+  line-height: 1.25;
 }
 
-nav {
-  margin: 20px 0;
-}
-
-nav a {
-  margin-right: 15px;
-  text-decoration: none;
-  color: #0066cc;
-}
-
-nav a:hover {
-  text-decoration: underline;
+h3 {
+  margin: 1.4rem 0 0.4rem 0;
+  line-height: 1.3;
 }
 
 p {
+  margin: 0.75rem 0;
   line-height: 1.6;
   font-size: 1.05rem;
+}
+
+/* =========
+   Links / Nav
+   ========= */
+a {
+  color: var(--link);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+nav {
+  margin: 16px 0 22px 0;
+}
+
+nav a {
+  margin-right: 14px;
+}
+
+/* Back link helper */
+a.back {
+  display: inline-block;
+  margin: 8px 0 18px 0;
+  font-size: 0.95rem;
+}
+
+/* =========
+   Dividers
+   ========= */
+hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 26px 0;
+}
+
+/* =========
+   Cards / Meta blocks
+   ========= */
+.meta {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 16px;
+  border-radius: 8px;
+  margin: 16px 0 20px 0;
+  line-height: 1.5;
+  font-size: 0.98rem;
+}
+
+/* Optional: a generic “card” class you can reuse */
+.card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+/* =========
+   PDF Embed
+   ========= */
+.pdf-frame {
+  width: 100%;
+  height: calc(100vh - 260px); /* adjust if needed */
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: white;
+}
+
+.pdf-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.small-note {
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+/* =========
+   Images
+   ========= */
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  display: block;
 }
