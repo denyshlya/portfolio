@@ -59,7 +59,7 @@
   mount.appendChild(renderer.domElement);
 
 
-  // Lighting (CAD-like)
+
   const ambient = new THREE.AmbientLight(0xffffff, 0.6);
   scene.add(ambient);
 
@@ -67,7 +67,6 @@
   dirLight.position.set(100, -100, 200);
   scene.add(dirLight);
 
-  // Controls
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.dampingFactor = 0.08;
@@ -75,11 +74,40 @@
   controls.minDistance = 80;
   controls.maxDistance = 400;
 
-  // Load PCB
+
   const loader = new GLTFLoader();
-  loader.load('./assets/glb/PCB.glb', (gltf) => {
-    scene.add(gltf.scene);
-  });
+loader.load('./assets/glb/PCB.glb', (gltf) => {
+  const model = gltf.scene;
+  scene.add(model);
+
+
+  const box = new THREE.Box3().setFromObject(model);
+  const center = box.getCenter(new THREE.Vector3());
+  model.position.sub(center);
+
+
+  model.rotateX(Math.PI);
+
+
+  const tilt = THREE.MathUtils.degToRad(45);
+  model.rotation.x += tilt;
+  model.rotation.z += THREE.MathUtils.degToRad(25);
+
+
+  const size = box.getSize(new THREE.Vector3());
+  const maxDim = Math.max(size.x, size.y, size.z);
+  const fov = camera.fov * (Math.PI / 180);
+  const dist = (maxDim / 2) / Math.tan(fov / 2);
+
+
+  camera.position.set(0, -dist * 2.0, dist * 1.2);
+
+
+  controls.target.set(0, 0, 0);
+  camera.lookAt(controls.target);
+  controls.update();
+}, undefined, (err) => console.error(err));
+
 
   function animate() {
     requestAnimationFrame(animate);
@@ -100,6 +128,7 @@ window.addEventListener('resize', () => {
 
 </body>
 </html>
+
 
 
 
