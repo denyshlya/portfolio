@@ -75,11 +75,21 @@
   controls.minDistance = 80;
   controls.maxDistance = 400;
 
-  // Load PCB
-  const loader = new GLTFLoader();
-  loader.load('./assets/glb/PCB.glb', (gltf) => {
-    scene.add(gltf.scene);
-  });
+
+const loader = new GLTFLoader();
+loader.load('./assets/glb/PCB.glb', (gltf) => {
+  const model = gltf.scene;
+  scene.add(model);
+
+  const box = new THREE.Box3().setFromObject(model);
+  const center = box.getCenter(new THREE.Vector3());
+
+  model.position.sub(center);
+
+  controls.target.set(0, 0, 0);
+  controls.update();
+});
+
 
   function animate() {
     requestAnimationFrame(animate);
@@ -100,6 +110,7 @@ window.addEventListener('resize', () => {
 
 </body>
 </html>
+
 
 
 
