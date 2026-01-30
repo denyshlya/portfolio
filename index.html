@@ -65,6 +65,12 @@
   renderer.setPixelRatio(window.devicePixelRatio);
   mount.appendChild(renderer.domElement);
 
+   const hint = document.querySelector('#pcb-viewer .rotate-hint');
+   const hideHint = () => { if (hint) hint.style.display = 'none'; };
+
+  renderer.domElement.addEventListener('pointerdown', hideHint, { once: true });
+  renderer.domElement.addEventListener('wheel', hideHint, { once: true });
+
 
   // Lighting (CAD-like)
   const ambient = new THREE.AmbientLight(0xffffff, 0.6);
@@ -187,6 +193,7 @@ window.addEventListener('resize', () => {
 
 </body>
 </html>
+
 
 
 
