@@ -107,11 +107,22 @@ const loader = new GLTFLoader();
 loader.load('./assets/glb/PCB.glb', (gltf) => {
   const model = gltf.scene;
   scene.add(model);
-  model.traverse((obj) => {
+model.traverse((obj) => {
   if (!obj.isMesh) return;
+
+  // Default: components + board can shadow
   obj.castShadow = true;
   obj.receiveShadow = true;
+
+  // If it's your PNG overlay (transparent material), DON'T shadow it
+  const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
+  const isTransparent = mats.some(m => m && m.transparent);
+  if (isTransparent) {
+    obj.castShadow = false;
+    obj.receiveShadow = false;
+  }
 });
+
 
 
   // Center geometry at origin
@@ -166,6 +177,7 @@ window.addEventListener('resize', () => {
 
 </body>
 </html>
+
 
 
 
