@@ -30,7 +30,11 @@
     I design and build embedded measurement systems, PCBs,
     and data pipelines for real-world sensing problems.
   </p>
-    <div id="pcb-viewer"></div>
+    <div id="pcb-viewer">
+  <div class="rotate-hint" aria-hidden="true" title="Drag to rotate">
+    ⟳ Drag
+  </div>
+</div>
  <script type="module">
   import * as THREE from 'https://unpkg.com/three@0.161.0/build/three.module.js';
   import { GLTFLoader } from 'https://unpkg.com/three@0.161.0/examples/jsm/loaders/GLTFLoader.js';
@@ -41,7 +45,7 @@
   const scene = new THREE.Scene();
   const mount = document.getElementById('pcb-viewer');
 
-  scene.background = new THREE.Color(0x9aa0a6);
+  scene.background = new THREE.Color(0xffffff);
 
 
   const camera = new THREE.PerspectiveCamera(
@@ -183,6 +187,7 @@ window.addEventListener('resize', () => {
 
 </body>
 </html>
+
 
 
 
