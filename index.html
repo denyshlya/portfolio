@@ -5,6 +5,13 @@
   <meta charset="UTF-8" />
   <title>Denys Shlyakhtovskyy | Electrical Engineering</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.161.0/build/three.module.js"
+    }
+  }
+  </script>
 </head>
 <body>
   <link rel="stylesheet" href="style.css">
@@ -23,10 +30,11 @@
     and data pipelines for real-world sensing problems.
   </p>
     
-<script type="module">
+ <script type="module">
   import * as THREE from 'https://unpkg.com/three@0.161.0/build/three.module.js';
   import { GLTFLoader } from 'https://unpkg.com/three@0.161.0/examples/jsm/loaders/GLTFLoader.js';
   import { OrbitControls } from 'https://unpkg.com/three@0.161.0/examples/jsm/controls/OrbitControls.js';
+
 
 
   const scene = new THREE.Scene();
@@ -82,6 +90,7 @@
 </script>
 </body>
 </html>
+
 
 
 
