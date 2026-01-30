@@ -29,9 +29,7 @@ body {
   padding: 40px 20px;
 }
 
-/* =========
-   Typography
-   ========= */
+
 h1 {
   font-size: 2.2rem;
   margin: 0 0 0.5rem 0;
@@ -54,9 +52,7 @@ p {
   font-size: 1.05rem;
 }
 
-/* =========
-   Links / Nav
-   ========= */
+
 a {
   color: var(--link);
   text-decoration: none;
@@ -74,24 +70,19 @@ nav a {
   margin-right: 14px;
 }
 
-/* Back link helper */
+
 a.back {
   display: inline-block;
   margin-bottom: 24px;
 }
 
-/* =========
-   Dividers
-   ========= */
 hr {
   border: 0;
   border-top: 1px solid var(--border);
   margin: 26px 0;
 }
 
-/* =========
-   Cards / Meta blocks
-   ========= */
+
 .meta {
   background: var(--card);
   border: 1px solid var(--border);
@@ -102,7 +93,7 @@ hr {
   font-size: 0.98rem;
 }
 
-/* Optional: a generic “card” class you can reuse */
+
 .card {
   background: white;
   border: 1px solid var(--border);
@@ -110,9 +101,7 @@ hr {
   padding: 16px;
 }
 
-/* =========
-   PDF Embed
-   ========= */
+
 .pdf-frame {
   width: 100%;
   height: calc(100vh - 260px); /* adjust if needed */
@@ -134,12 +123,25 @@ hr {
   color: var(--muted);
 }
 
-/* =========
-   Images
-   ========= */
 img {
   max-width: 100%;
   height: auto;
   border-radius: 10px;
   display: block;
 }
+#pcb-viewer{
+  width: 100%;
+  max-width: 980px;
+  height: 520px;
+  margin: 24px auto 0;
+  background: #9aa0a6;         /* grey */
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px;
+  overflow: hidden;
+}
+#pcb-viewer canvas{
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
