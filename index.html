@@ -71,12 +71,11 @@
   scene.add(dirLight);
 
   // Camera-attached light (casts shadows from viewer direction)
-const camLight = new THREE.DirectionalLight(0xffffff, 0.9);
+// Camera-attached light
+const camLight = new THREE.DirectionalLight(0xffffff, 1.2);
 camLight.castShadow = true;
 
-// Shadow quality
-camLight.shadow.mapSize.width = 2048;
-camLight.shadow.mapSize.height = 2048;
+camLight.shadow.mapSize.set(2048, 2048);
 camLight.shadow.camera.near = 0.1;
 camLight.shadow.camera.far = 2000;
 camLight.shadow.camera.left = -300;
@@ -84,10 +83,17 @@ camLight.shadow.camera.right = 300;
 camLight.shadow.camera.top = 300;
 camLight.shadow.camera.bottom = -300;
 
-// Add light to camera so it moves with it
+camLight.shadow.bias = -0.0002;
+camLight.shadow.normalBias = 0.02;
+
+// Put the light slightly behind/above camera, point at center
+camLight.position.set(0, 0, 1);
+camLight.target.position.set(0, 0, 0);
+
 camera.add(camLight);
 camera.add(camLight.target);
 scene.add(camera);
+
 
 
   // Controls
@@ -177,6 +183,7 @@ window.addEventListener('resize', () => {
 
 </body>
 </html>
+
 
 
 
