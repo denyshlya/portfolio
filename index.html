@@ -22,8 +22,66 @@
     I design and build embedded measurement systems, PCBs,
     and data pipelines for real-world sensing problems.
   </p>
+    
+<script type="module">
+  import * as THREE from 'https://unpkg.com/three@0.161.0/build/three.module.js';
+  import { GLTFLoader } from 'https://unpkg.com/three@0.161.0/examples/jsm/loaders/GLTFLoader.js';
+  import { OrbitControls } from 'https://unpkg.com/three@0.161.0/examples/jsm/controls/OrbitControls.js';
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x0f172a);
+
+  const camera = new THREE.PerspectiveCamera(
+    45,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+  );
+  camera.position.set(0, -200, 150);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  document.body.appendChild(renderer.domElement);
+
+  // Lighting (CAD-like)
+  const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+  scene.add(ambient);
+
+  const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+  dirLight.position.set(100, -100, 200);
+  scene.add(dirLight);
+
+  // Controls
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+  controls.enablePan = false;
+  controls.minDistance = 80;
+  controls.maxDistance = 400;
+
+  // Load PCB
+  const loader = new GLTFLoader();
+  loader.load('./assets/pcb.glb', (gltf) => {
+    scene.add(gltf.scene);
+  });
+
+  function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+</script>
 </body>
 </html>
+
 
 
 
