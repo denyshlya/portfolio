@@ -82,14 +82,37 @@ loader.load('./assets/glb/PCB.glb', (gltf) => {
   const model = gltf.scene;
   scene.add(model);
 
+  // Center geometry at origin
   const box = new THREE.Box3().setFromObject(model);
   const center = box.getCenter(new THREE.Vector3());
-
   model.position.sub(center);
 
+  // Recompute box after centering (important)
+  const box2 = new THREE.Box3().setFromObject(model);
+  const size = box2.getSize(new THREE.Vector3());
+
+  // Determine "board normal" as the axis with smallest dimension (thickness)
+  // axis = 0->x, 1->y, 2->z
+  let axis = 0;
+  if (size.y < size.x) axis = 1;
+  if (size.z < (axis === 0 ? size.x : size.y)) axis = 2;
+
+  // Camera distance based on board size
+  const maxDim = Math.max(size.x, size.y, size.z);
+  const dist = maxDim * 1.4;
+
+  // Put camera "above" the board along the thickness axis
+  const pos = new THREE.Vector3(0, 0, 0);
+  if (axis === 0) pos.set(dist, 0, 0);   // thickness is X -> look along +X
+  if (axis === 1) pos.set(0, dist, 0);   // thickness is Y -> look along +Y
+  if (axis === 2) pos.set(0, 0, dist);   // thickness is Z -> look along +Z
+
+  camera.position.copy(pos);
   controls.target.set(0, 0, 0);
+  camera.lookAt(0, 0, 0);
   controls.update();
 });
+
 
 
   function animate() {
@@ -111,6 +134,7 @@ window.addEventListener('resize', () => {
 
 </body>
 </html>
+
 
 
 
