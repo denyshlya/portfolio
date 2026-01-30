@@ -55,6 +55,8 @@
 
 
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+   renderer.shadowMap.enabled = true;                 
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.setSize(mount.clientWidth, mount.clientHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
   mount.appendChild(renderer.domElement);
@@ -67,6 +69,26 @@
   const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
   dirLight.position.set(100, -100, 200);
   scene.add(dirLight);
+
+  // Camera-attached light (casts shadows from viewer direction)
+const camLight = new THREE.DirectionalLight(0xffffff, 0.9);
+camLight.castShadow = true;
+
+// Shadow quality
+camLight.shadow.mapSize.width = 2048;
+camLight.shadow.mapSize.height = 2048;
+camLight.shadow.camera.near = 0.1;
+camLight.shadow.camera.far = 2000;
+camLight.shadow.camera.left = -300;
+camLight.shadow.camera.right = 300;
+camLight.shadow.camera.top = 300;
+camLight.shadow.camera.bottom = -300;
+
+// Add light to camera so it moves with it
+camera.add(camLight);
+camera.add(camLight.target);
+scene.add(camera);
+
 
   // Controls
   const controls = new OrbitControls(camera, renderer.domElement);
@@ -85,6 +107,12 @@ const loader = new GLTFLoader();
 loader.load('./assets/glb/PCB.glb', (gltf) => {
   const model = gltf.scene;
   scene.add(model);
+  model.traverse((obj) => {
+  if (!obj.isMesh) return;
+  obj.castShadow = true;
+  obj.receiveShadow = true;
+});
+
 
   // Center geometry at origin
   const box = new THREE.Box3().setFromObject(model);
@@ -138,6 +166,7 @@ window.addEventListener('resize', () => {
 
 </body>
 </html>
+
 
 
 
