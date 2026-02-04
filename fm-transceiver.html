@@ -5,91 +5,102 @@
   <title>FM Transceiver | Denys Shlyakhtovskyy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="container">
 
-    <h1>FM Transceiver</h1>
+  
+  <style>
 
-    <p>
-      A low-power FM transceiver system designed around the Silicon Labs
-      Si4027 RF transceiver IC, focusing on RF hardware integration,
-      mixed-signal PCB design, and digital control of RF devices.
-    </p>
+    .overview {
+      max-width: 70ch;
+      line-height: 1.6;
+      margin: 10px 0 24px;
+      color: var(--muted);
+    }
 
-    <h2>Project Objective</h2>
-    <p>
-      The objective of this project was to design and integrate a
-      functional FM transmitter and receiver using a commercially
-      available RF transceiver IC, while developing practical experience
-      with RF-aware PCB layout and digital configuration of RF hardware.
-    </p>
+    .accordion {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
 
-    <h2>System Overview</h2>
-    <p>
-      The system consists of a custom-designed PCB hosting the Si4027
-      transceiver IC, supporting RF passives, audio input and output
-      stages, and a digital control interface. The board is housed in a
-      dedicated enclosure with external user controls and indicators.
-    </p>
 
-    <img src="assets/images/fm-transceiver-board.jpg"
-         alt="FM transceiver PCB using Si4027"
-         width="100%">
+    details.section {
+      background: transparent;      
+      border: 0;                      
+      border-radius: 10px;
+      overflow: clip;                   
+    }
 
-    <h2>Transceiver IC Selection</h2>
-    <p>
-      The Silicon Labs Si4027 was selected due to its integrated FM
-      transmit and receive functionality, low power operation, and
-      suitability for short-range RF experimentation without requiring
-      fully discrete RF stages.
-    </p>
+    summary.section-title {
+      list-style: none;
+      cursor: pointer;
+      user-select: none;
+      padding: 14px 0;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 12px;
+      color: var(--text);
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      position: relative;
+    }
 
-    <h2>PCB Design & Hardware Integration</h2>
-    <p>
-      The PCB was designed with attention to RF layout considerations,
-      including component placement around the transceiver, separation
-      of analog, digital, and RF sections, and grounding strategies to
-      reduce noise coupling. External connectors were provided for
-      control, audio I/O, and system testing.
-    </p>
+    
+    summary.section-title::-webkit-details-marker { display: none; }
 
-    <h2>Digital Control & Initialization</h2>
-    <p>
-      The Si4027 is configured through a serial digital control interface
-      requiring correct timing, polarity, and configuration bit
-      selection during device initialization. Firmware was developed to
-      handle device startup and register configuration.
-    </p>
 
-    <h2>Integration Issue & Root Cause</h2>
-    <p>
-      During system integration, the transceiver failed to initialize
-      correctly. Investigation identified an incorrect configuration of
-      the control interface polarity bit, resulting in invalid
-      communication with the Si4027 during initialization. As a result,
-      the RF device could not be brought into an operational state
-      within the available project timeline.
-    </p>
+    summary.section-title:hover {
+      opacity: 0.92;
+    }
 
-    <h2>Debugging & Engineering Takeaways</h2>
-    <ul>
-      <li>Strict adherence to RF IC digital interface timing and polarity requirements is critical</li>
-      <li>Small configuration errors can prevent full system bring-up despite correct hardware</li>
-      <li>Early validation of control interfaces can reduce late-stage integration risk</li>
-    </ul>
 
-    <h2>Future Work</h2>
-    <ul>
-      <li>Correct control interface polarity configuration and reattempt device initialization</li>
-      <li>Validate digital signaling using logic analysis during bring-up</li>
-      <li>Characterize RF performance after successful initialization</li>
-    </ul>
+    .chev {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.04);
+      transition: transform 220ms ease, background 220ms ease;
+      flex: 0 0 auto;
+    }
 
-    <p>
-      <a href="projects.html">← Back to projects</a>
-    </p>
 
-  </div>
-</body>
-</html>
+    .label {
+      display: inline-block;
+      transition: transform 260ms ease;
+      transform-origin: left center;
+    }
+
+
+    .rule {
+      height: 1px;
+      width: 0;
+      background: var(--border);
+      margin: 0 auto;
+      opacity: 0;
+      transition: width 260ms ease, opacity 180ms ease;
+    }
+
+    .content {
+      overflow: hidden;
+    }
+
+    .content-inner {
+      padding: 0 0 16px;
+      color: var(--text);
+    }
+
+    .content-inner p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 80ch;
+    }
+
+    .media {
+      margin-top: 12px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(0,0,0,0.03);
+      b
