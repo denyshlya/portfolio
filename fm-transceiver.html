@@ -21,11 +21,10 @@
 
     <hr>
 
-    <!-- Clickable label -->
     <a class="section-link" id="schematicsLink" href="#">Schematics</a>
 
-    <!-- Hidden content (animated). Your CSS should target .drop-panel / .is-open / .drop-inner -->
-    <div id="schematicsPanel" class="drop-panel" aria-hidden="true">
+    <!-- Start hidden so it never shows on page load -->
+    <div id="schematicsPanel" class="drop-panel" hidden aria-hidden="true">
       <div class="drop-inner">
         <h2>Schematics</h2>
         <p>(Drop your schematics content here)</p>
@@ -46,22 +45,37 @@
       }
 
       function openPanel(){
+        // make it participate in layout, then animate open
+        panel.hidden = false;
         panel.classList.add("is-open");
         panel.setAttribute("aria-hidden", "false");
+
+        // start collapsed so the transition can animate
+        panel.style.maxHeight = "0px";
+        panel.getBoundingClientRect(); // force reflow
+
         panel.style.maxHeight = panel.scrollHeight + "px";
       }
 
       function closePanel(){
-        // start from current height
+        // animate closed
         panel.style.maxHeight = panel.scrollHeight + "px";
         panel.getBoundingClientRect(); // force reflow
+
         panel.style.maxHeight = "0px";
         panel.classList.remove("is-open");
         panel.setAttribute("aria-hidden", "true");
+
+        // after animation, fully hide it so it can't flash
+        const onEnd = (e) => {
+          if (e.propertyName !== "max-height") return;
+          panel.removeEventListener("transitionend", onEnd);
+          panel.hidden = true;
+        };
+        panel.addEventListener("transitionend", onEnd);
       }
 
       function slideToCenterThenDrop(){
-        // ensure a real start frame exists
         link.style.transform = "translateX(0px)";
         link.getBoundingClientRect(); // force reflow
 
@@ -75,29 +89,32 @@
           link.removeEventListener("transitionend", onSlideEnd);
           openPanel();
         };
-
         link.addEventListener("transitionend", onSlideEnd);
       }
 
       function collapseThenSlideBack(){
         closePanel();
 
-        const onCollapseEnd = (e) => {
+        // slide back after we finish closing (use a timeout as a fallback)
+        const onCloseEnd = (e) => {
           if (e.propertyName !== "max-height") return;
-          panel.removeEventListener("transitionend", onCollapseEnd);
+          panel.removeEventListener("transitionend", onCloseEnd);
           link.style.transform = "translateX(0px)";
         };
+        panel.addEventListener("transitionend", onCloseEnd);
 
-        panel.addEventListener("transitionend", onCollapseEnd);
+        // fallback in case transitionend doesn't fire (rare)
+        setTimeout(() => {
+          if (!open) link.style.transform = "translateX(0px)";
+        }, 450);
       }
 
       link.addEventListener("click", (e) => {
         e.preventDefault();
-
         open = !open;
 
         if (open) {
-          link.classList.add("is-selected"); // stays grey (per your CSS)
+          link.classList.add("is-selected");
           slideToCenterThenDrop();
         } else {
           link.classList.remove("is-selected");
@@ -112,7 +129,7 @@
         link.style.transform = `translateX(${shift}px)`;
 
         // keep panel height correct while open
-        panel.style.maxHeight = panel.scrollHeight + "px";
+        if (!panel.hidden) panel.style.maxHeight = panel.scrollHeight + "px";
       });
     </script>
   </div>
