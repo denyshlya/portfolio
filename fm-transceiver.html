@@ -21,57 +21,100 @@
 
     <hr>
 
-    <!-- Make it a button-like link (no scrolling for now) -->
+    <!-- Clickable label -->
     <a class="section-link" id="schematicsLink" href="#">Schematics</a>
 
-   
-    <div id="schematicsContent" hidden>
-      <h2>Schematics</h2>
-      <p>(Drop your schematics content here)</p>
+    <!-- Hidden content (animated). Your CSS should target .drop-panel / .is-open / .drop-inner -->
+    <div id="schematicsPanel" class="drop-panel" aria-hidden="true">
+      <div class="drop-inner">
+        <h2>Schematics</h2>
+        <p>(Drop your schematics content here)</p>
+      </div>
     </div>
 
     <script>
-  const link = document.getElementById("schematicsLink");
-  let centered = false;
+      const link = document.getElementById("schematicsLink");
+      const panel = document.getElementById("schematicsPanel");
 
-  function shiftToViewportCenter(el){
-    const r = el.getBoundingClientRect();
-    const elCenter = r.left + r.width / 2;
-    const viewportCenter = window.innerWidth / 2;
-    return viewportCenter - elCenter;
-  }
+      let open = false;
 
-  function animateToCenter(){
-    // ensure we start from 0 on a real rendered frame
-    link.style.transform = "translateX(0px)";
+      function shiftToViewportCenter(el){
+        const r = el.getBoundingClientRect();
+        const elCenter = r.left + r.width / 2;
+        const viewportCenter = window.innerWidth / 2;
+        return viewportCenter - elCenter;
+      }
 
-    requestAnimationFrame(() => {
-      const shift = shiftToViewportCenter(link);
-      link.style.transform = `translateX(${shift}px)`;
-    });
-  }
+      function openPanel(){
+        panel.classList.add("is-open");
+        panel.setAttribute("aria-hidden", "false");
+        panel.style.maxHeight = panel.scrollHeight + "px";
+      }
 
-  link.addEventListener("click", (e) => {
-    e.preventDefault();
+      function closePanel(){
+        // start from current height
+        panel.style.maxHeight = panel.scrollHeight + "px";
+        panel.getBoundingClientRect(); // force reflow
+        panel.style.maxHeight = "0px";
+        panel.classList.remove("is-open");
+        panel.setAttribute("aria-hidden", "true");
+      }
 
-    centered = !centered;
+      function slideToCenterThenDrop(){
+        // ensure a real start frame exists
+        link.style.transform = "translateX(0px)";
+        link.getBoundingClientRect(); // force reflow
 
-    if (centered) {
-      link.classList.add("is-selected");
-      animateToCenter();
-    } else {
-      link.classList.remove("is-selected");
-      link.style.transform = "translateX(0px)";
-    }
-  });
+        requestAnimationFrame(() => {
+          const shift = shiftToViewportCenter(link);
+          link.style.transform = `translateX(${shift}px)`;
+        });
 
-  window.addEventListener("resize", () => {
-    if (!centered) return;
-    const shift = shiftToViewportCenter(link);
-    link.style.transform = `translateX(${shift}px)`;
-  });
-</script>
+        const onSlideEnd = (e) => {
+          if (e.propertyName !== "transform") return;
+          link.removeEventListener("transitionend", onSlideEnd);
+          openPanel();
+        };
 
+        link.addEventListener("transitionend", onSlideEnd);
+      }
+
+      function collapseThenSlideBack(){
+        closePanel();
+
+        const onCollapseEnd = (e) => {
+          if (e.propertyName !== "max-height") return;
+          panel.removeEventListener("transitionend", onCollapseEnd);
+          link.style.transform = "translateX(0px)";
+        };
+
+        panel.addEventListener("transitionend", onCollapseEnd);
+      }
+
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        open = !open;
+
+        if (open) {
+          link.classList.add("is-selected"); // stays grey (per your CSS)
+          slideToCenterThenDrop();
+        } else {
+          link.classList.remove("is-selected");
+          collapseThenSlideBack();
+        }
+      });
+
+      window.addEventListener("resize", () => {
+        if (!open) return;
+
+        const shift = shiftToViewportCenter(link);
+        link.style.transform = `translateX(${shift}px)`;
+
+        // keep panel height correct while open
+        panel.style.maxHeight = panel.scrollHeight + "px";
+      });
+    </script>
   </div>
 </body>
 </html>
