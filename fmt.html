@@ -105,26 +105,41 @@
       margin: 12px 0 6px;
     }
 
-    /* ===== panzoom ===== */
-    .panzoom{
-      position: relative;
-      width: 100%;
-      max-width: 900px;
-      margin: 0 auto;
-      overflow: visible;
-      cursor: grab;
-      user-select: none;
-      touch-action: none;
-    }
-    .panzoom:active{ cursor: grabbing; }
-    .panzoom-img{
-      display: block;
-      width: 100%;
-      height: auto;
-      border-radius: 10px;
-      transform-origin: 0 0;
-      will-change: transform;
-    }
+    /* ===== zoom ===== */
+.zoom-wrap{
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.zoom-img{
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+}
+
+.zoom-lens{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 220px;              /* overridden by data-lens */
+  height: 220px;
+  border: 2px solid #000;
+  border-radius: 14px;
+  background-repeat: no-repeat;
+  background-color: #fff;
+  pointer-events: none;
+
+  opacity: 0;
+  transform: translate(-9999px, -9999px);
+  transition: opacity 120ms ease;
+}
+
+.zoom-wrap:hover .zoom-lens{
+  opacity: 1;
+}
   </style>
 </head>
 
@@ -167,10 +182,12 @@ Several scope adjustments were made over the course of the project to improve fe
           <div class="drop-panel" id="sw-software-code" hidden aria-hidden="true">
             <div class="drop-inner">
 
-              <div class="panzoom" data-zoom="1.05">
-                <img class="panzoom-img" src="assets/photos/fm/soft-flow.png" alt="Software block diagram" draggable="false" />
-              </div>
-
+              <div class="zoom-wrap" data-zoom="2.0" data-lens="220">
+  <img class="zoom-img"
+       src="assets/photos/fm/soft-flow.png"
+       alt="Software block diagram" />
+  <div class="zoom-lens" aria-hidden="true"></div>
+</div>
               <p>
                 The system begins by initializing all modules and I/O ports before displaying key operating metrics on the graphical LCD. During normal operation, the transceiver remains in receive mode while continuously monitoring user inputs. The mode selection determines the function of the up and down buttons, allowing the user to change the active channel, adjust audio volume, or modify screen brightness. If the transmit button is pressed, the system temporarily switches to transmit mode and returns to receive mode once the button is released. This control loop repeats continuously to enable responsive, real-time interaction with the device.
               </p>
@@ -577,75 +594,80 @@ Several scope adjustments were made over the course of the project to improve fe
       });
 
       // ===== Pan/zoom =====
-      (function setupPanZoom(){
-        document.querySelectorAll(".panzoom").forEach((wrap) => {
-          const img = wrap.querySelector(".panzoom-img");
-          if (!img) return;
+     (function setupLensZoom(){
+  document.querySelectorAll(".zoom-wrap").forEach((wrap) => {
+    const img = wrap.querySelector(".zoom-img");
+    const lens = wrap.querySelector(".zoom-lens");
+    if (!img || !lens) return;
 
-          let scale = Number(wrap.dataset.zoom || 1.05);
-          const MIN = 1.0;
-          const MAX = 1.35;
-          const WHEEL_STEP = 0.08;
+    function getNum(attr, fallback){
+      const v = Number(wrap.dataset[attr]);
+      return Number.isFinite(v) ? v : fallback;
+    }
 
-          let tx = 0, ty = 0;
-          let dragging = false;
-          let startX = 0, startY = 0;
-          let startTX = 0, startTY = 0;
+    function syncLensSize(){
+      const s = getNum("lens", 220);
+      lens.style.width = s + "px";
+      lens.style.height = s + "px";
+      return s;
+    }
 
-          const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+    function updateBackground(){
+      // use rendered size so edges line up (no cutoff / no drift)
+      const r = img.getBoundingClientRect();
+      const zoom = getNum("zoom", 2.0);
 
-          function apply(){
-            img.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
-          }
+      lens.style.backgroundImage = `url(${img.src})`;
+      lens.style.backgroundSize = `${r.width * zoom}px ${r.height * zoom}px`;
+      return { r, zoom };
+    }
 
-          function setScale(newScale, anchorX, anchorY){
-            const prev = scale;
-            scale = clamp(newScale, MIN, MAX);
+    function setPos(e){
+      const { r, zoom } = updateBackground();
+      const lensSize = syncLensSize();
+      const half = lensSize / 2;
 
-            const ax = anchorX, ay = anchorY;
-            tx = ax - (ax - tx) * (scale / prev);
-            ty = ay - (ay - ty) * (scale / prev);
+      // pointer position relative to image
+      let x = e.clientX - r.left;
+      let y = e.clientY - r.top;
 
-            apply();
-          }
+      // clamp so the lens can reach the image edge without showing “outside”
+      x = Math.max(0, Math.min(x, r.width));
+      y = Math.max(0, Math.min(y, r.height));
 
-          if (img.complete) apply();
-          else img.addEventListener("load", apply, { once: true });
+      // lens position (relative to wrapper)
+      const lx = x - half;
+      const ly = y - half;
 
-          wrap.addEventListener("pointerdown", (e) => {
-            dragging = true;
-            wrap.setPointerCapture(e.pointerId);
-            startX = e.clientX;
-            startY = e.clientY;
-            startTX = tx;
-            startTY = ty;
-          });
+      lens.style.transform = `translate(${lx}px, ${ly}px)`;
 
-          wrap.addEventListener("pointermove", (e) => {
-            if (!dragging) return;
-            tx = startTX + (e.clientX - startX);
-            ty = startTY + (e.clientY - startY);
-            apply();
-          });
+      // background offset so the pixel under cursor is centered in the lens
+      const bx = -x * zoom + half;
+      const by = -y * zoom + half;
+      lens.style.backgroundPosition = `${bx}px ${by}px`;
+    }
 
-          function endDrag(e){
-            dragging = false;
-            try { wrap.releasePointerCapture(e.pointerId); } catch {}
-          }
-          wrap.addEventListener("pointerup", endDrag);
-          wrap.addEventListener("pointercancel", endDrag);
+    function onEnter(){
+      syncLensSize();
+      updateBackground();
+      lens.style.opacity = "1";
+    }
 
-          wrap.addEventListener("wheel", (e) => {
-            e.preventDefault();
-            const rect = wrap.getBoundingClientRect();
-            const ax = e.clientX - rect.left;
-            const ay = e.clientY - rect.top;
+    function onLeave(){
+      lens.style.opacity = "0";
+      lens.style.transform = "translate(-9999px, -9999px)";
+    }
 
-            const dir = e.deltaY > 0 ? -1 : 1;
-            setScale(scale + dir * WHEEL_STEP, ax, ay);
-          }, { passive: false });
-        });
-      })();
+    wrap.addEventListener("mouseenter", onEnter);
+    wrap.addEventListener("mousemove", setPos);
+    wrap.addEventListener("mouseleave", onLeave);
+
+    // if the page resizes, keep it accurate
+    window.addEventListener("resize", () => {
+      if (lens.style.opacity === "1") updateBackground();
+    });
+  });
+})();
 
       // keep centered on resize for both headers
       window.addEventListener("resize", () => {
