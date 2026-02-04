@@ -147,49 +147,54 @@ Several scope adjustments were made over the course of the project to improve fe
     <div id="panel-battery-management" class="drop-panel" hidden aria-hidden="true">
       <div class="drop-inner">
         <h3>Battery management</h3>
-        <p>(Drop content here)</p>
+        <p>The power supply block provides energy to the system and ensures safe battery operation. It includes the battery cell, a master disconnect switch for complete power isolation, and a battery management circuit that protects the cell and disconnects it under fault conditions.
+</p>
       </div>
     </div>
 
     <div id="panel-interrupts" class="drop-panel" hidden aria-hidden="true">
       <div class="drop-inner">
-        <h3>Interrupts</h3>
-        <p>(Drop content here)</p>
+        <h3>System inputs</h3>
+        <p>The system input block provides the primary user interface and power control for the device. It includes the microphone for audio input, user buttons for device control, and a main power switch that connects or disconnects the battery. These elements allow the user to interact with and operate the transceiver at a basic level.</p>
       </div>
     </div>
 
     <div id="panel-decoupling" class="drop-panel" hidden aria-hidden="true">
       <div class="drop-inner">
-        <h3>Decoupling</h3>
-        <p>(Drop content here)</p>
+        <h3>MCU support</h3>
+        <p>The MCU support block contains the circuitry required for stable and reliable microcontroller operation. It includes decoupling capacitors that filter supply noise and stabilize the MCU power rails, as well as a crystal oscillator that provides the system clock for internal timing and synchronization.</p>
       </div>
     </div>
 
     <div id="panel-glcd" class="drop-panel" hidden aria-hidden="true">
       <div class="drop-inner">
-        <h3>GLCD</h3>
-        <p>(Drop content here)</p>
+        <h3>Outputs</h3>
+        <p>The system output block includes the display and audio output components. A 1.3-inch screen, powered by the battery management system and controlled by the microcontroller, presents key system information to the user. Audio output is provided through a speaker driven by a dedicated amplifier, which plays the received signal from the RF backend.
+</p>
       </div>
     </div>
 
     <div id="panel-audio-amplifier" class="drop-panel" hidden aria-hidden="true">
       <div class="drop-inner">
         <h3>Audio amplifier</h3>
-        <p>(Drop content here)</p>
+        <p>The audio amplifier block boosts the received audio signal to a level suitable for driving the speaker. It interfaces directly with the RF backend and provides clear, audible output during receive operation.
+</p>
       </div>
     </div>
 
     <div id="panel-microcontroller" class="drop-panel" hidden aria-hidden="true">
       <div class="drop-inner">
         <h3>Microcontroller</h3>
-        <p>(Drop content here)</p>
+        <p>The MCU block serves as the central controller of the system. It processes user inputs, manages operating modes, and coordinates communication between the RF backend, display, and audio output. The microcontroller executes the system firmware and controls overall device behavior during both transmit and receive operation.
+</p>
       </div>
     </div>
 
     <div id="panel-transceiver" class="drop-panel" hidden aria-hidden="true">
       <div class="drop-inner">
-        <h3>Transceiver</h3>
-        <p>(Drop content here)</p>
+        <h3>RF backend</h3>
+        <p>The RF backend handles all wireless communication functions. A single transceiver IC manages both transmit and receive operation and is powered through the battery management system. The antenna interface is implemented using fixed and tunable matching components to provide proper impedance matching and efficient RF performance.
+</p>
       </div>
     </div>
   </div>
