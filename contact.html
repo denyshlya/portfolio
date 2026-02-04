@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contact | Denys Shlyakhtovskyy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* stack top-level headers vertically */
+    #contactLink{
+      display: block;
+      width: fit-content;
+      margin: 14px 0 8px 0;
+    }
+
+    .contact-list{
+      text-align: center;
+      margin-top: 8px;
+    }
+    .contact-list .section-link{
+      display: block;
+      width: 100%;
+      margin: 14px 0 8px 0;
+    }
+    .contact-list p{
+      text-align: center;
+      max-width: 60ch;
+      margin: 0 auto;
+    }
+    .contact-list a.inline-link{
+      color: var(--link);
+      text-decoration: none;
+      word-break: break-word;
+    }
+    .contact-list a.inline-link:hover{
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <a class="back" href="./index.html">← Back to Portfolio</a>
+
+    <h1>Contact</h1>
+
+    <p>
+      If you’d like to discuss engineering roles, projects, or collaboration opportunities,
+      the best ways to reach me are below.
+    </p>
+
+    <hr>
+
+    <!-- Main header -->
+    <a class="section-link" id="contactLink" href="#">Get in Touch</a>
+
+    <div id="contactPanel" class="drop-panel" hidden aria-hidden="true">
+      <div class="drop-inner">
+        <div class="contact-list">
+
+          <!-- Email -->
+          <a class="section-link" href="#" data-ct="email">Email</a>
+          <div class="drop-panel" id="ct-email" hidden aria-hidden="true">
+            <div class="drop-inner">
+              <p>
+                <a class="inline-link" href="mailto:denys@example.com">
+                  denys@example.com
+                </a>
+              </p>
+            </div>
+          </div>
+
+          <!-- Phone -->
+          <a class="section-link" href="#" data-ct="phone">Phone</a>
+          <div class="drop-panel" id="ct-phone" hidden aria-hidden="true">
+            <div class="drop-inner">
+              <p>
+                <a class="inline-link" href="tel:+11234567890">
+                  +1 (123) 456-7890
+                </a>
+              </p>
+            </div>
+          </div>
+
+          <!-- LinkedIn -->
+          <a class="section-link" href="#" data-ct="linkedin">LinkedIn</a>
+          <div class="drop-panel" id="ct-linkedin" hidden aria-hidden="true">
+            <div class="drop-inner">
+              <p>
+                <a class="inline-link" href="https://www.linkedin.com/in/your-linkedin/" target="_blank" rel="noopener">
+                  linkedin.com/in/your-linkedin
+                </a>
+              </p>
+            </div>
+          </div>
+
+          <!-- GitHub -->
+          <a class="section-link" href="#" data-ct="github">GitHub</a>
+          <div class="drop-panel" id="ct-github" hidden aria-hidden="true">
+            <div class="drop-inner">
+              <p>
+                <a class="inline-link" href="https://github.com/your-username" target="_blank" rel="noopener">
+                  github.com/your-username
+                </a>
+              </p>
+            </div>
+          </div>
+
+          <!-- Location (optional but good) -->
+          <a class="section-link" href="#" data-ct="location">Location</a>
+          <div class="drop-panel" id="ct-location" hidden aria-hidden="true">
+            <div class="drop-inner">
+              <p>
+                British Columbia, Canada<br>
+                Open to relocation (U.S. / Texas)
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // ===== helpers (same as other pages) =====
+      function shiftToViewportCenter(el){
+        const r = el.getBoundingClientRect();
+        const elCenter = r.left + r.width / 2;
+        const viewportCenter = window.innerWidth / 2;
+        return viewportCenter - elCenter;
+      }
+
+      function waitForTransition(el, prop){
+        return new Promise((resolve) => {
+          const onEnd = (e) => {
+            if (e.propertyName !== prop) return;
+            el.removeEventListener("transitionend", onEnd);
+            resolve();
+          };
+          el.addEventListener("transitionend", onEnd);
+        });
+      }
+
+      async function openPanel(panel){
+        panel.hidden = false;
+        panel.setAttribute("aria-hidden", "false");
+        panel.style.maxHeight = "0px";
+        panel.getBoundingClientRect();
+        panel.classList.add("is-open");
+        panel.style.maxHeight = panel.scrollHeight + "px";
+        await waitForTransition(panel, "max-height");
+        panel.style.maxHeight = "none";
+      }
+
+      async function closePanel(panel){
+        panel.style.maxHeight = panel.scrollHeight + "px";
+        panel.getBoundingClientRect();
+        panel.classList.remove("is-open");
+        panel.style.maxHeight = "0px";
+        await waitForTransition(panel, "max-height");
+        panel.hidden = true;
+        panel.setAttribute("aria-hidden", "true");
+      }
+
+      // ===== main contact section =====
+      const contactLink  = document.getElementById("contactLink");
+      const contactPanel = document.getElementById("contactPanel");
+
+      let open = false;
+      let sliding = false;
+
+      async function slideToCenter(){
+        if (sliding) return;
+        sliding = true;
+        contactLink.style.transform = "translateX(0px)";
+        contactLink.getBoundingClientRect();
+        requestAnimationFrame(() => {
+          contactLink.style.transform =
+            `translateX(${shiftToViewportCenter(contactLink)}px)`;
+        });
+        await waitForTransition(contactLink, "transform");
+        sliding = false;
+      }
+
+      async function slideBackLeft(){
+        if (sliding) return;
+        sliding = true;
+        contactLink.style.transform = "translateX(0px)";
+        await waitForTransition(contactLink, "transform");
+        sliding = false;
+      }
+
+      contactLink.addEventListener("click", async (e) => {
+        e.preventDefault();
+        if (sliding) return;
+
+        open = !open;
+
+        if (open){
+          contactLink.classList.add("is-selected");
+          await slideToCenter();
+          await openPanel(contactPanel);
+        } else {
+          contactPanel.querySelectorAll(".drop-panel").forEach(p => {
+            p.classList.remove("is-open");
+            p.hidden = true;
+            p.style.maxHeight = "0px";
+          });
+          contactPanel.querySelectorAll(".section-link")
+            .forEach(a => a.classList.remove("is-selected"));
+
+          await closePanel(contactPanel);
+          contactLink.classList.remove("is-selected");
+          await slideBackLeft();
+        }
+      });
+
+      // sub dropdowns
+      document.querySelectorAll("[data-ct]").forEach(btn => {
+        const key = btn.getAttribute("data-ct");
+        const panel = document.getElementById(`ct-${key}`);
+        if (!panel) return;
+
+        btn.addEventListener("click", async (e) => {
+          e.preventDefault();
+          if (contactPanel.hidden) return;
+
+          if (panel.hidden){
+            btn.classList.add("is-selected");
+            await openPanel(panel);
+          } else {
+            await closePanel(panel);
+            btn.classList.remove("is-selected");
+          }
+        });
+      });
+
+      window.addEventListener("resize", () => {
+        if (!open) return;
+        contactLink.style.transform =
+          `translateX(${shiftToViewportCenter(contactLink)}px)`;
+      });
+    </script>
+  </div>
+</body>
+</html>
