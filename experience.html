@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Professional Experience | Denys Shlyakhtovskyy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css">
+
+  <!-- page-only helpers (matches your dropdown/slide system) -->
+  <style>
+    /* stack top-level headers vertically */
+    #albertaLink,
+    #dbmLink{
+      display: block;
+      width: fit-content;
+      margin: 14px 0 8px 0;
+    }
+
+    /* keeps submenus vertical + centered like your other pages */
+    .schematics-list{
+      text-align: center;
+      margin-top: 8px;
+    }
+    .schematics-list .section-link{
+      display: block;
+      width: 100%;
+      margin: 14px 0 8px 0;
+    }
+    .schematics-list .drop-panel{
+      text-align: center;
+      margin: 0 auto 8px auto;
+      max-width: 70ch;
+    }
+    .schematics-list .drop-panel img{
+      margin: 0 auto;
+      display: block;
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+    .schematics-list .drop-panel p{
+      text-align: center;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- change href if you want this to go back to index.html instead -->
+    <a class="back" href="./index.html">← Back to Portfolio</a>
+
+    <h1>Professional Experience</h1>
+
+    <p>
+      Selected roles highlighting hands-on communications work, RF systems, field operations,
+      troubleshooting, and reliability-focused practices.
+    </p>
+
+    <hr>
+
+    <!-- ===== Government of Alberta ===== -->
+    <a class="section-link" id="albertaLink" href="#">Government of Alberta</a>
+
+    <div id="albertaPanel" class="drop-panel" hidden aria-hidden="true">
+      <div class="drop-inner">
+        <div class="schematics-list">
+
+          <a class="section-link" href="#" data-ab="overview">Overview</a>
+          <div class="drop-panel" id="ab-overview" hidden aria-hidden="true">
+            <div class="drop-inner">
+              <p>
+                (Write a short overview here: role title, wildfire communications technician,
+                scope of responsibilities, systems supported, reliability/safety context, etc.)
+              </p>
+            </div>
+          </div>
+
+          <a class="section-link" href="#" data-ab="photos">Photos</a>
+          <div class="drop-panel" id="ab-photos" hidden aria-hidden="true">
+            <div class="drop-inner">
+              <!-- Replace with your real images -->
+              <img src="assets/photos/experience/alberta-1.jpg" alt="Government of Alberta work photo">
+              <p>(Caption / context for photo)</p>
+
+              <img src="assets/photos/experience/alberta-2.jpg" alt="Government of Alberta work photo">
+              <p>(Caption / context for photo)</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== dBm Communications ===== -->
+    <a class="section-link" id="dbmLink" href="#">dBm Communications</a>
+
+    <div id="dbmPanel" class="drop-panel" hidden aria-hidden="true">
+      <div class="drop-inner">
+        <div class="schematics-list">
+
+          <a class="section-link" href="#" data-db="overview">Overview</a>
+          <div class="drop-panel" id="db-overview" hidden aria-hidden="true">
+            <div class="drop-inner">
+              <p>
+                (Write a short overview here: role title, type of work, tools/equipment,
+                installs/service, troubleshooting, documentation, etc.)
+              </p>
+            </div>
+          </div>
+
+          <a class="section-link" href="#" data-db="photos">Photos</a>
+          <div class="drop-panel" id="db-photos" hidden aria-hidden="true">
+            <div class="drop-inner">
+              <!-- Replace with your real images -->
+              <img src="assets/photos/experience/dbm-1.jpg" alt="dBm Communications work photo">
+              <p>(Caption / context for photo)</p>
+
+              <img src="assets/photos/experience/dbm-2.jpg" alt="dBm Communications work photo">
+              <p>(Caption / context for photo)</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // ===== helpers (ONLY ONCE) =====
+      function shiftToViewportCenter(el){
+        const r = el.getBoundingClientRect();
+        const elCenter = r.left + r.width / 2;
+        const viewportCenter = window.innerWidth / 2;
+        return viewportCenter - elCenter;
+      }
+
+      function waitForTransition(el, prop){
+        return new Promise((resolve) => {
+          const onEnd = (e) => {
+            if (e.propertyName !== prop) return;
+            el.removeEventListener("transitionend", onEnd);
+            resolve();
+          };
+          el.addEventListener("transitionend", onEnd);
+        });
+      }
+
+      async function openPanel(panel){
+        panel.hidden = false;
+        panel.setAttribute("aria-hidden", "false");
+
+        panel.style.maxHeight = "0px";
+        panel.getBoundingClientRect();
+
+        panel.classList.add("is-open");
+        panel.style.maxHeight = panel.scrollHeight + "px";
+
+        await waitForTransition(panel, "max-height");
+        panel.style.maxHeight = "none";
+      }
+
+      async function closePanel(panel){
+        panel.style.maxHeight = panel.scrollHeight + "px";
+        panel.getBoundingClientRect();
+
+        panel.classList.remove("is-open");
+        panel.style.maxHeight = "0px";
+
+        await waitForTransition(panel, "max-height");
+
+        panel.hidden = true;
+        panel.setAttribute("aria-hidden", "true");
+      }
+
+      // ===== generic top-level slider (reused for both) =====
+      function setupTopSlider(linkId, panelId, subAttr){
+        const link  = document.getElementById(linkId);
+        const panel = document.getElementById(panelId);
+
+        let open = false;
+        let sliding = false;
+
+        async function slideToCenter(){
+          if (sliding) return;
+          sliding = true;
+
+          link.style.transform = "translateX(0px)";
+          link.getBoundingClientRect();
+
+          requestAnimationFrame(() => {
+            const shift = shiftToViewportCenter(link);
+            link.style.transform = `translateX(${shift}px)`;
+          });
+
+          await waitForTransition(link, "transform");
+          sliding = false;
+        }
+
+        async function slideBackLeft(){
+          if (sliding) return;
+          sliding = true;
+
+          link.style.transform = "translateX(0px)";
+          await waitForTransition(link, "transform");
+          sliding = false;
+        }
+
+        link.addEventListener("click", async (e) => {
+          e.preventDefault();
+          if (sliding) return;
+
+          open = !open;
+
+          if (open){
+            link.classList.add("is-selected");
+            await slideToCenter();
+            await openPanel(panel);
+          } else {
+            // close nested panels inside this top panel
+            panel.querySelectorAll(".drop-panel").forEach((p) => {
+              p.classList.remove("is-open");
+              p.style.maxHeight = "0px";
+              p.hidden = true;
+              p.setAttribute("aria-hidden", "true");
+            });
+            panel.querySelectorAll(".section-link").forEach((a) => a.classList.remove("is-selected"));
+
+            await closePanel(panel);
+            link.classList.remove("is-selected");
+            await slideBackLeft();
+          }
+        });
+
+        // sub dropdowns inside this section
+        panel.querySelectorAll(`[${subAttr}]`).forEach((btn) => {
+          const key = btn.getAttribute(subAttr);
+          const subPanelId =
+            subAttr === "data-ab" ? `ab-${key}` :
+            subAttr === "data-db" ? `db-${key}` : null;
+
+          const subPanel = document.getElementById(subPanelId);
+          if (!subPanel) return;
+
+          btn.addEventListener("click", async (e) => {
+            e.preventDefault();
+            if (panel.hidden) return;
+
+            if (subPanel.hidden){
+              btn.classList.add("is-selected");
+              await openPanel(subPanel);
+            } else {
+              await closePanel(subPanel);
+              btn.classList.remove("is-selected");
+            }
+          });
+        });
+
+        // keep centered on resize
+        window.addEventListener("resize", () => {
+          if (!open) return;
+          link.style.transform = `translateX(${shiftToViewportCenter(link)}px)`;
+          if (!panel.hidden && panel.style.maxHeight !== "none") {
+            panel.style.maxHeight = panel.scrollHeight + "px";
+          }
+        });
+      }
+
+      // init both sections
+      setupTopSlider("albertaLink", "albertaPanel", "data-ab");
+      setupTopSlider("dbmLink", "dbmPanel", "data-db");
+    </script>
+  </div>
+</body>
+</html>
