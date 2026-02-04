@@ -30,13 +30,14 @@
       margin-top: 10px;
     }
     /* make top-level headers stack vertically */
-  #schematicsLink,
-  #softwareLink{
-  display: block;
-  width: 100%;
-  text-align: center;
-  margin: 14px 0 8px 0; /* same rhythm as the list */
+/* stack the two top-level headers vertically without changing their width */
+#schematicsLink,
+#softwareLink{
+  display: block;         /* forces new line */
+  width: fit-content;     /* keeps natural width so centering math works */
+  margin: 14px 0 8px 0;   /* vertical rhythm */
 }
+
 
   </style>
 </head>
