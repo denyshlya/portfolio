@@ -188,28 +188,29 @@ img {
 }
 
 .section-link:hover{
-  color: #777;                   /* slightly less grey on hover */
+  color: #777;                 
   text-decoration: none;
 }
-.section-link {
+.section-link{
   display: inline-block;
-  font-size: 1.15rem;            /* ~1pt smaller than h2 */
+  font-size: 1.15rem;
   font-weight: 600;
-  margin: 2.2rem 0 0.6rem 0;     /* same vertical rhythm as h2 */
+  margin: 2.2rem 0 0.6rem 0;
   line-height: 1.25;
-  color: var(--link);
+
+  color: var(--muted);
   text-decoration: none;
 
-
-  transition: color 0.15s ease, transform 320ms ease;
+  transform: translateX(0); 
+  transition: transform 320ms ease, color 160ms ease;
   will-change: transform;
 }
 
-
-.section-link:hover {
-  color: var(--muted);
+.section-link:hover{
+  color: #777;
   text-decoration: none;
 }
+
 
 
 .section-link.is-centered{
