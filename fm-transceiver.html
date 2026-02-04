@@ -21,23 +21,103 @@
 
     <hr>
 
-    <!-- Header button -->
+    <!-- Main header button -->
     <a class="section-link" id="schematicsLink" href="#">Schematics</a>
 
-    <!-- Dropdown content (hidden on load; animated open/close) -->
+    <!-- Main dropdown content (hidden on load; animated open/close) -->
     <div id="schematicsPanel" class="drop-panel" hidden aria-hidden="true">
       <div class="drop-inner">
-        <p>(Drop your schematics content here)</p>
+
+        <!-- Sub-dropdowns -->
+        <a class="section-link" href="#" data-dd="battery-management">Battery management</a>
+        <div class="drop-panel" id="dd-battery-management" hidden aria-hidden="true">
+          <div class="drop-inner">
+            <p>(Drop content here)</p>
+          </div>
+        </div>
+
+        <a class="section-link" href="#" data-dd="voltage-regulator">Voltage regulator</a>
+        <div class="drop-panel" id="dd-voltage-regulator" hidden aria-hidden="true">
+          <div class="drop-inner">
+            <p>(Drop content here)</p>
+          </div>
+        </div>
+
+        <a class="section-link" href="#" data-dd="battery-percentage">Battery percentage</a>
+        <div class="drop-panel" id="dd-battery-percentage" hidden aria-hidden="true">
+          <div class="drop-inner">
+            <p>(Drop content here)</p>
+          </div>
+        </div>
+
+        <a class="section-link" href="#" data-dd="microcontroller">Microcontroller</a>
+        <div class="drop-panel" id="dd-microcontroller" hidden aria-hidden="true">
+          <div class="drop-inner">
+            <p>(Drop content here)</p>
+          </div>
+        </div>
+
+        <a class="section-link" href="#" data-dd="glcd">GLCD</a>
+        <div class="drop-panel" id="dd-glcd" hidden aria-hidden="true">
+          <div class="drop-inner">
+            <p>(Drop content here)</p>
+          </div>
+        </div>
+
+        <a class="section-link" href="#" data-dd="interrupts">Interrupts</a>
+        <div class="drop-panel" id="dd-interrupts" hidden aria-hidden="true">
+          <div class="drop-inner">
+            <p>(Drop content here)</p>
+          </div>
+        </div>
+
+        <a class="section-link" href="#" data-dd="icsp">ICSP</a>
+        <div class="drop-panel" id="dd-icsp" hidden aria-hidden="true">
+          <div class="drop-inner">
+            <p>(Drop content here)</p>
+          </div>
+        </div>
+
+        <a class="section-link" href="#" data-dd="reset">Reset</a>
+        <div class="drop-panel" id="dd-reset" hidden aria-hidden="true">
+          <div class="drop-inner">
+            <p>(Drop content here)</p>
+          </div>
+        </div>
+
+        <a class="section-link" href="#" data-dd="decoupling">Decoupling</a>
+        <div class="drop-panel" id="dd-decoupling" hidden aria-hidden="true">
+          <div class="drop-inner">
+            <p>(Drop content here)</p>
+          </div>
+        </div>
+
+        <a class="section-link" href="#" data-dd="transceiver">Transceiver</a>
+        <div class="drop-panel" id="dd-transceiver" hidden aria-hidden="true">
+          <div class="drop-inner">
+            <p>(Drop content here)</p>
+          </div>
+        </div>
+
+        <a class="section-link" href="#" data-dd="crystal-oscillator">Crystal oscillator</a>
+        <div class="drop-panel" id="dd-crystal-oscillator" hidden aria-hidden="true">
+          <div class="drop-inner">
+            <p>(Drop content here)</p>
+          </div>
+        </div>
+
+        <a class="section-link" href="#" data-dd="audio-amplifier">Audio amplifier</a>
+        <div class="drop-panel" id="dd-audio-amplifier" hidden aria-hidden="true">
+          <div class="drop-inner">
+            <p>(Drop content here)</p>
+          </div>
+        </div>
+
       </div>
     </div>
 
     <script>
-      const link = document.getElementById("schematicsLink");
-      const panel = document.getElementById("schematicsPanel");
-
-      let open = false;
-      let sliding = false;
-
+      // -------- helpers --------
       function shiftToViewportCenter(el){
         const r = el.getBoundingClientRect();
         const elCenter = r.left + r.width / 2;
@@ -56,53 +136,23 @@
         });
       }
 
-      async function slideToCenter(){
-        if (sliding) return;
-        sliding = true;
-
-        link.style.transform = "translateX(0px)";
-        link.getBoundingClientRect(); // force reflow so animation triggers
-
-        requestAnimationFrame(() => {
-          const shift = shiftToViewportCenter(link);
-          link.style.transform = `translateX(${shift}px)`;
-        });
-
-        await waitForTransition(link, "transform");
-        sliding = false;
-      }
-
-      async function slideBackLeft(){
-        if (sliding) return;
-        sliding = true;
-
-        link.style.transform = "translateX(0px)";
-        await waitForTransition(link, "transform");
-
-        sliding = false;
-      }
-
-      async function openPanel(){
-        // Make visible but start collapsed, then animate down
+      async function openPanel(panel){
         panel.hidden = false;
         panel.setAttribute("aria-hidden", "false");
 
         panel.style.maxHeight = "0px";
-        panel.getBoundingClientRect(); // force reflow
+        panel.getBoundingClientRect(); // reflow
 
         panel.classList.add("is-open");
         panel.style.maxHeight = panel.scrollHeight + "px";
 
         await waitForTransition(panel, "max-height");
-
-        // Let it breathe after open (responsive to content changes)
         panel.style.maxHeight = "none";
       }
 
-      async function closePanel(){
-        // If maxHeight is none, set it to actual px first so it can animate
+      async function closePanel(panel){
         panel.style.maxHeight = panel.scrollHeight + "px";
-        panel.getBoundingClientRect(); // force reflow
+        panel.getBoundingClientRect(); // reflow
 
         panel.classList.remove("is-open");
         panel.style.maxHeight = "0px";
@@ -113,35 +163,96 @@
         panel.setAttribute("aria-hidden", "true");
       }
 
-      link.addEventListener("click", async (e) => {
+      // -------- main Schematics behavior --------
+      const schematicsLink = document.getElementById("schematicsLink");
+      const schematicsPanel = document.getElementById("schematicsPanel");
+
+      let schematicsOpen = false;
+      let sliding = false;
+
+      async function slideToCenter(link){
+        if (sliding) return;
+        sliding = true;
+
+        link.style.transform = "translateX(0px)";
+        link.getBoundingClientRect(); // reflow
+
+        requestAnimationFrame(() => {
+          const shift = shiftToViewportCenter(link);
+          link.style.transform = `translateX(${shift}px)`;
+        });
+
+        await waitForTransition(link, "transform");
+        sliding = false;
+      }
+
+      async function slideBackLeft(link){
+        if (sliding) return;
+        sliding = true;
+
+        link.style.transform = "translateX(0px)";
+        await waitForTransition(link, "transform");
+
+        sliding = false;
+      }
+
+      schematicsLink.addEventListener("click", async (e) => {
         e.preventDefault();
         if (sliding) return;
 
-        open = !open;
+        schematicsOpen = !schematicsOpen;
 
-        if (open) {
-          link.classList.add("is-selected");
-          await slideToCenter();
-          await openPanel();
+        if (schematicsOpen) {
+          schematicsLink.classList.add("is-selected");
+          await slideToCenter(schematicsLink);
+          await openPanel(schematicsPanel);
         } else {
-          // close first, then slide back
-          await closePanel();
-          link.classList.remove("is-selected");
-          await slideBackLeft();
+          // close all sub-panels too
+          document.querySelectorAll("#schematicsPanel .drop-panel").forEach((p) => {
+            if (!p.hidden) {
+              p.classList.remove("is-open");
+              p.style.maxHeight = "0px";
+              p.hidden = true;
+              p.setAttribute("aria-hidden", "true");
+            }
+          });
+
+          await closePanel(schematicsPanel);
+          schematicsLink.classList.remove("is-selected");
+          await slideBackLeft(schematicsLink);
         }
       });
 
       window.addEventListener("resize", () => {
-        if (!open) return;
+        if (!schematicsOpen) return;
 
-        // keep centered while open
-        const shift = shiftToViewportCenter(link);
-        link.style.transform = `translateX(${shift}px)`;
+        const shift = shiftToViewportCenter(schematicsLink);
+        schematicsLink.style.transform = `translateX(${shift}px)`;
 
-        // keep dropdown height correct if content is visible
-        if (!panel.hidden && panel.style.maxHeight !== "none") {
-          panel.style.maxHeight = panel.scrollHeight + "px";
+        if (!schematicsPanel.hidden && schematicsPanel.style.maxHeight !== "none") {
+          schematicsPanel.style.maxHeight = schematicsPanel.scrollHeight + "px";
         }
+      });
+
+      // -------- sub dropdowns inside schematics --------
+      document.querySelectorAll('[data-dd]').forEach((btn) => {
+        const key = btn.getAttribute("data-dd");
+        const panel = document.getElementById(`dd-${key}`);
+
+        btn.addEventListener("click", async (e) => {
+          e.preventDefault();
+
+          // only operate if schematics section is open
+          if (schematicsPanel.hidden) return;
+
+          if (panel.hidden) {
+            btn.classList.add("is-selected");
+            await openPanel(panel);
+          } else {
+            await closePanel(panel);
+            btn.classList.remove("is-selected");
+          }
+        });
       });
     </script>
   </div>
