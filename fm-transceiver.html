@@ -89,7 +89,159 @@ Several scope adjustments were made over the course of the project to improve fe
        <a class="section-link" href="#" data-sw="block-diagram">Block Diagram</a>
       <div class="drop-panel" id="sw-block-diagram" hidden aria-hidden="true">
         <div class="drop-inner">
-          <p>(Drop code snippets or links here)</p>
+          <!--DROPDOWN START-->
+<!-- Interactive subsystem diagram -->
+<section class="subsystem-map">
+  <div class="map-wrap" aria-label="Subsystem diagram">
+    <img
+      src="assets/photos/fm/block-diagram.png"
+      alt="FM Transceiver subsystem block diagram"
+    />
+
+    <!-- SVG overlay: viewBox matches your screenshot size (872 x 804) -->
+    <svg class="map-overlay" viewBox="0 0 872 804" aria-hidden="true">
+      <!-- BATTERY MANAGEMENT (Battery + Power Switch + BAT.MAN.) -->
+      <rect class="hot" data-target="battery-management"
+            x="70" y="165" width="740" height="145" rx="18" />
+
+      <!-- INTERRUPTS / BUTTONS (Buttons + MIC area) -->
+      <rect class="hot" data-target="interrupts"
+            x="270" y="25" width="330" height="160" rx="18" />
+
+      <!-- CRYSTAL OSCILLATOR + DECOUPLING (left cyan block) -->
+      <rect class="hot" data-target="crystal-oscillator"
+            x="85" y="300" width="185" height="160" rx="18" />
+      <rect class="hot" data-target="decoupling"
+            x="85" y="300" width="185" height="160" rx="18" />
+
+      <!-- GLCD / SCREEN (left black dashed) -->
+      <rect class="hot" data-target="glcd"
+            x="75" y="450" width="260" height="130" rx="18" />
+
+      <!-- AUDIO AMPLIFIER (center) -->
+      <rect class="hot" data-target="audio-amplifier"
+            x="310" y="330" width="255" height="165" rx="18" />
+
+      <!-- MICROCONTROLLER (bottom center) -->
+      <rect class="hot" data-target="microcontroller"
+            x="330" y="610" width="230" height="120" rx="18" />
+
+      <!-- TRANSCEIVER (right magenta block: RX/TX + Z match + Antenna) -->
+      <rect class="hot" data-target="transceiver"
+            x="590" y="320" width="240" height="420" rx="18" />
+    </svg>
+  </div>
+
+  <!-- Dropdown panels (one per subsystem) -->
+  <div class="map-panels">
+    <div id="panel-battery-management" class="drop-panel" hidden aria-hidden="true">
+      <div class="drop-inner">
+        <h3>Battery management</h3>
+        <p>(Drop content here)</p>
+      </div>
+    </div>
+
+    <div id="panel-interrupts" class="drop-panel" hidden aria-hidden="true">
+      <div class="drop-inner">
+        <h3>Interrupts</h3>
+        <p>(Drop content here)</p>
+      </div>
+    </div>
+
+    <div id="panel-crystal-oscillator" class="drop-panel" hidden aria-hidden="true">
+      <div class="drop-inner">
+        <h3>Crystal oscillator</h3>
+        <p>(Drop content here)</p>
+      </div>
+    </div>
+
+    <div id="panel-decoupling" class="drop-panel" hidden aria-hidden="true">
+      <div class="drop-inner">
+        <h3>Decoupling</h3>
+        <p>(Drop content here)</p>
+      </div>
+    </div>
+
+    <div id="panel-glcd" class="drop-panel" hidden aria-hidden="true">
+      <div class="drop-inner">
+        <h3>GLCD</h3>
+        <p>(Drop content here)</p>
+      </div>
+    </div>
+
+    <div id="panel-audio-amplifier" class="drop-panel" hidden aria-hidden="true">
+      <div class="drop-inner">
+        <h3>Audio amplifier</h3>
+        <p>(Drop content here)</p>
+      </div>
+    </div>
+
+    <div id="panel-microcontroller" class="drop-panel" hidden aria-hidden="true">
+      <div class="drop-inner">
+        <h3>Microcontroller</h3>
+        <p>(Drop content here)</p>
+      </div>
+    </div>
+
+    <div id="panel-transceiver" class="drop-panel" hidden aria-hidden="true">
+      <div class="drop-inner">
+        <h3>Transceiver</h3>
+        <p>(Drop content here)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* container */
+  .map-wrap{
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    margin: 18px auto 10px;
+  }
+  .map-wrap img{
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 10px;
+  }
+  .map-overlay{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* clickable shading */
+  .hot{
+    fill: rgba(0,0,0,0.08);
+    stroke: rgba(0,0,0,0.25);
+    stroke-width: 2;
+    cursor: pointer;
+    transition: fill 180ms ease, stroke 180ms ease;
+  }
+  .hot:hover{
+    fill: rgba(0,0,0,0.14);
+    stroke: rgba(0,0,0,0.40);
+  }
+  .hot.is-active{
+    fill: rgba(0,0,0,0.18);
+    stroke: rgba(0,0,0,0.55);
+  }
+
+  /* keep panels nicely spaced */
+  .map-panels{
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .map-panels h3{
+    margin: 12px 0 6px;
+  }
+</style>
+          
+          <!--DROPDOWN END-->
+        <!--  <p>(Drop code snippets or links here)</p>-->
         </div>
       </div>
     </div>    
@@ -475,6 +627,79 @@ document.querySelectorAll("[data-sw]").forEach((btn) => {
           }
         });
       });
+      //extra
+      
+  function waitForTransition(el, prop){
+    return new Promise((resolve) => {
+      const onEnd = (e) => {
+        if (e.propertyName !== prop) return;
+        el.removeEventListener("transitionend", onEnd);
+        resolve();
+      };
+      el.addEventListener("transitionend", onEnd);
+    });
+  }
+
+  async function openPanel(panel){
+    panel.hidden = false;
+    panel.setAttribute("aria-hidden", "false");
+    panel.style.maxHeight = "0px";
+    panel.getBoundingClientRect();
+    panel.classList.add("is-open");
+    panel.style.maxHeight = panel.scrollHeight + "px";
+    await waitForTransition(panel, "max-height");
+    panel.style.maxHeight = "none";
+  }
+
+  async function closePanel(panel){
+    panel.style.maxHeight = panel.scrollHeight + "px";
+    panel.getBoundingClientRect();
+    panel.classList.remove("is-open");
+    panel.style.maxHeight = "0px";
+    await waitForTransition(panel, "max-height");
+    panel.hidden = true;
+    panel.setAttribute("aria-hidden", "true");
+  }
+
+  const regions = Array.from(document.querySelectorAll(".map-overlay .hot"));
+  const panels  = new Map(
+    Array.from(document.querySelectorAll(".map-panels .drop-panel"))
+      .map(p => [p.id.replace("panel-",""), p])
+  );
+
+  let active = null;
+
+  regions.forEach(r => {
+    r.addEventListener("click", async () => {
+      const key = r.dataset.target;
+      const panel = panels.get(key);
+      if (!panel) return;
+
+      // clicking active region toggles close
+      if (active === key){
+        r.classList.remove("is-active");
+        await closePanel(panel);
+        active = null;
+        return;
+      }
+
+      // close currently open
+      if (active){
+        const prevRegion = regions.find(x => x.dataset.target === active);
+        const prevPanel  = panels.get(active);
+        if (prevRegion) prevRegion.classList.remove("is-active");
+        if (prevPanel && !prevPanel.hidden) await closePanel(prevPanel);
+      }
+
+      // open new
+      regions.forEach(x => x.classList.toggle("is-active", x.dataset.target === key));
+      await openPanel(panel);
+      active = key;
+
+      // optional: scroll panel into view smoothly
+      panel.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
     </script>
   </div>
 </body>
