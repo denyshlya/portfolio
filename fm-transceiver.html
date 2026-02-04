@@ -79,13 +79,25 @@ Several scope adjustments were made over the course of the project to improve fe
       </div>
 
       <a class="section-link" href="#" data-sw="software-code">Control</a>
-      <div class="drop-panel" id="sw-software-code" hidden aria-hidden="true">
-        <div class="drop-inner">
-          <img src="assets/photos/fm/soft-flow.png" alt="Software block diagram">
-          <p>The system begins by initializing all modules and I/O ports before displaying key operating metrics on the graphical LCD. During normal operation, the transceiver remains in receive mode while continuously monitoring user inputs. The mode selection determines the function of the up and down buttons, allowing the user to change the active channel, adjust audio volume, or modify screen brightness. If the transmit button is pressed, the system temporarily switches to transmit mode and returns to receive mode once the button is released. This control loop repeats continuously to enable responsive, real-time interaction with the device.
-</p>
-        </div>
-      </div>
+<div class="drop-panel" id="sw-software-code" hidden aria-hidden="true">
+  <div class="drop-inner">
+
+    <div class="zoom-wrap" data-zoom="2.2" data-lens="220">
+      <img
+        class="zoom-img"
+        src="assets/photos/fm/soft-flow.png"
+        alt="Software block diagram"
+      />
+      <div class="zoom-lens" aria-hidden="true"></div>
+    </div>
+
+    <p>
+      The system begins by initializing all modules and I/O ports before displaying key operating metrics on the graphical LCD. During normal operation, the transceiver remains in receive mode while continuously monitoring user inputs. The mode selection determines the function of the up and down buttons, allowing the user to change the active channel, adjust audio volume, or modify screen brightness. If the transmit button is pressed, the system temporarily switches to transmit mode and returns to receive mode once the button is released. This control loop repeats continuously to enable responsive, real-time interaction with the device.
+    </p>
+
+  </div>
+</div>
+
        <a class="section-link" href="#" data-sw="block-diagram">Block Diagram</a>
       <div class="drop-panel" id="sw-block-diagram" hidden aria-hidden="true">
         <div class="drop-inner">
@@ -106,7 +118,7 @@ Several scope adjustments were made over the course of the project to improve fe
 
       <!-- INTERRUPTS / BUTTONS (blue dashed area) -->
       <rect class="hot hot-blue" data-target="interrupts"
-            x="260" y="20" width="325" height="305" rx="18" />
+            x="260" y="17" width="325" height="307" rx="18" />
 
       <!-- XTAL + DECOUPLING (cyan dashed area) -->
       <rect class="hot hot-cyan" data-target="decoupling"
@@ -269,6 +281,44 @@ Several scope adjustments were made over the course of the project to improve fe
   .map-panels h3{
     margin: 12px 0 6px;
   }
+  /* --- image magnifier lens (only where .zoom-wrap exists) --- */
+.zoom-wrap{
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 900px;      /* optional */
+  margin: 0 auto;
+}
+
+.zoom-img{
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;   /* matches your site images */
+}
+
+.zoom-lens{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 220px;          /* overridden by data-lens if set */
+  height: 220px;
+  border-radius: 16px;
+  border: 2px solid #000;
+  background-repeat: no-repeat;
+  background-color: #fff;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.18);
+  pointer-events: none;
+
+  opacity: 0;
+  transform: scale(0.96);
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+.zoom-wrap.is-on .zoom-lens{
+  opacity: 1;
+  transform: scale(1);
+}
+
 </style>
           
           <!--DROPDOWN END-->
@@ -740,6 +790,81 @@ document.querySelectorAll("[data-sw]").forEach((btn) => {
       panel.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   });
+      //END EXTRA
+      //ZOOM
+      (function setupMagnifier(){
+    const wraps = document.querySelectorAll(".zoom-wrap");
+    wraps.forEach((wrap) => {
+      const img  = wrap.querySelector(".zoom-img");
+      const lens = wrap.querySelector(".zoom-lens");
+      if (!img || !lens) return;
+
+      const zoom = Number(wrap.dataset.zoom || 2.2);     // magnification
+      const lensSize = Number(wrap.dataset.lens || 220); // px
+
+      lens.style.width = lensSize + "px";
+      lens.style.height = lensSize + "px";
+
+      function updateBackground(){
+        lens.style.backgroundImage = `url("${img.currentSrc || img.src}")`;
+      }
+
+      function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+
+      function move(e){
+        const rect = img.getBoundingClientRect();
+
+        // cursor position within the displayed image
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        // keep lens inside image bounds
+        const half = lensSize / 2;
+        const lx = clamp(x, half, rect.width  - half);
+        const ly = clamp(y, half, rect.height - half);
+
+        // position lens
+        lens.style.left = (lx - half) + "px";
+        lens.style.top  = (ly - half) + "px";
+
+        // compute background sizing/position relative to NATURAL image size
+        const natW = img.naturalWidth  || rect.width;
+        const natH = img.naturalHeight || rect.height;
+
+        // scale ratio from displayed size to natural pixels
+        const rx = natW / rect.width;
+        const ry = natH / rect.height;
+
+        const bgW = natW * zoom;
+        const bgH = natH * zoom;
+
+        // background position (centered on cursor)
+        const bgX = -((lx * rx * zoom) - half);
+        const bgY = -((ly * ry * zoom) - half);
+
+        lens.style.backgroundSize = `${bgW}px ${bgH}px`;
+        lens.style.backgroundPosition = `${bgX}px ${bgY}px`;
+      }
+
+      function on(){
+        updateBackground();
+        wrap.classList.add("is-on");
+      }
+      function off(){
+        wrap.classList.remove("is-on");
+      }
+
+      // refresh if image loads later
+      if (!img.complete) img.addEventListener("load", updateBackground, { once: true });
+
+      wrap.addEventListener("mouseenter", on);
+      wrap.addEventListener("mouseleave", off);
+      wrap.addEventListener("mousemove", move);
+      wrap.addEventListener("touchstart", (e) => { on(); move(e.touches[0]); }, { passive: true });
+      wrap.addEventListener("touchmove",  (e) => { move(e.touches[0]); }, { passive: true });
+      wrap.addEventListener("touchend", off);
+    });
+  })();
     </script>
   </div>
 </body>
