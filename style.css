@@ -175,46 +175,30 @@ img {
 }
 .section-link{
   display: inline-block;
-  font-size: 1.15rem;            
-  font-weight: 600;
-  margin: 2.2rem 0 0.6rem 0;
-  line-height: 1.25;
-
-  color: var(--muted);          
-  text-decoration: none;
-
-  transition: transform 320ms ease, color 160ms ease;
-  will-change: transform;
-}
-
-.section-link:hover{
-  color: #777;                 
-  text-decoration: none;
-}
-.section-link{
-  display: inline-block;
   font-size: 1.15rem;
   font-weight: 600;
   margin: 2.2rem 0 0.6rem 0;
   line-height: 1.25;
 
-  color: var(--muted);
+  color: var(--muted);          /* grey by default */
   text-decoration: none;
 
-  transform: translateX(0); 
-  transition: transform 320ms ease, color 160ms ease;
+  transform: translateX(0px);   /* important for animation */
+  transition: transform 360ms ease, color 160ms ease;
   will-change: transform;
 }
 
 .section-link:hover{
-  color: #777;
+  color: #777;                  /* slightly less grey on hover */
   text-decoration: none;
 }
 
-
-
-.section-link.is-centered{
-  color: var(--muted);
-  transform: translateX(var(--shift, 0px));
+/* after click: stays grey (never blue) */
+.section-link.is-selected{
+  color: var(--muted) !important;
 }
+.section-link.is-selected:hover{
+  color: #777 !important;
+}
+
 
