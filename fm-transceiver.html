@@ -57,12 +57,10 @@
 <!-- Main header button -->
 <a class="section-link" id="softwareLink" href="#">Overview</a>
 
-<!-- Main dropdown content -->
 <div id="softwarePanel" class="drop-panel" hidden aria-hidden="true">
   <div class="drop-inner">
     <div class="schematics-list">
 
-      <!-- Description -->
       <a class="section-link" href="#" data-sw="software-description">Executive summary</a>
       <div class="drop-panel" id="sw-software-description" hidden aria-hidden="true">
         <div class="drop-inner">
@@ -70,16 +68,24 @@
         </div>
       </div>
 
-      <!-- Flowchart -->
       <a class="section-link" href="#" data-sw="software-flowchart">Scope</a>
       <div class="drop-panel" id="sw-software-flowchart" hidden aria-hidden="true">
         <div class="drop-inner">
-          <p>(Drop flowchart image or explanation here)</p>
+          <p>The FM Transceiver Pair project focuses on the development of two portable RF transceivers designed for simple two-way communication. Each device includes a user interface composed of four buttons and a single switch: a lit transmit button, a mode select button, a pair of up/down buttons, and an on/off switch. In addition to the controls, each unit incorporates a 1.3-inch display and speaker-based audio output. Because the devices are powered by removable batteries, a battery management system is included to ensure both user safety and battery protection. The project also involves testing activities, including software debugging and optimization to reduce unnecessary power consumption, as well as verification of RF performance against the project requirements.
+
+Several scope adjustments were made over the course of the project to improve feasibility and increase the likelihood of success. An externally chargeable battery was adopted to reduce system complexity, and a single 18650 lithium-ion cell was selected due to better availability, lower cost, and higher energy density compared to lithium-polymer alternatives. Later design changes included the addition of an external ADC to simplify battery charge monitoring and reduce overall hardware and software complexity. The design was also revised to use a single speaker rather than multiple speakers in response to parts availability constraints.
+</p>
         </div>
       </div>
 
-      <!-- Code -->
       <a class="section-link" href="#" data-sw="software-code">Control</a>
+      <div class="drop-panel" id="sw-software-code" hidden aria-hidden="true">
+        <div class="drop-inner">
+          <p>(Drop code snippets or links here)</p>
+        </div>
+      </div>
+
+      <a class="section-link" href="#" data-sw="software-code">Block Diagram</a>
       <div class="drop-panel" id="sw-software-code" hidden aria-hidden="true">
         <div class="drop-inner">
           <p>(Drop code snippets or links here)</p>
