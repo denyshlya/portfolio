@@ -59,7 +59,24 @@
           <div class="drop-panel" id="dd-battery-management" hidden aria-hidden="true">
             <div class="drop-inner">
               <img src="assets/photos/fm/battery-management.png" alt="Battery management schematic">
-              <p>text</p>
+              <p>The BATMAN battery management subsystem for the FM Transceiver project and is centered
+                around the Texas Instruments BQ77905 battery manager IC. 
+                Its primary function is to safely manage a single 18650 
+                Li-ion cell by providing over-voltage, under-voltage, 
+                over-current, short-circuit, and temperature protection. 
+                The BATMAN IC continuously monitors cell voltage, 
+                charge/discharge current through a sense resistor, and cell 
+                temperature via an external NTC thermistor. 
+                Two external MOSFETs are driven by BATMAN to disconnect 
+                the battery from the system load when unsafe conditions 
+                are detected. Status outputs such as CHG, DSG, and LD provide 
+                the system controller with real-time 
+                information about battery and load state. 
+                In the broader scope of the project, this subsystem forms the core of the power supply block, 
+                ensuring user safety and protecting all downstream electronics. By isolating fault 
+                conditions at the battery level, BATMAN improves overall system reliability 
+                and allows the FM transceiver to operate safely from a removable high-energy Li-ion cell.
+</p>
             </div>
           </div>
 
