@@ -54,7 +54,41 @@
     </p>
 
     <hr>
+<!-- Main header button -->
+<a class="section-link" id="softwareLink" href="#">Overview</a>
 
+<!-- Main dropdown content -->
+<div id="softwarePanel" class="drop-panel" hidden aria-hidden="true">
+  <div class="drop-inner">
+    <div class="schematics-list">
+
+      <!-- Description -->
+      <a class="section-link" href="#" data-sw="software-description">Description</a>
+      <div class="drop-panel" id="sw-software-description" hidden aria-hidden="true">
+        <div class="drop-inner">
+          <p>(Drop software description here)</p>
+        </div>
+      </div>
+
+      <!-- Flowchart -->
+      <a class="section-link" href="#" data-sw="software-flowchart">Scope</a>
+      <div class="drop-panel" id="sw-software-flowchart" hidden aria-hidden="true">
+        <div class="drop-inner">
+          <p>(Drop flowchart image or explanation here)</p>
+        </div>
+      </div>
+
+      <!-- Code -->
+      <a class="section-link" href="#" data-sw="software-code">Control</a>
+      <div class="drop-panel" id="sw-software-code" hidden aria-hidden="true">
+        <div class="drop-inner">
+          <p>(Drop code snippets or links here)</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
     <!-- Main header button -->
     <a class="section-link" id="schematicsLink" href="#">Schematics</a>
 
@@ -206,41 +240,7 @@
         </div>
       </div>
     </div>
-<!-- Main header button -->
-<a class="section-link" id="softwareLink" href="#">Software</a>
 
-<!-- Main dropdown content -->
-<div id="softwarePanel" class="drop-panel" hidden aria-hidden="true">
-  <div class="drop-inner">
-    <div class="schematics-list">
-
-      <!-- Description -->
-      <a class="section-link" href="#" data-sw="software-description">Description</a>
-      <div class="drop-panel" id="sw-software-description" hidden aria-hidden="true">
-        <div class="drop-inner">
-          <p>(Drop software description here)</p>
-        </div>
-      </div>
-
-      <!-- Flowchart -->
-      <a class="section-link" href="#" data-sw="software-flowchart">Flowchart</a>
-      <div class="drop-panel" id="sw-software-flowchart" hidden aria-hidden="true">
-        <div class="drop-inner">
-          <p>(Drop flowchart image or explanation here)</p>
-        </div>
-      </div>
-
-      <!-- Code -->
-      <a class="section-link" href="#" data-sw="software-code">Code</a>
-      <div class="drop-panel" id="sw-software-code" hidden aria-hidden="true">
-        <div class="drop-inner">
-          <p>(Drop code snippets or links here)</p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
 
     <script>
       // ----- main Software behavior (reuses existing helpers) -----
