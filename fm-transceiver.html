@@ -17,8 +17,44 @@
       A low-power FM transceiver designed around the Silicon Labs Si4720,
       focused on RF-aware PCB layout, mixed-signal integration, and digital
       control of RF hardware. 
-
     </p>
+    <hr>
+
+<a class="section-link" id="schematicsLink" href="#schematics">Schematics</a>
+
+<h2 id="schematics">Schematics</h2>
+<p>
+  (Drop your schematics content here)
+</p>
+
+<script>
+  const link = document.getElementById("schematicsLink");
+
+  link.addEventListener("click", () => {
+    // Make it stay grey
+    link.classList.add("is-active");
+
+    // Compute how far to shift so the link centers within the viewport
+    const rect = link.getBoundingClientRect();
+    const linkCenterX = rect.left + rect.width / 2;
+    const viewportCenterX = window.innerWidth / 2;
+    const shift = viewportCenterX - linkCenterX;
+
+    link.style.setProperty("--shift", `${shift}px`);
+  });
+
+  // Optional: keep it centered if window resizes while active
+  window.addEventListener("resize", () => {
+    if (!link.classList.contains("is-active")) return;
+
+    const rect = link.getBoundingClientRect();
+    const linkCenterX = rect.left + rect.width / 2;
+    const viewportCenterX = window.innerWidth / 2;
+    const shift = viewportCenterX - linkCenterX;
+
+    link.style.setProperty("--shift", `${shift}px`);
+  });
+</script>
   </div>
 </body>
 </html>
