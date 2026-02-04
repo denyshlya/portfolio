@@ -88,15 +88,8 @@ Several scope adjustments were made over the course of the project to improve fe
         src="assets/photos/fm/soft-flow.png"
         alt="Software block diagram"
       />
-      <div class="panzoom" data-zoom="1.15">
-  <img
-    class="panzoom-img"
-    src="assets/photos/fm/soft-flow.png"
-    alt="Software block diagram"
-    draggable="false"
-  />
-</div>
-
+      <div class="zoom-lens" aria-hidden="true"></div>
+    </div>
 
     <p>
       The system begins by initializing all modules and I/O ports before displaying key operating metrics on the graphical LCD. During normal operation, the transceiver remains in receive mode while continuously monitoring user inputs. The mode selection determines the function of the up and down buttons, allowing the user to change the active channel, adjust audio volume, or modify screen brightness. If the transmit button is pressed, the system temporarily switches to transmit mode and returns to receive mode once the button is released. This control loop repeats continuously to enable responsive, real-time interaction with the device.
@@ -129,7 +122,7 @@ Several scope adjustments were made over the course of the project to improve fe
 
       <!-- XTAL + DECOUPLING (cyan dashed area) -->
       <rect class="hot hot-cyan" data-target="decoupling"
-            x="78" y="335" width="195" height="140" rx="18" />
+            x="78" y="320" width="195" height="140" rx="18" />
 
       <!-- GLCD / SCREEN (black dashed area) -->
       <rect class="hot hot-black" data-target="glcd"
@@ -203,31 +196,6 @@ Several scope adjustments were made over the course of the project to improve fe
 </section>
 
 <style>
-  /* full-image pan/zoom */
-.panzoom{
-  position: relative;
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-  border-radius: 10px;
-  overflow: hidden;     /* keeps edges clean */
-  cursor: grab;
-  user-select: none;
-  touch-action: none;   /* needed for touch pan */
-}
-
-.panzoom:active{
-  cursor: grabbing;
-}
-
-.panzoom-img{
-  display: block;
-  width: 100%;
-  height: auto;
-  transform-origin: 0 0;
-  will-change: transform;
-}
-
   /* container */
   .map-wrap{
     position: relative;
@@ -824,137 +792,79 @@ document.querySelectorAll("[data-sw]").forEach((btn) => {
   });
       //END EXTRA
       //ZOOM
-   
-(function setupPanZoom(){
-  document.querySelectorAll(".panzoom").forEach((wrap) => {
-    const img = wrap.querySelector(".panzoom-img");
-    if (!img) return;
+      (function setupMagnifier(){
+    const wraps = document.querySelectorAll(".zoom-wrap");
+    wraps.forEach((wrap) => {
+      const img  = wrap.querySelector(".zoom-img");
+      const lens = wrap.querySelector(".zoom-lens");
+      if (!img || !lens) return;
 
-    let scale = Number(wrap.dataset.zoom || 1.15);
+      const zoom = Number(wrap.dataset.zoom || 2.2);     // magnification
+      const lensSize = Number(wrap.dataset.lens || 220); // px
 
-    // keep zoom small
-    const MIN = 1.0;
-    const MAX = 1.6;
-    const WHEEL_STEP = 0.08; // small step
-    const DRAG_SPEED = 1.0;
+      lens.style.width = lensSize + "px";
+      lens.style.height = lensSize + "px";
 
-    // current translation in px (in container coordinate space)
-    let tx = 0, ty = 0;
+      function updateBackground(){
+        lens.style.backgroundImage = `url("${img.currentSrc || img.src}")`;
+      }
 
-    // drag state
-    let dragging = false;
-    let startX = 0, startY = 0;
-    let startTX = 0, startTY = 0;
+      function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
 
-    function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+      function move(e){
+        const rect = img.getBoundingClientRect();
 
-    function apply(){
-      img.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
-    }
+        // cursor position within the displayed image
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
 
-    function bounds(){
-      // container size
-      const cw = wrap.clientWidth;
-      const ch = wrap.clientHeight;
+        // keep lens inside image bounds
+        const half = lensSize / 2;
+        const lx = clamp(x, half, rect.width  - half);
+        const ly = clamp(y, half, rect.height - half);
 
-      // image displayed base size (before transform) is width:100%
-      // compute base rendered image size:
-      const baseW = cw;
-      const baseH = cw * (img.naturalHeight / img.naturalWidth || 1);
+        // position lens
+        lens.style.left = (lx - half) + "px";
+        lens.style.top  = (ly - half) + "px";
 
-      // scaled size
-      const sw = baseW * scale;
-      const sh = baseH * scale;
+        // compute background sizing/position relative to NATURAL image size
+        const natW = img.naturalWidth  || rect.width;
+        const natH = img.naturalHeight || rect.height;
 
-      // clamp so we don't drag past edges
-      const minX = Math.min(0, cw - sw);
-      const minY = Math.min(0, ch - sh);
-      const maxX = 0;
-      const maxY = 0;
+        // scale ratio from displayed size to natural pixels
+        const rx = natW / rect.width;
+        const ry = natH / rect.height;
 
-      return { minX, minY, maxX, maxY, baseH };
-    }
+        const bgW = natW * zoom;
+        const bgH = natH * zoom;
 
-    function clampPan(){
-      const b = bounds();
-      // ensure wrapper height matches image height (so bounds are correct)
-      wrap.style.height = b.baseH + "px";
+        // background position (centered on cursor)
+        const bgX = -((lx * rx * zoom) - half);
+        const bgY = -((ly * ry * zoom) - half);
 
-      tx = clamp(tx, b.minX, b.maxX);
-      ty = clamp(ty, b.minY, b.maxY);
-    }
+        lens.style.backgroundSize = `${bgW}px ${bgH}px`;
+        lens.style.backgroundPosition = `${bgX}px ${bgY}px`;
+      }
 
-    function setScale(newScale, anchorX, anchorY){
-      const prev = scale;
-      scale = clamp(newScale, MIN, MAX);
+      function on(){
+        updateBackground();
+        wrap.classList.add("is-on");
+      }
+      function off(){
+        wrap.classList.remove("is-on");
+      }
 
-      // keep point under cursor stable:
-      // translate so that (anchor) stays in place after scaling
-      const ax = anchorX;
-      const ay = anchorY;
+      // refresh if image loads later
+      if (!img.complete) img.addEventListener("load", updateBackground, { once: true });
 
-      tx = ax - (ax - tx) * (scale / prev);
-      ty = ay - (ay - ty) * (scale / prev);
-
-      clampPan();
-      apply();
-    }
-
-    // Ensure natural sizes exist
-    function init(){
-      clampPan();
-      apply();
-    }
-    if (img.complete) init();
-    else img.addEventListener("load", init, { once: true });
-
-    // Drag to pan
-    wrap.addEventListener("pointerdown", (e) => {
-      dragging = true;
-      wrap.setPointerCapture(e.pointerId);
-      startX = e.clientX;
-      startY = e.clientY;
-      startTX = tx;
-      startTY = ty;
+      wrap.addEventListener("mouseenter", on);
+      wrap.addEventListener("mouseleave", off);
+      wrap.addEventListener("mousemove", move);
+      wrap.addEventListener("touchstart", (e) => { on(); move(e.touches[0]); }, { passive: true });
+      wrap.addEventListener("touchmove",  (e) => { move(e.touches[0]); }, { passive: true });
+      wrap.addEventListener("touchend", off);
     });
-
-    wrap.addEventListener("pointermove", (e) => {
-      if (!dragging) return;
-      const dx = (e.clientX - startX) * DRAG_SPEED;
-      const dy = (e.clientY - startY) * DRAG_SPEED;
-      tx = startTX + dx;
-      ty = startTY + dy;
-      clampPan();
-      apply();
-    });
-
-    function endDrag(e){
-      dragging = false;
-      try { wrap.releasePointerCapture(e.pointerId); } catch {}
-    }
-    wrap.addEventListener("pointerup", endDrag);
-    wrap.addEventListener("pointercancel", endDrag);
-    wrap.addEventListener("pointerleave", () => { dragging = false; });
-
-    // Wheel zoom (mouse)
-    wrap.addEventListener("wheel", (e) => {
-      e.preventDefault();
-      const rect = wrap.getBoundingClientRect();
-      const ax = e.clientX - rect.left;
-      const ay = e.clientY - rect.top;
-
-      const dir = e.deltaY > 0 ? -1 : 1; // natural: wheel up zoom in
-      setScale(scale + dir * WHEEL_STEP, ax, ay);
-    }, { passive: false });
-
-    // Re-clamp on resize
-    window.addEventListener("resize", () => {
-      clampPan();
-      apply();
-    });
-  });
-})();
-
+  })();
     </script>
   </div>
 </body>
