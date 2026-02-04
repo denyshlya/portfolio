@@ -5,6 +5,24 @@
   <title>FM Transceiver | Denys Shlyakhtovskyy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css">
+
+  <!-- minimal page-only layout helpers (no global changes) -->
+  <style>
+    .schematics-list{
+      text-align: center;
+      margin-top: 8px;
+    }
+    .schematics-list .section-link{
+      display: block;
+      width: 100%;
+      margin: 14px 0 8px 0; /* vertical rhythm */
+    }
+    .schematics-list .drop-panel{
+      text-align: left;      /* content inside can be normal */
+      margin: 0 auto 8px auto;
+      max-width: 70ch;
+    }
+  </style>
 </head>
 
 <body>
@@ -24,92 +42,81 @@
     <!-- Main header button -->
     <a class="section-link" id="schematicsLink" href="#">Schematics</a>
 
-    <!-- Main dropdown content (hidden on load; animated open/close) -->
+    <!-- Main dropdown content -->
     <div id="schematicsPanel" class="drop-panel" hidden aria-hidden="true">
       <div class="drop-inner">
 
-        <!-- Sub-dropdowns -->
-        <a class="section-link" href="#" data-dd="battery-management">Battery management</a>
-        <div class="drop-panel" id="dd-battery-management" hidden aria-hidden="true">
-          <div class="drop-inner">
-            <p>(Drop content here)</p>
+        <div class="schematics-list">
+          <!-- 1 -->
+          <a class="section-link" href="#" data-dd="battery-management">Battery management</a>
+          <div class="drop-panel" id="dd-battery-management" hidden aria-hidden="true">
+            <div class="drop-inner"><p>(Drop content here)</p></div>
           </div>
-        </div>
 
-        <a class="section-link" href="#" data-dd="voltage-regulator">Voltage regulator</a>
-        <div class="drop-panel" id="dd-voltage-regulator" hidden aria-hidden="true">
-          <div class="drop-inner">
-            <p>(Drop content here)</p>
+          <!-- 2 -->
+          <a class="section-link" href="#" data-dd="voltage-regulator">Voltage regulator</a>
+          <div class="drop-panel" id="dd-voltage-regulator" hidden aria-hidden="true">
+            <div class="drop-inner"><p>(Drop content here)</p></div>
           </div>
-        </div>
 
-        <a class="section-link" href="#" data-dd="battery-percentage">Battery percentage</a>
-        <div class="drop-panel" id="dd-battery-percentage" hidden aria-hidden="true">
-          <div class="drop-inner">
-            <p>(Drop content here)</p>
+          <!-- 3 -->
+          <a class="section-link" href="#" data-dd="battery-percentage">Battery percentage</a>
+          <div class="drop-panel" id="dd-battery-percentage" hidden aria-hidden="true">
+            <div class="drop-inner"><p>(Drop content here)</p></div>
           </div>
-        </div>
 
-        <a class="section-link" href="#" data-dd="microcontroller">Microcontroller</a>
-        <div class="drop-panel" id="dd-microcontroller" hidden aria-hidden="true">
-          <div class="drop-inner">
-            <p>(Drop content here)</p>
+          <!-- 4 -->
+          <a class="section-link" href="#" data-dd="microcontroller">Microcontroller</a>
+          <div class="drop-panel" id="dd-microcontroller" hidden aria-hidden="true">
+            <div class="drop-inner"><p>(Drop content here)</p></div>
           </div>
-        </div>
 
-        <a class="section-link" href="#" data-dd="glcd">GLCD</a>
-        <div class="drop-panel" id="dd-glcd" hidden aria-hidden="true">
-          <div class="drop-inner">
-            <p>(Drop content here)</p>
+          <!-- 5 -->
+          <a class="section-link" href="#" data-dd="glcd">GLCD</a>
+          <div class="drop-panel" id="dd-glcd" hidden aria-hidden="true">
+            <div class="drop-inner"><p>(Drop content here)</p></div>
           </div>
-        </div>
 
-        <a class="section-link" href="#" data-dd="interrupts">Interrupts</a>
-        <div class="drop-panel" id="dd-interrupts" hidden aria-hidden="true">
-          <div class="drop-inner">
-            <p>(Drop content here)</p>
+          <!-- 6 -->
+          <a class="section-link" href="#" data-dd="interrupts">Interrupts</a>
+          <div class="drop-panel" id="dd-interrupts" hidden aria-hidden="true">
+            <div class="drop-inner"><p>(Drop content here)</p></div>
           </div>
-        </div>
 
-        <a class="section-link" href="#" data-dd="icsp">ICSP</a>
-        <div class="drop-panel" id="dd-icsp" hidden aria-hidden="true">
-          <div class="drop-inner">
-            <p>(Drop content here)</p>
+          <!-- 7 -->
+          <a class="section-link" href="#" data-dd="icsp">ICSP</a>
+          <div class="drop-panel" id="dd-icsp" hidden aria-hidden="true">
+            <div class="drop-inner"><p>(Drop content here)</p></div>
           </div>
-        </div>
 
-        <a class="section-link" href="#" data-dd="reset">Reset</a>
-        <div class="drop-panel" id="dd-reset" hidden aria-hidden="true">
-          <div class="drop-inner">
-            <p>(Drop content here)</p>
+          <!-- 8 -->
+          <a class="section-link" href="#" data-dd="reset">Reset</a>
+          <div class="drop-panel" id="dd-reset" hidden aria-hidden="true">
+            <div class="drop-inner"><p>(Drop content here)</p></div>
           </div>
-        </div>
 
-        <a class="section-link" href="#" data-dd="decoupling">Decoupling</a>
-        <div class="drop-panel" id="dd-decoupling" hidden aria-hidden="true">
-          <div class="drop-inner">
-            <p>(Drop content here)</p>
+          <!-- 9 -->
+          <a class="section-link" href="#" data-dd="decoupling">Decoupling</a>
+          <div class="drop-panel" id="dd-decoupling" hidden aria-hidden="true">
+            <div class="drop-inner"><p>(Drop content here)</p></div>
           </div>
-        </div>
 
-        <a class="section-link" href="#" data-dd="transceiver">Transceiver</a>
-        <div class="drop-panel" id="dd-transceiver" hidden aria-hidden="true">
-          <div class="drop-inner">
-            <p>(Drop content here)</p>
+          <!-- 10 -->
+          <a class="section-link" href="#" data-dd="transceiver">Transceiver</a>
+          <div class="drop-panel" id="dd-transceiver" hidden aria-hidden="true">
+            <div class="drop-inner"><p>(Drop content here)</p></div>
           </div>
-        </div>
 
-        <a class="section-link" href="#" data-dd="crystal-oscillator">Crystal oscillator</a>
-        <div class="drop-panel" id="dd-crystal-oscillator" hidden aria-hidden="true">
-          <div class="drop-inner">
-            <p>(Drop content here)</p>
+          <!-- 11 -->
+          <a class="section-link" href="#" data-dd="crystal-oscillator">Crystal oscillator</a>
+          <div class="drop-panel" id="dd-crystal-oscillator" hidden aria-hidden="true">
+            <div class="drop-inner"><p>(Drop content here)</p></div>
           </div>
-        </div>
 
-        <a class="section-link" href="#" data-dd="audio-amplifier">Audio amplifier</a>
-        <div class="drop-panel" id="dd-audio-amplifier" hidden aria-hidden="true">
-          <div class="drop-inner">
-            <p>(Drop content here)</p>
+          <!-- 12 -->
+          <a class="section-link" href="#" data-dd="audio-amplifier">Audio amplifier</a>
+          <div class="drop-panel" id="dd-audio-amplifier" hidden aria-hidden="true">
+            <div class="drop-inner"><p>(Drop content here)</p></div>
           </div>
         </div>
 
@@ -117,7 +124,7 @@
     </div>
 
     <script>
-      // -------- helpers --------
+      // ----- helpers -----
       function shiftToViewportCenter(el){
         const r = el.getBoundingClientRect();
         const elCenter = r.left + r.width / 2;
@@ -141,7 +148,7 @@
         panel.setAttribute("aria-hidden", "false");
 
         panel.style.maxHeight = "0px";
-        panel.getBoundingClientRect(); // reflow
+        panel.getBoundingClientRect();
 
         panel.classList.add("is-open");
         panel.style.maxHeight = panel.scrollHeight + "px";
@@ -152,7 +159,7 @@
 
       async function closePanel(panel){
         panel.style.maxHeight = panel.scrollHeight + "px";
-        panel.getBoundingClientRect(); // reflow
+        panel.getBoundingClientRect();
 
         panel.classList.remove("is-open");
         panel.style.maxHeight = "0px";
@@ -163,35 +170,35 @@
         panel.setAttribute("aria-hidden", "true");
       }
 
-      // -------- main Schematics behavior --------
+      // ----- main Schematics behavior -----
       const schematicsLink = document.getElementById("schematicsLink");
       const schematicsPanel = document.getElementById("schematicsPanel");
 
       let schematicsOpen = false;
       let sliding = false;
 
-      async function slideToCenter(link){
+      async function slideToCenter(){
         if (sliding) return;
         sliding = true;
 
-        link.style.transform = "translateX(0px)";
-        link.getBoundingClientRect(); // reflow
+        schematicsLink.style.transform = "translateX(0px)";
+        schematicsLink.getBoundingClientRect();
 
         requestAnimationFrame(() => {
-          const shift = shiftToViewportCenter(link);
-          link.style.transform = `translateX(${shift}px)`;
+          const shift = shiftToViewportCenter(schematicsLink);
+          schematicsLink.style.transform = `translateX(${shift}px)`;
         });
 
-        await waitForTransition(link, "transform");
+        await waitForTransition(schematicsLink, "transform");
         sliding = false;
       }
 
-      async function slideBackLeft(link){
+      async function slideBackLeft(){
         if (sliding) return;
         sliding = true;
 
-        link.style.transform = "translateX(0px)";
-        await waitForTransition(link, "transform");
+        schematicsLink.style.transform = "translateX(0px)";
+        await waitForTransition(schematicsLink, "transform");
 
         sliding = false;
       }
@@ -204,22 +211,23 @@
 
         if (schematicsOpen) {
           schematicsLink.classList.add("is-selected");
-          await slideToCenter(schematicsLink);
+          await slideToCenter();
           await openPanel(schematicsPanel);
         } else {
-          // close all sub-panels too
-          document.querySelectorAll("#schematicsPanel .drop-panel").forEach((p) => {
-            if (!p.hidden) {
-              p.classList.remove("is-open");
-              p.style.maxHeight = "0px";
-              p.hidden = true;
-              p.setAttribute("aria-hidden", "true");
-            }
+          // close any open sub-panels instantly before closing main
+          document.querySelectorAll(".schematics-list .drop-panel").forEach((p) => {
+            p.classList.remove("is-open");
+            p.style.maxHeight = "0px";
+            p.hidden = true;
+            p.setAttribute("aria-hidden", "true");
+          });
+          document.querySelectorAll(".schematics-list .section-link").forEach((a) => {
+            a.classList.remove("is-selected");
           });
 
           await closePanel(schematicsPanel);
           schematicsLink.classList.remove("is-selected");
-          await slideBackLeft(schematicsLink);
+          await slideBackLeft();
         }
       });
 
@@ -234,15 +242,13 @@
         }
       });
 
-      // -------- sub dropdowns inside schematics --------
-      document.querySelectorAll('[data-dd]').forEach((btn) => {
+      // ----- sub dropdown behavior -----
+      document.querySelectorAll(".schematics-list [data-dd]").forEach((btn) => {
         const key = btn.getAttribute("data-dd");
         const panel = document.getElementById(`dd-${key}`);
 
         btn.addEventListener("click", async (e) => {
           e.preventDefault();
-
-          // only operate if schematics section is open
           if (schematicsPanel.hidden) return;
 
           if (panel.hidden) {
