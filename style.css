@@ -187,4 +187,30 @@ img {
   color: var(--muted);           /* grey on hover */
   text-decoration: none;
 }
+.section-link {
+  display: inline-block;
+  font-size: 1.15rem;            /* ~1pt smaller than h2 */
+  font-weight: 600;
+  margin: 2.2rem 0 0.6rem 0;     /* same vertical rhythm as h2 */
+  line-height: 1.25;
+  color: var(--link);
+  text-decoration: none;
+
+  /* animation */
+  transition: color 0.15s ease, transform 320ms ease;
+  will-change: transform;
+}
+
+/* hover turns grey */
+.section-link:hover {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+/* clicked/active stays grey */
+.section-link.is-active {
+  color: var(--muted);
+  text-decoration: none;
+  transform: translateX(var(--shift, 0px));
+}
 
