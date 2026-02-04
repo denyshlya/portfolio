@@ -35,16 +35,20 @@
   let centered = false;
 
   function shiftToViewportCenter(el){
-    const rect = el.getBoundingClientRect();
-    const elCenter = rect.left + rect.width / 2;
+    const r = el.getBoundingClientRect();
+    const elCenter = r.left + r.width / 2;
     const viewportCenter = window.innerWidth / 2;
     return viewportCenter - elCenter;
   }
 
-  function updatePosition(){
-    if (!centered) return;
-    const shift = shiftToViewportCenter(link);
-    link.style.transform = `translateX(${shift}px)`;
+  function animateToCenter(){
+    // ensure we start from 0 on a real rendered frame
+    link.style.transform = "translateX(0px)";
+
+    requestAnimationFrame(() => {
+      const shift = shiftToViewportCenter(link);
+      link.style.transform = `translateX(${shift}px)`;
+    });
   }
 
   link.addEventListener("click", (e) => {
@@ -53,18 +57,19 @@
     centered = !centered;
 
     if (centered) {
-      // force a paint so the transition always triggers
-      link.style.transform = "translateX(0px)";
-      link.getBoundingClientRect();
-
-      const shift = shiftToViewportCenter(link);
-      link.style.transform = `translateX(${shift}px)`;
+      link.classList.add("is-selected");
+      animateToCenter();
     } else {
+      link.classList.remove("is-selected");
       link.style.transform = "translateX(0px)";
     }
   });
 
-  window.addEventListener("resize", updatePosition);
+  window.addEventListener("resize", () => {
+    if (!centered) return;
+    const shift = shiftToViewportCenter(link);
+    link.style.transform = `translateX(${shift}px)`;
+  });
 </script>
 
   </div>
