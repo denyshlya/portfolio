@@ -16,45 +16,59 @@
     <p>
       A low-power FM transceiver designed around the Silicon Labs Si4720,
       focused on RF-aware PCB layout, mixed-signal integration, and digital
-      control of RF hardware. 
+      control of RF hardware.
     </p>
+
     <hr>
 
-<a class="section-link" id="schematicsLink" href="#schematics">Schematics</a>
+    <!-- Make it a button-like link (no scrolling for now) -->
+    <a class="section-link" id="schematicsLink" href="#">Schematics</a>
 
-<h2 id="schematics">Schematics</h2>
-<p>
-  (Drop your schematics content here)
-</p>
+    <!-- Hidden for now -->
+    <div id="schematicsContent" hidden>
+      <h2>Schematics</h2>
+      <p>(Drop your schematics content here)</p>
+    </div>
 
-<script>
-  const link = document.getElementById("schematicsLink");
+    <script>
+      const link = document.getElementById("schematicsLink");
 
-  link.addEventListener("click", () => {
-    // Make it stay grey
-    link.classList.add("is-active");
+      function computeShiftToViewportCenter(el){
+        const rect = el.getBoundingClientRect();
+        const elCenter = rect.left + rect.width / 2;
+        const viewportCenter = window.innerWidth / 2;
+        return viewportCenter - elCenter;
+      }
 
-    // Compute how far to shift so the link centers within the viewport
-    const rect = link.getBoundingClientRect();
-    const linkCenterX = rect.left + rect.width / 2;
-    const viewportCenterX = window.innerWidth / 2;
-    const shift = viewportCenterX - linkCenterX;
+      function centerLink(){
+        const shift = computeShiftToViewportCenter(link);
+        link.style.setProperty("--shift", `${shift}px`);
+        link.classList.add("is-centered");
+      }
 
-    link.style.setProperty("--shift", `${shift}px`);
-  });
+      function uncenterLink(){
+        link.style.setProperty("--shift", `0px`);
+        link.classList.remove("is-centered");
+      }
 
-  // Optional: keep it centered if window resizes while active
-  window.addEventListener("resize", () => {
-    if (!link.classList.contains("is-active")) return;
+      link.addEventListener("click", (e) => {
+        e.preventDefault(); // stop anchor scroll
 
-    const rect = link.getBoundingClientRect();
-    const linkCenterX = rect.left + rect.width / 2;
-    const viewportCenterX = window.innerWidth / 2;
-    const shift = viewportCenterX - linkCenterX;
+        if (link.classList.contains("is-centered")) {
+          uncenterLink();
+        } else {
+          // set shift first so animation goes from 0 -> shift smoothly
+          link.style.setProperty("--shift", `${computeShiftToViewportCenter(link)}px`);
+          // ensure browser registers the starting state
+          requestAnimationFrame(() => link.classList.add("is-centered"));
+        }
+      });
 
-    link.style.setProperty("--shift", `${shift}px`);
-  });
-</script>
+      window.addEventListener("resize", () => {
+        if (!link.classList.contains("is-centered")) return;
+        link.style.setProperty("--shift", `${computeShiftToViewportCenter(link)}px`);
+      });
+    </script>
   </div>
 </body>
 </html>
