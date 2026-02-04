@@ -173,5 +173,18 @@ img {
   70%  { opacity: 1; transform: translateY(0); }
   100% { opacity: 0; transform: translateY(6px); }
 }
+.section-link {
+  display: inline-block;
+  font-size: 1.15rem;            /* ~1pt smaller than h2 */
+  font-weight: 600;
+  margin: 2.2rem 0 0.6rem 0;     /* same vertical rhythm as h2 */
+  line-height: 1.25;
+  color: var(--link);
+  transition: color 0.15s ease;
+}
 
+.section-link:hover {
+  color: var(--muted);           /* grey on hover */
+  text-decoration: none;
+}
 
