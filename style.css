@@ -180,20 +180,19 @@ img {
   margin: 2.2rem 0 0.6rem 0;
   line-height: 1.25;
 
-  color: var(--muted);          /* grey by default */
+  color: var(--muted);          
   text-decoration: none;
 
-  transform: translateX(0px);   /* important for animation */
+  transform: translateX(0px);  
   transition: transform 360ms ease, color 160ms ease;
   will-change: transform;
 }
 
 .section-link:hover{
-  color: #777;                  /* slightly less grey on hover */
+  color: #777;                 
   text-decoration: none;
 }
 
-/* after click: stays grey (never blue) */
 .section-link.is-selected{
   color: var(--muted) !important;
 }
@@ -201,4 +200,22 @@ img {
   color: #777 !important;
 }
 
+.drop-panel{
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: max-height 380ms ease, opacity 220ms ease, transform 380ms ease;
+}
+
+
+.drop-panel.is-open{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+.drop-inner{
+  padding-top: 10px;
+}
 
