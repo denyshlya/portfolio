@@ -193,45 +193,136 @@
 </p>
             </div>
           </div>
-<!-- SOFTWARE -->
-<a class="section-link" href="#" data-dd="software">Software</a>
-<div class="drop-panel" id="dd-software" hidden aria-hidden="true">
-  <div class="drop-inner">
+        </div>
+      </div>
+    </div>
+<!-- Main header button -->
+<a class="section-link" id="softwareLink" href="#">Software</a>
 
+<!-- Main dropdown content -->
+<div id="softwarePanel" class="drop-panel" hidden aria-hidden="true">
+  <div class="drop-inner">
     <div class="schematics-list">
+
       <!-- Description -->
-      <a class="section-link" href="#" data-dd="software-description">Description</a>
-      <div class="drop-panel" id="dd-software-description" hidden aria-hidden="true">
+      <a class="section-link" href="#" data-sw="software-description">Description</a>
+      <div class="drop-panel" id="sw-software-description" hidden aria-hidden="true">
         <div class="drop-inner">
           <p>(Drop software description here)</p>
         </div>
       </div>
 
       <!-- Flowchart -->
-      <a class="section-link" href="#" data-dd="software-flowchart">Flowchart</a>
-      <div class="drop-panel" id="dd-software-flowchart" hidden aria-hidden="true">
+      <a class="section-link" href="#" data-sw="software-flowchart">Flowchart</a>
+      <div class="drop-panel" id="sw-software-flowchart" hidden aria-hidden="true">
         <div class="drop-inner">
           <p>(Drop flowchart image or explanation here)</p>
         </div>
       </div>
 
       <!-- Code -->
-      <a class="section-link" href="#" data-dd="software-code">Code</a>
-      <div class="drop-panel" id="dd-software-code" hidden aria-hidden="true">
+      <a class="section-link" href="#" data-sw="software-code">Code</a>
+      <div class="drop-panel" id="sw-software-code" hidden aria-hidden="true">
         <div class="drop-inner">
           <p>(Drop code snippets or links here)</p>
         </div>
       </div>
-    </div>
 
+    </div>
   </div>
 </div>
 
-        </div>
-      </div>
-    </div>
-
     <script>
+      // ----- main Software behavior (reuses existing helpers) -----
+const softwareLink  = document.getElementById("softwareLink");
+const softwarePanel = document.getElementById("softwarePanel");
+
+let softwareOpen = false;
+let softwareSliding = false;
+
+async function softwareSlideToCenter(){
+  if (softwareSliding) return;
+  softwareSliding = true;
+
+  softwareLink.style.transform = "translateX(0px)";
+  softwareLink.getBoundingClientRect();
+
+  requestAnimationFrame(() => {
+    const shift = shiftToViewportCenter(softwareLink);
+    softwareLink.style.transform = `translateX(${shift}px)`;
+  });
+
+  await waitForTransition(softwareLink, "transform");
+  softwareSliding = false;
+}
+
+async function softwareSlideBackLeft(){
+  if (softwareSliding) return;
+  softwareSliding = true;
+
+  softwareLink.style.transform = "translateX(0px)";
+  await waitForTransition(softwareLink, "transform");
+
+  softwareSliding = false;
+}
+
+softwareLink.addEventListener("click", async (e) => {
+  e.preventDefault();
+  if (softwareSliding) return;
+
+  softwareOpen = !softwareOpen;
+
+  if (softwareOpen) {
+    softwareLink.classList.add("is-selected");
+    await softwareSlideToCenter();
+    await openPanel(softwarePanel);
+  } else {
+    // close any open sub-panels inside software before closing
+    softwarePanel.querySelectorAll(".drop-panel").forEach((p) => {
+      p.classList.remove("is-open");
+      p.style.maxHeight = "0px";
+      p.hidden = true;
+      p.setAttribute("aria-hidden", "true");
+    });
+    softwarePanel.querySelectorAll(".section-link").forEach((a) => a.classList.remove("is-selected"));
+
+    await closePanel(softwarePanel);
+    softwareLink.classList.remove("is-selected");
+    await softwareSlideBackLeft();
+  }
+});
+
+// keep centered on resize
+window.addEventListener("resize", () => {
+  if (!softwareOpen) return;
+
+  const shift = shiftToViewportCenter(softwareLink);
+  softwareLink.style.transform = `translateX(${shift}px)`;
+
+  if (!softwarePanel.hidden && softwarePanel.style.maxHeight !== "none") {
+    softwarePanel.style.maxHeight = softwarePanel.scrollHeight + "px";
+  }
+});
+
+// ----- sub dropdown behavior for Software (separate selector) -----
+document.querySelectorAll("[data-sw]").forEach((btn) => {
+  const key = btn.getAttribute("data-sw");
+  const panel = document.getElementById(`sw-${key}`);
+
+  btn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    if (softwarePanel.hidden) return;
+
+    if (panel.hidden) {
+      btn.classList.add("is-selected");
+      await openPanel(panel);
+    } else {
+      await closePanel(panel);
+      btn.classList.remove("is-selected");
+    }
+  });
+});
+
       // ----- helpers -----
       function shiftToViewportCenter(el){
         const r = el.getBoundingClientRect();
