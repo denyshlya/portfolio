@@ -21,12 +21,12 @@
 
     <hr>
 
+    <!-- Header button -->
     <a class="section-link" id="schematicsLink" href="#">Schematics</a>
 
-    <!-- Start hidden so it never shows on page load -->
+    <!-- Dropdown content (hidden on load; animated open/close) -->
     <div id="schematicsPanel" class="drop-panel" hidden aria-hidden="true">
       <div class="drop-inner">
-        <h2>Schematics</h2>
         <p>(Drop your schematics content here)</p>
       </div>
     </div>
@@ -36,6 +36,7 @@
       const panel = document.getElementById("schematicsPanel");
 
       let open = false;
+      let sliding = false;
 
       function shiftToViewportCenter(el){
         const r = el.getBoundingClientRect();
@@ -44,92 +45,103 @@
         return viewportCenter - elCenter;
       }
 
-      function openPanel(){
-        // make it participate in layout, then animate open
-        panel.hidden = false;
-        panel.classList.add("is-open");
-        panel.setAttribute("aria-hidden", "false");
-
-        // start collapsed so the transition can animate
-        panel.style.maxHeight = "0px";
-        panel.getBoundingClientRect(); // force reflow
-
-        panel.style.maxHeight = panel.scrollHeight + "px";
+      function waitForTransition(el, prop){
+        return new Promise((resolve) => {
+          const onEnd = (e) => {
+            if (e.propertyName !== prop) return;
+            el.removeEventListener("transitionend", onEnd);
+            resolve();
+          };
+          el.addEventListener("transitionend", onEnd);
+        });
       }
 
-      function closePanel(){
-        // animate closed
-        panel.style.maxHeight = panel.scrollHeight + "px";
-        panel.getBoundingClientRect(); // force reflow
+      async function slideToCenter(){
+        if (sliding) return;
+        sliding = true;
 
-        panel.style.maxHeight = "0px";
-        panel.classList.remove("is-open");
-        panel.setAttribute("aria-hidden", "true");
-
-        // after animation, fully hide it so it can't flash
-        const onEnd = (e) => {
-          if (e.propertyName !== "max-height") return;
-          panel.removeEventListener("transitionend", onEnd);
-          panel.hidden = true;
-        };
-        panel.addEventListener("transitionend", onEnd);
-      }
-
-      function slideToCenterThenDrop(){
         link.style.transform = "translateX(0px)";
-        link.getBoundingClientRect(); // force reflow
+        link.getBoundingClientRect(); // force reflow so animation triggers
 
         requestAnimationFrame(() => {
           const shift = shiftToViewportCenter(link);
           link.style.transform = `translateX(${shift}px)`;
         });
 
-        const onSlideEnd = (e) => {
-          if (e.propertyName !== "transform") return;
-          link.removeEventListener("transitionend", onSlideEnd);
-          openPanel();
-        };
-        link.addEventListener("transitionend", onSlideEnd);
+        await waitForTransition(link, "transform");
+        sliding = false;
       }
 
-      function collapseThenSlideBack(){
-        closePanel();
+      async function slideBackLeft(){
+        if (sliding) return;
+        sliding = true;
 
-        // slide back after we finish closing (use a timeout as a fallback)
-        const onCloseEnd = (e) => {
-          if (e.propertyName !== "max-height") return;
-          panel.removeEventListener("transitionend", onCloseEnd);
-          link.style.transform = "translateX(0px)";
-        };
-        panel.addEventListener("transitionend", onCloseEnd);
+        link.style.transform = "translateX(0px)";
+        await waitForTransition(link, "transform");
 
-        // fallback in case transitionend doesn't fire (rare)
-        setTimeout(() => {
-          if (!open) link.style.transform = "translateX(0px)";
-        }, 450);
+        sliding = false;
       }
 
-      link.addEventListener("click", (e) => {
+      async function openPanel(){
+        // Make visible but start collapsed, then animate down
+        panel.hidden = false;
+        panel.setAttribute("aria-hidden", "false");
+
+        panel.style.maxHeight = "0px";
+        panel.getBoundingClientRect(); // force reflow
+
+        panel.classList.add("is-open");
+        panel.style.maxHeight = panel.scrollHeight + "px";
+
+        await waitForTransition(panel, "max-height");
+
+        // Let it breathe after open (responsive to content changes)
+        panel.style.maxHeight = "none";
+      }
+
+      async function closePanel(){
+        // If maxHeight is none, set it to actual px first so it can animate
+        panel.style.maxHeight = panel.scrollHeight + "px";
+        panel.getBoundingClientRect(); // force reflow
+
+        panel.classList.remove("is-open");
+        panel.style.maxHeight = "0px";
+
+        await waitForTransition(panel, "max-height");
+
+        panel.hidden = true;
+        panel.setAttribute("aria-hidden", "true");
+      }
+
+      link.addEventListener("click", async (e) => {
         e.preventDefault();
+        if (sliding) return;
+
         open = !open;
 
         if (open) {
           link.classList.add("is-selected");
-          slideToCenterThenDrop();
+          await slideToCenter();
+          await openPanel();
         } else {
+          // close first, then slide back
+          await closePanel();
           link.classList.remove("is-selected");
-          collapseThenSlideBack();
+          await slideBackLeft();
         }
       });
 
       window.addEventListener("resize", () => {
         if (!open) return;
 
+        // keep centered while open
         const shift = shiftToViewportCenter(link);
         link.style.transform = `translateX(${shift}px)`;
 
-        // keep panel height correct while open
-        if (!panel.hidden) panel.style.maxHeight = panel.scrollHeight + "px";
+        // keep dropdown height correct if content is visible
+        if (!panel.hidden && panel.style.maxHeight !== "none") {
+          panel.style.maxHeight = panel.scrollHeight + "px";
+        }
       });
     </script>
   </div>
