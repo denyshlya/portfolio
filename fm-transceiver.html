@@ -24,51 +24,49 @@
     <!-- Make it a button-like link (no scrolling for now) -->
     <a class="section-link" id="schematicsLink" href="#">Schematics</a>
 
-    <!-- Hidden for now -->
+   
     <div id="schematicsContent" hidden>
       <h2>Schematics</h2>
       <p>(Drop your schematics content here)</p>
     </div>
 
     <script>
-      const link = document.getElementById("schematicsLink");
+  const link = document.getElementById("schematicsLink");
+  let centered = false;
 
-      function computeShiftToViewportCenter(el){
-        const rect = el.getBoundingClientRect();
-        const elCenter = rect.left + rect.width / 2;
-        const viewportCenter = window.innerWidth / 2;
-        return viewportCenter - elCenter;
-      }
+  function shiftToViewportCenter(el){
+    const rect = el.getBoundingClientRect();
+    const elCenter = rect.left + rect.width / 2;
+    const viewportCenter = window.innerWidth / 2;
+    return viewportCenter - elCenter;
+  }
 
-      function centerLink(){
-        const shift = computeShiftToViewportCenter(link);
-        link.style.setProperty("--shift", `${shift}px`);
-        link.classList.add("is-centered");
-      }
+  function updatePosition(){
+    if (!centered) return;
+    const shift = shiftToViewportCenter(link);
+    link.style.transform = `translateX(${shift}px)`;
+  }
 
-      function uncenterLink(){
-        link.style.setProperty("--shift", `0px`);
-        link.classList.remove("is-centered");
-      }
+  link.addEventListener("click", (e) => {
+    e.preventDefault();
 
-      link.addEventListener("click", (e) => {
-        e.preventDefault(); // stop anchor scroll
+    centered = !centered;
 
-        if (link.classList.contains("is-centered")) {
-          uncenterLink();
-        } else {
-          // set shift first so animation goes from 0 -> shift smoothly
-          link.style.setProperty("--shift", `${computeShiftToViewportCenter(link)}px`);
-          // ensure browser registers the starting state
-          requestAnimationFrame(() => link.classList.add("is-centered"));
-        }
-      });
+    if (centered) {
+      // force a paint so the transition always triggers
+      link.style.transform = "translateX(0px)";
+      link.getBoundingClientRect();
 
-      window.addEventListener("resize", () => {
-        if (!link.classList.contains("is-centered")) return;
-        link.style.setProperty("--shift", `${computeShiftToViewportCenter(link)}px`);
-      });
-    </script>
+      const shift = shiftToViewportCenter(link);
+      link.style.transform = `translateX(${shift}px)`;
+    } else {
+      link.style.transform = "translateX(0px)";
+    }
+  });
+
+  window.addEventListener("resize", updatePosition);
+</script>
+
   </div>
 </body>
 </html>
