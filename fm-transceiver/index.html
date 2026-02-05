@@ -450,13 +450,14 @@
                 <div class="zoom-lens" aria-hidden="true"></div>
               </div>
               <div class="hw-cap">Front</div>
+              <p></p>
             </div>
           
             <div class="hw-card">
               <div class="zoom-wrap" data-zoom="2.0" data-lens="220">
                 <img
                   class="zoom-img"
-                  src="/assets/photos/fm/pcb-rear.png"
+                  src="/assets/photos/fm/pcb-back.png"
                   alt="PCB rear"
                 />
                 <div class="zoom-lens" aria-hidden="true"></div>
@@ -466,7 +467,9 @@
           
           </div>
 
+        <p>The PCB was designed with functional partitioning and signal-integrity considerations in mind. Components are grouped by subsystem (MCU support, RF front-end, audio, and power management) to keep routing intuitive and minimize trace length for critical signals. High-pin-count devices are centrally located to simplify fan-out routing, while decoupling capacitors are placed as close as possible to IC power pins to reduce supply noise and improve stability. A continuous ground reference and short return paths were prioritized throughout the layout to improve overall robustness.
 
+<hr>The RF IC was intentionally placed in the bottom-right corner of the board near the antenna connection point (E1). This placement reduces the amount of small-signal and RF-sensitive routing that must travel across the PCB, helping limit noise coupling from digital and power circuitry. Keeping the RF section localized also simplified impedance-aware routing between the RF IC and antenna interface.</p>
         </div>
       </div>
     </section>
