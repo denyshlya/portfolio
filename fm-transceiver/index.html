@@ -7,6 +7,27 @@
   <link rel="stylesheet" href="/style.css">
 
   <style>
+    .stats-table{
+    width: 100%;
+    max-width: 70ch;
+    margin: 0 auto;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  .stats-table th,
+  .stats-table td{
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    vertical-align: top;
+  }
+  .stats-table th{
+    width: 42%;
+    font-weight: 600;
+    opacity: 0.9;
+  }
+  .stats-table td{
+    opacity: 0.95;
+  }
     .schematics-list{
       text-align: center;
       margin-top: 8px;
@@ -29,9 +50,8 @@
       margin-top: 10px;
     }
 
-    /* stack the two top-level headers vertically */
-    #schematicsLink,
-    #softwareLink{
+    /* stack top-level headers vertically (NO IDs) */
+    .top-link{
       display: block;
       width: fit-content;
       margin: 14px 0 8px 0;
@@ -106,40 +126,40 @@
     }
 
     /* ===== zoom ===== */
-.zoom-wrap{
-  position: relative;
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-}
+    .zoom-wrap{
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
 
-.zoom-img{
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 10px;
-}
+    .zoom-img{
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 10px;
+    }
 
-.zoom-lens{
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 220px;              /* overridden by data-lens */
-  height: 220px;
-  border: 2px solid #000;
-  border-radius: 14px;
-  background-repeat: no-repeat;
-  background-color: #fff;
-  pointer-events: none;
+    .zoom-lens{
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 220px;              /* overridden by data-lens */
+      height: 220px;
+      border: 2px solid #000;
+      border-radius: 14px;
+      background-repeat: no-repeat;
+      background-color: #fff;
+      pointer-events: none;
 
-  opacity: 0;
-  transform: translate(-9999px, -9999px);
-  transition: opacity 120ms ease;
-}
+      opacity: 0;
+      transform: translate(-9999px, -9999px);
+      transition: opacity 120ms ease;
+    }
 
-.zoom-wrap:hover .zoom-lens{
-  opacity: 1;
-}
+    .zoom-wrap:hover .zoom-lens{
+      opacity: 1;
+    }
   </style>
 </head>
 
@@ -149,320 +169,301 @@
     <h1>FM Transceiver</h1>
 
     <p>
-      This project was made for the Electronics Engineering program at Okanagan College in 2022. The idea was to integrate digital control architecture with RF components to create a low power 2-way FM radio (pair of walkie talkies); Below is a technical description of the project.
+      This project was made for the Electronics Engineering program at Okanagan College in 2022.
+      The idea was to integrate digital control architecture with RF components to create a low power
+      2-way FM radio (pair of walkie talkies); Below is a technical description of the project.
     </p>
 
     <hr>
-<!-- Changes -->
-<a class="section-link" id="softwareLink" href="#">Quick Stats</a>
 
-    <div id="softwarePanel" class="drop-panel" hidden aria-hidden="true">
-      <div class="drop-inner">
-        <div class="schematics-list">
+    <!-- =========================
+         TOP-LEVEL DROPDOWNS
+         ========================= -->
 
-          <a class="section-link" href="#" data-sw="software-description">Executive summary</a>
-          <div class="drop-panel" id="sw-software-description" hidden aria-hidden="true">
-            <div class="drop-inner">
-                        <p>The FM Transceiver project aims to create a simple, effective, wireless solution for indoor two-way communication. Two devices were designed and built, each organized around five core functional blocks: system input, RF backend, MCU support, system output, and power supply, along with a small set of supporting components. The devices use frequency modulation (FM), which offers better noise immunity and stability compared to amplitude modulation. Received audio is output through an 8 Ω speaker driven by a low-power audio amplifier. A Microchip PIC24FJ1024GB606 microcontroller is used to handle input processing and system control due to its simplicity and flexible I/O. RF communication is handled by the SI4720 transceiver, a highly integrated solution that manages all RF functions within the system.</p>
-            </div>
-          </div>
-           </div>
-           </div>
-          </div>
+    <!-- Quick Stats -->
+    <section class="drop" data-drop>
+      <a class="section-link top-link" href="#" data-drop-btn>Quick Stats</a>
 
-    <a class="section-link" id="softwareLink" href="#">Interactive System Architecture</a>
+      <div class="drop-panel" hidden aria-hidden="true" data-drop-panel>
+        <div class="drop-inner">
+          <div class="schematics-list">
+              <table class="stats-table">
+                <tbody>
+                  <tr><th>Project</th><td>FM Transceiver Pair (two devices)</td></tr>
+                  <tr><th>Program / Year</th><td>Electronic Engineering Technology, 2022 (Okanagan College)</td></tr>
+                  <tr><th>Modulation</th><td>FM (Frequency Modulation)</td></tr>
+                  <tr><th>Target Range</th><td>10 m (indoor short-range)</td></tr>
+                  <tr><th>Battery</th><td>Single 18650 Li-ion (3000 mAh)</td></tr>
+                  <tr><th>Standby Time (spec)</th><td>3 hours</td></tr>
+                  <tr><th>Continuous TX Time (spec)</th><td>30 minutes</td></tr>
+                  <tr><th>MCU</th><td>Microchip PIC24FJ1024GB606</td></tr>
+                  <tr><th>RF Transceiver</th><td>Silicon Labs SI4720 (76–108 MHz band)</td></tr>
+                  <tr><th>Audio Output</th><td>8 Ω speaker + TI TPA321 amplifier (BTL)</td></tr>
+                  <tr><th>Display</th><td>1.3&quot; SPI GLCD (Adafruit 4313, 240×240, ST7789 controller)</td></tr>
+                  <tr><th>Battery Protection</th><td>TI BQ77905 (“BATMAN”) + NTC + dual MOSFET cutoff</td></tr>
+                  <tr><th>Battery Monitoring</th><td>MCP3021 (10-bit I²C ADC) + buffer stage</td></tr>
+                  <tr><th>Status</th><td>Not fully functional (SPI timing/transfer issues prevented control of SI4720 + GLCD)</td></tr>
+                </tbody>
+            </table>
+            
+        
 
-    <div id="softwarePanel" class="drop-panel" hidden aria-hidden="true">
-      <div class="drop-inner">
-        <div class="schematics-list">
-
-          <a class="section-link" href="#" data-sw="software-description">Block Diagram</a>
-          <div class="drop-panel" id="sw-software-description" hidden aria-hidden="true">
-            <div class="drop-inner">
-                        <p>The FM Transceiver project aims to create a simple, effective, wireless solution for indoor two-way communication. Two devices were designed and built, each organized around five core functional blocks: system input, RF backend, MCU support, system output, and power supply, along with a small set of supporting components. The devices use frequency modulation (FM), which offers better noise immunity and stability compared to amplitude modulation. Received audio is output through an 8 Ω speaker driven by a low-power audio amplifier. A Microchip PIC24FJ1024GB606 microcontroller is used to handle input processing and system control due to its simplicity and flexible I/O. RF communication is handled by the SI4720 transceiver, a highly integrated solution that manages all RF functions within the system.</p>
-            </div>
-          </div>
-           </div>
-           </div>
-          </div>
-
-    <a class="section-link" id="softwareLink" href="#">Schematics</a>
-
-    <div id="softwarePanel" class="drop-panel" hidden aria-hidden="true">
-      <div class="drop-inner">
-        <div class="schematics-list">
-
-          <a class="section-link" href="#" data-sw="software-description">Executive summary</a>
-          <div class="drop-panel" id="sw-software-description" hidden aria-hidden="true">
-            <div class="drop-inner">
-                        <p>The FM Transceiver project aims to create a simple, effective, wireless solution for indoor two-way communication. Two devices were designed and built, each organized around five core functional blocks: system input, RF backend, MCU support, system output, and power supply, along with a small set of supporting components. The devices use frequency modulation (FM), which offers better noise immunity and stability compared to amplitude modulation. Received audio is output through an 8 Ω speaker driven by a low-power audio amplifier. A Microchip PIC24FJ1024GB606 microcontroller is used to handle input processing and system control due to its simplicity and flexible I/O. RF communication is handled by the SI4720 transceiver, a highly integrated solution that manages all RF functions within the system.</p>
-            </div>
-          </div>
-           </div>
-           </div>
-          </div>
-    <a class="section-link" id="softwareLink" href="#">Hardware Implementation</a>
-
-    <div id="softwarePanel" class="drop-panel" hidden aria-hidden="true">
-      <div class="drop-inner">
-        <div class="schematics-list">
-
-          <a class="section-link" href="#" data-sw="software-description">Executive summary</a>
-          <div class="drop-panel" id="sw-software-description" hidden aria-hidden="true">
-            <div class="drop-inner">
-                        <p>The FM Transceiver project aims to create a simple, effective, wireless solution for indoor two-way communication. Two devices were designed and built, each organized around five core functional blocks: system input, RF backend, MCU support, system output, and power supply, along with a small set of supporting components. The devices use frequency modulation (FM), which offers better noise immunity and stability compared to amplitude modulation. Received audio is output through an 8 Ω speaker driven by a low-power audio amplifier. A Microchip PIC24FJ1024GB606 microcontroller is used to handle input processing and system control due to its simplicity and flexible I/O. RF communication is handled by the SI4720 transceiver, a highly integrated solution that manages all RF functions within the system.</p>
-            </div>
-          </div>
-           </div>
-           </div>
-          </div>
-    <a class="section-link" id="softwareLink" href="#">Software/Control</a>
-
-    <div id="softwarePanel" class="drop-panel" hidden aria-hidden="true">
-      <div class="drop-inner">
-        <div class="schematics-list">
-
-          <a class="section-link" href="#" data-sw="software-description">Executive summary</a>
-          <div class="drop-panel" id="sw-software-description" hidden aria-hidden="true">
-            <div class="drop-inner">
-                        <p>The FM Transceiver project aims to create a simple, effective, wireless solution for indoor two-way communication. Two devices were designed and built, each organized around five core functional blocks: system input, RF backend, MCU support, system output, and power supply, along with a small set of supporting components. The devices use frequency modulation (FM), which offers better noise immunity and stability compared to amplitude modulation. Received audio is output through an 8 Ω speaker driven by a low-power audio amplifier. A Microchip PIC24FJ1024GB606 microcontroller is used to handle input processing and system control due to its simplicity and flexible I/O. RF communication is handled by the SI4720 transceiver, a highly integrated solution that manages all RF functions within the system.</p>
-            </div>
-          </div>
-           </div>
-           </div>
-          </div>
-          <a class="section-link" id="softwareLink" href="#">Power & Safety</a>
-
-    <div id="softwarePanel" class="drop-panel" hidden aria-hidden="true">
-      <div class="drop-inner">
-        <div class="schematics-list">
-
-          <a class="section-link" href="#" data-sw="software-description">Executive summary</a>
-          <div class="drop-panel" id="sw-software-description" hidden aria-hidden="true">
-            <div class="drop-inner">
-                        <p>The FM Transceiver project aims to create a simple, effective, wireless solution for indoor two-way communication. Two devices were designed and built, each organized around five core functional blocks: system input, RF backend, MCU support, system output, and power supply, along with a small set of supporting components. The devices use frequency modulation (FM), which offers better noise immunity and stability compared to amplitude modulation. Received audio is output through an 8 Ω speaker driven by a low-power audio amplifier. A Microchip PIC24FJ1024GB606 microcontroller is used to handle input processing and system control due to its simplicity and flexible I/O. RF communication is handled by the SI4720 transceiver, a highly integrated solution that manages all RF functions within the system.</p>
-            </div>
-          </div>
-           </div>
-           </div>
-          </div>
-    <a class="section-link" id="softwareLink" href="#">Skills and Outcomes</a>
-
-    <div id="softwarePanel" class="drop-panel" hidden aria-hidden="true">
-      <div class="drop-inner">
-        <div class="schematics-list">
-
-          <a class="section-link" href="#" data-sw="software-description">Executive summary</a>
-          <div class="drop-panel" id="sw-software-description" hidden aria-hidden="true">
-            <div class="drop-inner">
-                        <p>The FM Transceiver project aims to create a simple, effective, wireless solution for indoor two-way communication. Two devices were designed and built, each organized around five core functional blocks: system input, RF backend, MCU support, system output, and power supply, along with a small set of supporting components. The devices use frequency modulation (FM), which offers better noise immunity and stability compared to amplitude modulation. Received audio is output through an 8 Ω speaker driven by a low-power audio amplifier. A Microchip PIC24FJ1024GB606 microcontroller is used to handle input processing and system control due to its simplicity and flexible I/O. RF communication is handled by the SI4720 transceiver, a highly integrated solution that manages all RF functions within the system.</p>
-            </div>
-          </div>
-           </div>
-           </div>
-          </div>
-    <!--Changes!-->
-    <!-- Overview -->
-    <a class="section-link" id="softwareLink" href="#">Overview</a>
-
-    <div id="softwarePanel" class="drop-panel" hidden aria-hidden="true">
-      <div class="drop-inner">
-        <div class="schematics-list">
-
-          <a class="section-link" href="#" data-sw="software-description">Executive summary</a>
-          <div class="drop-panel" id="sw-software-description" hidden aria-hidden="true">
-            <div class="drop-inner">
-                        <p>The FM Transceiver project aims to create a simple, effective, wireless solution for indoor two-way communication. Two devices were designed and built, each organized around five core functional blocks: system input, RF backend, MCU support, system output, and power supply, along with a small set of supporting components. The devices use frequency modulation (FM), which offers better noise immunity and stability compared to amplitude modulation. Received audio is output through an 8 Ω speaker driven by a low-power audio amplifier. A Microchip PIC24FJ1024GB606 microcontroller is used to handle input processing and system control due to its simplicity and flexible I/O. RF communication is handled by the SI4720 transceiver, a highly integrated solution that manages all RF functions within the system.</p>
-            </div>
-          </div>
-
-          <a class="section-link" href="#" data-sw="software-flowchart">Scope</a>
-          <div class="drop-panel" id="sw-software-flowchart" hidden aria-hidden="true">
-            <div class="drop-inner">
-             <p>The FM Transceiver Pair project focuses on the development of two portable RF transceivers designed for simple two-way communication. Each device includes a user interface composed of four buttons and a single switch: a lit transmit button, a mode select button, a pair of up/down buttons, and an on/off switch. In addition to the controls, each unit incorporates a 1.3-inch display and speaker-based audio output. Because the devices are powered by removable batteries, a battery management system is included to ensure both user safety and battery protection. The project also involves testing activities, including software debugging and optimization to reduce unnecessary power consumption, as well as verification of RF performance against the project requirements.
-
-Several scope adjustments were made over the course of the project to improve feasibility and increase the likelihood of success. An externally chargeable battery was adopted to reduce system complexity, and a single 18650 lithium-ion cell was selected due to better availability, lower cost, and higher energy density compared to lithium-polymer alternatives. Later design changes included the addition of an external ADC to simplify battery charge monitoring and reduce overall hardware and software complexity. The design was also revised to use a single speaker rather than multiple speakers in response to parts availability constraints.
-</p>
-            </div>
-          </div>
-
-          <a class="section-link" href="#" data-sw="software-code">Control</a>
-          <div class="drop-panel" id="sw-software-code" hidden aria-hidden="true">
-            <div class="drop-inner">
-
-              <div class="zoom-wrap" data-zoom="2.0" data-lens="220">
-  <img class="zoom-img"
-       src="/assets/photos/fm/soft-flow.png"
-       alt="Software block diagram" />
-  <div class="zoom-lens" aria-hidden="true"></div>
-</div>
-              <p>
-                The system begins by initializing all modules and I/O ports before displaying key operating metrics on the graphical LCD. During normal operation, the transceiver remains in receive mode while continuously monitoring user inputs. The mode selection determines the function of the up and down buttons, allowing the user to change the active channel, adjust audio volume, or modify screen brightness. If the transmit button is pressed, the system temporarily switches to transmit mode and returns to receive mode once the button is released. This control loop repeats continuously to enable responsive, real-time interaction with the device.
-              </p>
-
-            </div>
-          </div>
-
-          <a class="section-link" href="#" data-sw="block-diagram">Block Diagram</a>
-          <div class="drop-panel" id="sw-block-diagram" hidden aria-hidden="true">
-            <div class="drop-inner">
-
-              <section class="subsystem-map">
-                <div class="map-wrap" aria-label="Subsystem diagram">
-                  <img src="/assets/photos/fm/block-diagram.png" alt="FM Transceiver subsystem block diagram" />
-
-                  <svg class="map-overlay" viewBox="0 0 872 804" aria-hidden="true">
-                    <rect class="hot hot-red" data-target="battery-management" x="77" y="190" width="736" height="137" rx="18" />
-                    <rect class="hot hot-blue" data-target="interrupts"        x="260" y="17"  width="325" height="307" rx="18" />
-                    <rect class="hot hot-cyan" data-target="decoupling"         x="78"  y="330" width="195" height="142" rx="18" />
-                    <rect class="hot hot-black" data-target="glcd"             x="85"  y="490" width="465" height="120" rx="18" />
-                    <rect class="hot hot-audio" data-target="audio-amplifier"  x="325" y="355" width="225" height="120" rx="18" />
-                    <rect class="hot hot-uc" data-target="microcontroller"     x="340" y="632" width="210" height="120" rx="18" />
-                    <rect class="hot hot-magenta" data-target="transceiver"    x="555" y="345" width="265" height="425" rx="18" />
-                  </svg>
-                </div>
-
-                <div class="map-panels">
-                  <div id="panel-battery-management" class="drop-panel" hidden aria-hidden="true"><div class="drop-inner"><h3>Battery management</h3><p>The power supply block provides energy to the system and ensures safe battery operation. It includes the battery cell, a master disconnect switch for complete power isolation, and a battery management circuit that protects the cell and disconnects it under fault conditions.</p></div></div>
-                  <div id="panel-interrupts" class="drop-panel" hidden aria-hidden="true"><div class="drop-inner"><h3>System inputs</h3><p>The system input block provides the primary user interface and power control for the device. It includes the microphone for audio input, user buttons for device control, and a main power switch that connects or disconnects the battery. These elements allow the user to interact with and operate the transceiver at a basic level.</p></div></div>
-                  <div id="panel-decoupling" class="drop-panel" hidden aria-hidden="true"><div class="drop-inner"><h3>MCU support</h3><p>The MCU support block contains the circuitry required for stable and reliable microcontroller operation. It includes decoupling capacitors that filter supply noise and stabilize the MCU power rails, as well as a crystal oscillator that provides the system clock for internal timing and synchronization.</p></div></div>
-                  <div id="panel-glcd" class="drop-panel" hidden aria-hidden="true"><div class="drop-inner"><h3>Outputs</h3><p>The system output block includes the display and audio output components. A 1.3-inch screen, powered by the battery management system and controlled by the microcontroller, presents key system information to the user. Audio output is provided through a speaker driven by a dedicated amplifier, which plays the received signal from the RF backend.</p></div></div>
-                  <div id="panel-audio-amplifier" class="drop-panel" hidden aria-hidden="true"><div class="drop-inner"><h3>Audio amplifier</h3><p>The audio amplifier block boosts the received audio signal to a level suitable for driving the speaker. It interfaces directly with the RF backend and provides clear, audible output during receive operation.</p></div></div>
-                  <div id="panel-microcontroller" class="drop-panel" hidden aria-hidden="true"><div class="drop-inner"><h3>Microcontroller</h3> <p>The MCU block serves as the central controller of the system. It processes user inputs, manages operating modes, and coordinates communication between the RF backend, display, and audio output. The microcontroller executes the system firmware and controls overall device behavior during both transmit and receive operation.</p></div></div>
-                  <div id="panel-transceiver" class="drop-panel" hidden aria-hidden="true"><div class="drop-inner"><h3>RF backend</h3> <p>The RF backend handles all wireless communication functions. A single transceiver IC manages both transmit and receive operation and is powered through the battery management system. The antenna interface is implemented using fixed and tunable matching components to provide proper impedance matching and efficient RF performance.</p></div></div>
-                </div>
-              </section>
-
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <!-- Schematics -->
-    <a class="section-link" id="schematicsLink" href="#">Schematics</a>
-
-    <div id="schematicsPanel" class="drop-panel" hidden aria-hidden="true">
-      <div class="drop-inner">
-        <div class="schematics-list">
-         <!-- 1 -->
-          <a class="section-link" href="#" data-dd="battery-management">Battery management</a>
-          <div class="drop-panel" id="dd-battery-management" hidden aria-hidden="true">
-            <div class="drop-inner">
-              <img src="/assets/photos/fm/battery-management.png" alt="Battery management schematic">
-              <p>The BATMAN battery management subsystem for the FM Transceiver project and is centered around the Texas Instruments BQ77905 battery manager IC. Its primary function is to safely manage a single 18650 Li-ion cell by providing over-voltage, under-voltage, over-current, short-circuit, and temperature protection. The BATMAN IC continuously monitors cell voltage, charge/discharge current through a sense resistor, and cell temperature via an external NTC thermistor. Two external MOSFETs are driven by BATMAN to disconnect the battery from the system load when unsafe conditions are detected. Status outputs such as CHG, DSG, and LD provide the system controller with real-time information about battery and load state. In the broader scope of the project, this subsystem forms the core of the power supply block, ensuring user safety and protecting all downstream electronics. By isolating fault conditions at the battery level, BATMAN improves overall system reliability and allows the FM transceiver to operate safely from a removable high-energy Li-ion cell.</p>
-            </div>
-          </div>
-
-          <!-- 2 -->
-          <a class="section-link" href="#" data-dd="voltage-regulator">Voltage regulator</a>
-          <div class="drop-panel" id="dd-voltage-regulator" hidden aria-hidden="true">
-            <div class="drop-inner">
-              <img src="/assets/photos/fm/voltage-regulator.png" alt="Voltage regulator schematic">
-             <p>The S-1172 voltage regulator stage used to condition battery power for the rest of the system. The regulator takes the protected battery output (PREBAT) and produces a stable, regulated supply rail for sensitive electronics downstream. Input and output capacitors are placed close to the device to ensure stability, suppress noise, and handle transient current demands. The ON/OFF pin allows the regulator to be cleanly enabled or disabled as part of the system power-up sequence. By regulating the inherently variable voltage of an 18650 Li-ion cell, this stage prevents brownouts and over-voltage stress on digital and RF components. In the broader scope of the project, this schematic sits directly after the BATMAN battery manager and acts as the final power conditioning step. Together, these blocks ensure the transceiver operates reliably across the full battery discharge curve.</p></div>
-          </div>
-
-          <!-- 3 -->
-          <a class="section-link" href="#" data-dd="battery-percentage">Battery percentage</a>
-          <div class="drop-panel" id="dd-battery-percentage" hidden aria-hidden="true">
-            <div class="drop-inner">
-              <img src="/assets/photos/fm/battery-percentage.png" alt="Battery percentage schematic">
-              <p>The battery voltage monitoring circuit measures the protected battery rail and provides a low-power, MCU-readable representation of remaining charge. A high-value resistor divider scales the battery voltage while minimizing continuous current draw. The TC75 op-amp buffers this divided signal, presenting a stable, low-impedance output that is insensitive to ADC loading. This buffered voltage is then fed into the MCP3021 I²C ADC for digitization. The ADC allows the microcontroller to periodically sample battery voltage without directly loading the battery or analog node. In the broader system, this block enables battery percentage estimation and low-battery warning functionality while preserving overall power efficiency.</p>
-            </div>
-          </div>
-
-          <!-- 4 -->
-          <a class="section-link" href="#" data-dd="microcontroller">Microcontroller</a>
-          <div class="drop-panel" id="dd-microcontroller" hidden aria-hidden="true">
-            <div class="drop-inner">
-              <img src="/assets/photos/fm/microcontroller.png" alt="Microcontroller schematic">
-              <p>The microcontroller handles all high-level control, coordination, and user interaction for the system. It interfaces with peripherals over SPI and I²C, manages external interrupts from user inputs, and controls system states such as transmit/receive mode, display updates, and power behavior. Multiple power and ground pins are used to properly isolate digital and analog domains and reduce noise sensitivity. Programming and debugging are supported through dedicated ICSP lines. External interrupts allow responsive, event-driven input handling without continuous polling. In the broader project, this device acts as the central controller that ties together the RF, power management, audio, and user interface subsystems.
-</p>
-            </div>
-          </div>
-
-          <!-- 5 -->
-          <a class="section-link" href="#" data-dd="glcd">GLCD</a>
-          <div class="drop-panel" id="dd-glcd" hidden aria-hidden="true">
-            <div class="drop-inner">
-              <img src="/assets/photos/fm/glcd.png" alt="GLCD schematic">
-              <p>The graphical LCD interface provides the primary visual output for the device, displaying system state and user feedback. It is powered directly from the system supply and communicates with the microcontroller over an SPI interface. Dedicated control lines handle reset, data/command selection, chip select, and backlight control. This separation of control and data signals allows for efficient screen updates and flexible display operation. The backlight enable line allows brightness control or power savings when the display is not needed. In the overall project, this module serves as the main user interface, presenting information such as battery level, operating mode, and channel selection.
-</p>
-            </div>
-          </div>
-
-          <!-- 6 -->
-          <a class="section-link" href="#" data-dd="interrupts">Interrupts</a>
-          <div class="drop-panel" id="dd-interrupts" hidden aria-hidden="true">
-            <div class="drop-inner">
-              <img src="/assets/photos/fm/interrupts.png" alt="Interrupts schematic">
-              <p>The input and interrupt circuit captures all user button interactions and converts them into clean, reliable digital signals for the microcontroller. Each pushbutton is biased from the battery rail and uses an RC network to debounce the mechanical switch action. The resulting signals are routed directly to dedicated external interrupt pins, enabling immediate, event-driven response. One dual-switch device is used to reduce component count while maintaining independent inputs. This approach eliminates the need for constant polling and reduces processor overhead. In the broader system, this block provides responsive user control for mode selection, adjustments, and transmit/receive operation.</p>
-            </div>
-          </div>
-
-          <!-- 7 -->
-          <a class="section-link" href="#" data-dd="icsp">ICSP</a>
-          <div class="drop-panel" id="dd-icsp" hidden aria-hidden="true">
-            <div class="drop-inner">
-              <img src="/assets/photos/fm/icsp.png" alt="ICSP schematic">
-              <p>The ICSP programming interface allows the microcontroller to be programmed and debugged in-circuit without removing it from the board. It exposes the required power, ground, reset, and programming data and clock lines. This enables firmware updates, debugging, and recovery during development and testing. The interface follows Microchip’s standard ICSP pinout for compatibility with common programming tools. Keeping this header on the board simplifies iteration and troubleshooting. In the overall project, it provides the essential link between firmware development and the physical hardware.
-</p>
-            </div>
-          </div>
-
-          <!-- 8 -->
-          <a class="section-link" href="#" data-dd="reset">Reset</a>
-          <div class="drop-panel" id="dd-reset" hidden aria-hidden="true">
-            <div class="drop-inner">
-              <img src="/assets/photos/fm/reset.png" alt="Reset schematic">
-              <p>The reset and startup circuit ensures the microcontroller enters a known, stable state during power-up and user-initiated resets. A pull-up resistor holds the reset line high under normal operation, while the pushbutton allows manual assertion of reset. An RC network introduces a brief delay at startup to prevent false triggering during supply ramp-up. A series resistor protects the reset pin and improves signal integrity. The jumper allows flexibility during development or troubleshooting by modifying reset behavior. In the overall system, this block guarantees predictable boot behavior and reliable recovery from fault conditions.
-</p>
-            </div>
-          </div>
-
-          <!-- 9 -->
-          <a class="section-link" href="#" data-dd="decoupling">Decoupling</a>
-          <div class="drop-panel" id="dd-decoupling" hidden aria-hidden="true">
-            <div class="drop-inner">
-              <img src="/assets/photos/fm/decoupling.png" alt="Decoupling schematic">
-              <p>The power decoupling network stabilizes the supply rails feeding the digital and analog sections of the system. Local bypass capacitors provide a low-impedance path to ground for high-frequency noise and transient current spikes. Separating VDD and AVDD domains helps reduce coupling between digital switching noise and sensitive analog circuitry. This layout improves power integrity and overall signal quality across the board. By filtering disturbances close to the load, the circuit protects against erratic behavior and resets. In the broader project, this block is critical for reliable operation of the microcontroller and mixed-signal peripherals.
-</p>
-            </div>
-          </div>
-
-          <!-- 10 -->
-          <a class="section-link" href="#" data-dd="transceiver">Transceiver</a>
-          <div class="drop-panel" id="dd-transceiver" hidden aria-hidden="true">
-            <div class="drop-inner">
-              <img src="/assets/photos/fm/transceiver.png" alt="Transceiver schematic">
-              <p>The FM transceiver block handles all wireless transmission and reception as well as audio signal interfacing for the device. The SI4720 integrates modulation, demodulation, and RF signal processing into a single IC, reducing external component count and RF design complexity. An external antenna and matching inductor form the RF front end for efficient transmission and reception. Digital control and data exchange with the microcontroller are handled through a serial interface, allowing dynamic configuration of frequency, mode, and power. Audio input from the microphone is AC-coupled into the transceiver, while received audio is routed out for amplification. In the overall project, this block serves as the core communication engine that enables two-way FM voice operation.
-</p>
-            </div>
-          </div>
-
-          <!-- 11 -->
-          <a class="section-link" href="#" data-dd="crystal-oscillator">Crystal oscillator</a>
-          <div class="drop-panel" id="dd-crystal-oscillator" hidden aria-hidden="true">
-            <div class="drop-inner">
-              <img src="/assets/photos/fm/crystal-oscillator.png" alt="Crystal oscillator schematic">
-              <p>The crystal oscillator provides a stable and accurate reference clock for the transceiver’s internal timing and frequency synthesis. A 32.768 kHz crystal is used with matched load capacitors to ensure reliable oscillation and long-term frequency stability. This low-frequency reference supports precise tuning and consistent RF performance. Proper grounding and symmetric loading minimize phase noise and startup issues. In the broader system, this clock source underpins accurate modulation, demodulation, and channel stability.
-</p>
-            </div>
-          </div>
-
-          <!-- 12 -->
-          <a class="section-link" href="#" data-dd="audio-amplifier">Audio amplifier</a>
-          <div class="drop-panel" id="dd-audio-amplifier" hidden aria-hidden="true">
-            <div class="drop-inner">
-              <img src="/assets/photos/fm/audio-amplifier.png" alt="Audio amplifier schematic">
-              <p>The audio amplifier stage boosts the received audio signal to a level suitable for driving the speaker. The TPA321 is configured in a bridge-tied load arrangement to maximize output power while operating from a low supply voltage. AC coupling and biasing components condition the input signal and remove DC offsets. Local decoupling ensures stable operation under dynamic audio loads. The shutdown control allows the amplifier to be disabled when audio output is not required, reducing power consumption. In the overall system, this block converts demodulated RF audio into audible sound for the user.
-</p>
-            </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
+
+    <!-- Interactive System Architecture -->
+    <section class="drop" data-drop>
+      <a class="section-link top-link" href="#" data-drop-btn>Interactive System Architecture</a>
+
+      <div class="drop-panel" hidden aria-hidden="true" data-drop-panel>
+        <div class="drop-inner">
+          <div class="schematics-list">
+
+            <a class="section-link" href="#" data-sub-btn="block">Block Diagram</a>
+            <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="block">
+              <div class="drop-inner">
+            <a class="section-link" href="#" data-sub-btn="diagram">Block Diagram</a>
+            <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="diagram">
+              <div class="drop-inner">
+                <section class="subsystem-map">
+                  <div class="map-wrap" aria-label="Subsystem diagram">
+                    <img src="/assets/photos/fm/block-diagram.png" alt="FM Transceiver subsystem block diagram" />
+
+                    <svg class="map-overlay" viewBox="0 0 872 804" aria-hidden="true">
+                      <rect class="hot hot-red"     data-target="battery-management" x="77"  y="190" width="736" height="137" rx="18" />
+                      <rect class="hot hot-blue"    data-target="interrupts"        x="260" y="17"  width="325" height="307" rx="18" />
+                      <rect class="hot hot-cyan"    data-target="decoupling"        x="78"  y="330" width="195" height="142" rx="18" />
+                      <rect class="hot hot-black"   data-target="glcd"             x="85"  y="490" width="465" height="120" rx="18" />
+                      <rect class="hot hot-audio"   data-target="audio-amplifier"  x="325" y="355" width="225" height="120" rx="18" />
+                      <rect class="hot hot-uc"      data-target="microcontroller"  x="340" y="632" width="210" height="120" rx="18" />
+                      <rect class="hot hot-magenta" data-target="transceiver"      x="555" y="345" width="265" height="425" rx="18" />
+                    </svg>
+                  </div>
+
+                  <!-- NOTE: These panels are now keyed by data-map-panel (NO IDs) -->
+                  <div class="map-panels" data-map-panels>
+                    <div class="drop-panel" hidden aria-hidden="true" data-map-panel="battery-management">
+                      <div class="drop-inner">
+                        <h3>Battery management</h3>
+                        <p>The power supply block provides energy to the system and ensures safe battery operation. It includes the battery cell, a master disconnect switch for complete power isolation, and a battery management circuit that protects the cell and disconnects it under fault conditions.</p>
+                      </div>
+                    </div>
+
+                    <div class="drop-panel" hidden aria-hidden="true" data-map-panel="interrupts">
+                      <div class="drop-inner">
+                        <h3>System inputs</h3>
+                        <p>The system input block provides the primary user interface and power control for the device. It includes the microphone for audio input, user buttons for device control, and a main power switch that connects or disconnects the battery.</p>
+                      </div>
+                    </div>
+
+                    <div class="drop-panel" hidden aria-hidden="true" data-map-panel="decoupling">
+                      <div class="drop-inner">
+                        <h3>MCU support</h3>
+                        <p>The MCU support block contains the circuitry required for stable and reliable microcontroller operation. It includes decoupling capacitors that filter supply noise and stabilize the MCU power rails, as well as a crystal oscillator that provides the system clock.</p>
+                      </div>
+                    </div>
+
+                    <div class="drop-panel" hidden aria-hidden="true" data-map-panel="glcd">
+                      <div class="drop-inner">
+                        <h3>Outputs</h3>
+                        <p>The system output block includes the display and audio output components. A 1.3-inch screen presents key system information. Audio output is provided through a speaker driven by a dedicated amplifier.</p>
+                      </div>
+                    </div>
+
+                    <div class="drop-panel" hidden aria-hidden="true" data-map-panel="audio-amplifier">
+                      <div class="drop-inner">
+                        <h3>Audio amplifier</h3>
+                        <p>The audio amplifier block boosts the received audio signal to a level suitable for driving the speaker.</p>
+                      </div>
+                    </div>
+
+                    <div class="drop-panel" hidden aria-hidden="true" data-map-panel="microcontroller">
+                      <div class="drop-inner">
+                        <h3>Microcontroller</h3>
+                        <p>The MCU block serves as the central controller of the system. It processes user inputs, manages operating modes, and coordinates communication between the RF backend, display, and audio output.</p>
+                      </div>
+                    </div>
+
+                    <div class="drop-panel" hidden aria-hidden="true" data-map-panel="transceiver">
+                      <div class="drop-inner">
+                        <h3>RF backend</h3>
+                        <p>The RF backend handles all wireless communication functions. A single transceiver IC manages both transmit and receive operation. Matching components provide proper impedance matching and efficient RF performance.</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Schematics (Top-level) -->
+    <section class="drop" data-drop>
+      <a class="section-link top-link" href="#" data-drop-btn>Schematics</a>
+
+      <div class="drop-panel" hidden aria-hidden="true" data-drop-panel>
+        <div class="drop-inner">
+          <div class="schematics-list">
+
+            <a class="section-link" href="#" data-sub-btn="battery-management">Battery management</a>
+            <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="battery-management">
+              <div class="drop-inner">
+                <img src="/assets/photos/fm/battery-management.png" alt="Battery management schematic">
+                <p>The BATMAN battery management subsystem for the FM Transceiver project and is centered around the Texas Instruments BQ77905 battery manager IC. Its primary function is to safely manage a single 18650 Li-ion cell by providing over-voltage, under-voltage, over-current, short-circuit, and temperature protection. The BATMAN IC continuously monitors cell voltage, charge/discharge current through a sense resistor, and cell temperature via an external NTC thermistor. Two external MOSFETs are driven by BATMAN to disconnect the battery from the system load when unsafe conditions are detected. Status outputs such as CHG, DSG, and LD provide the system controller with real-time information about battery and load state. In the broader scope of the project, this subsystem forms the core of the power supply block, ensuring user safety and protecting all downstream electronics. By isolating fault conditions at the battery level, BATMAN improves overall system reliability and allows the FM transceiver to operate safely from a removable high-energy Li-ion cell.</p>
+              </div>
+            </div>
+
+            <a class="section-link" href="#" data-sub-btn="voltage-regulator">Voltage regulator</a>
+            <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="voltage-regulator">
+              <div class="drop-inner">
+                <img src="/assets/photos/fm/voltage-regulator.png" alt="Voltage regulator schematic">
+                <p>The S-1172 voltage regulator stage used to condition battery power for the rest of the system. The regulator takes the protected battery output (PREBAT) and produces a stable, regulated supply rail for sensitive electronics downstream. Input and output capacitors are placed close to the device to ensure stability, suppress noise, and handle transient current demands. The ON/OFF pin allows the regulator to be cleanly enabled or disabled as part of the system power-up sequence. By regulating the inherently variable voltage of an 18650 Li-ion cell, this stage prevents brownouts and over-voltage stress on digital and RF components. In the broader scope of the project, this schematic sits directly after the BATMAN battery manager and acts as the final power conditioning step. Together, these blocks ensure the transceiver operates reliably across the full battery discharge curve.</p>
+              </div>
+            </div>
+
+            <a class="section-link" href="#" data-sub-btn="battery-percentage">Battery percentage</a>
+            <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="battery-percentage">
+              <div class="drop-inner">
+                <img src="/assets/photos/fm/battery-percentage.png" alt="Battery percentage schematic">
+                <p>The battery voltage monitoring circuit measures the protected battery rail and provides a low-power, MCU-readable representation of remaining charge. A high-value resistor divider scales the battery voltage while minimizing continuous current draw. The TC75 op-amp buffers this divided signal, presenting a stable, low-impedance output that is insensitive to ADC loading. This buffered voltage is then fed into the MCP3021 I²C ADC for digitization. The ADC allows the microcontroller to periodically sample battery voltage without directly loading the battery or analog node. In the broader system, this block enables battery percentage estimation and low-battery warning functionality while preserving overall power efficiency.</p>
+              </div>
+            </div>
+
+            <a class="section-link" href="#" data-sub-btn="microcontroller">Microcontroller</a>
+            <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="microcontroller">
+              <div class="drop-inner">
+                <img src="/assets/photos/fm/microcontroller.png" alt="Microcontroller schematic">
+                <p>The microcontroller handles all high-level control, coordination, and user interaction for the system. It interfaces with peripherals over SPI and I²C, manages external interrupts from user inputs, and controls system states such as transmit/receive mode, display updates, and power behavior. Multiple power and ground pins are used to properly isolate digital and analog domains and reduce noise sensitivity. Programming and debugging are supported through dedicated ICSP lines. External interrupts allow responsive, event-driven input handling without continuous polling. In the broader project, this device acts as the central controller that ties together the RF, power management, audio, and user interface subsystems.</p>
+              </div>
+            </div>
+
+            <a class="section-link" href="#" data-sub-btn="glcd">GLCD</a>
+            <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="glcd">
+              <div class="drop-inner">
+                <img src="/assets/photos/fm/glcd.png" alt="GLCD schematic">
+                <p>The graphical LCD interface provides the primary visual output for the device, displaying system state and user feedback. It is powered directly from the system supply and communicates with the microcontroller over an SPI interface. Dedicated control lines handle reset, data/command selection, chip select, and backlight control. This separation of control and data signals allows for efficient screen updates and flexible display operation. The backlight enable line allows brightness control or power savings when the display is not needed. In the overall project, this module serves as the main user interface, presenting information such as battery level, operating mode, and channel selection.</p>
+              </div>
+            </div>
+
+            <a class="section-link" href="#" data-sub-btn="interrupts">Interrupts</a>
+            <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="interrupts">
+              <div class="drop-inner">
+                <img src="/assets/photos/fm/interrupts.png" alt="Interrupts schematic">
+                <p>The input and interrupt circuit captures all user button interactions and converts them into clean, reliable digital signals for the microcontroller. Each pushbutton is biased from the battery rail and uses an RC network to debounce the mechanical switch action. The resulting signals are routed directly to dedicated external interrupt pins, enabling immediate, event-driven response. One dual-switch device is used to reduce component count while maintaining independent inputs. This approach eliminates the need for constant polling and reduces processor overhead. In the broader system, this block provides responsive user control for mode selection, adjustments, and transmit/receive operation.</p>
+              </div>
+            </div>
+
+            <a class="section-link" href="#" data-sub-btn="icsp">ICSP</a>
+            <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="icsp">
+              <div class="drop-inner">
+                <img src="/assets/photos/fm/icsp.png" alt="ICSP schematic">
+                <p>The ICSP programming interface allows the microcontroller to be programmed and debugged in-circuit without removing it from the board. It exposes the required power, ground, reset, and programming data and clock lines. This enables firmware updates, debugging, and recovery during development and testing. The interface follows Microchip’s standard ICSP pinout for compatibility with common programming tools. Keeping this header on the board simplifies iteration and troubleshooting. In the overall project, it provides the essential link between firmware development and the physical hardware.</p>
+              </div>
+            </div>
+
+            <a class="section-link" href="#" data-sub-btn="reset">Reset</a>
+            <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="reset">
+              <div class="drop-inner">
+                <img src="/assets/photos/fm/reset.png" alt="Reset schematic">
+                <p>The reset and startup circuit ensures the microcontroller enters a known, stable state during power-up and user-initiated resets. A pull-up resistor holds the reset line high under normal operation, while the pushbutton allows manual assertion of reset. An RC network introduces a brief delay at startup to prevent false triggering during supply ramp-up. A series resistor protects the reset pin and improves signal integrity. The jumper allows flexibility during development or troubleshooting by modifying reset behavior. In the overall system, this block guarantees predictable boot behavior and reliable recovery from fault conditions.</p>
+              </div>
+            </div>
+
+            <a class="section-link" href="#" data-sub-btn="decoupling">Decoupling</a>
+            <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="decoupling">
+              <div class="drop-inner">
+                <img src="/assets/photos/fm/decoupling.png" alt="Decoupling schematic">
+                <p>The power decoupling network stabilizes the supply rails feeding the digital and analog sections of the system. Local bypass capacitors provide a low-impedance path to ground for high-frequency noise and transient current spikes. Separating VDD and AVDD domains helps reduce coupling between digital switching noise and sensitive analog circuitry. This layout improves power integrity and overall signal quality across the board. By filtering disturbances close to the load, the circuit protects against erratic behavior and resets. In the broader project, this block is critical for reliable operation of the microcontroller and mixed-signal peripherals.</p>
+              </div>
+            </div>
+
+            <a class="section-link" href="#" data-sub-btn="transceiver">Transceiver</a>
+            <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="transceiver">
+              <div class="drop-inner">
+                <img src="/assets/photos/fm/transceiver.png" alt="Transceiver schematic">
+                <p>The FM transceiver block handles all wireless transmission and reception as well as audio signal interfacing for the device. The SI4720 integrates modulation, demodulation, and RF signal processing into a single IC, reducing external component count and RF design complexity. An external antenna and matching inductor form the RF front end for efficient transmission and reception. Digital control and data exchange with the microcontroller are handled through a serial interface, allowing dynamic configuration of frequency, mode, and power. Audio input from the microphone is AC-coupled into the transceiver, while received audio is routed out for amplification. In the overall project, this block serves as the core communication engine that enables two-way FM voice operation.</p>
+              </div>
+            </div>
+
+            <a class="section-link" href="#" data-sub-btn="crystal-oscillator">Crystal oscillator</a>
+            <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="crystal-oscillator">
+              <div class="drop-inner">
+                <img src="/assets/photos/fm/crystal-oscillator.png" alt="Crystal oscillator schematic">
+                <p>The crystal oscillator provides a stable and accurate reference clock for the transceiver’s internal timing and frequency synthesis. A 32.768 kHz crystal is used with matched load capacitors to ensure reliable oscillation and long-term frequency stability. This low-frequency reference supports precise tuning and consistent RF performance. Proper grounding and symmetric loading minimize phase noise and startup issues. In the broader system, this clock source underpins accurate modulation, demodulation, and channel stability.</p>
+              </div>
+            </div>
+
+            <a class="section-link" href="#" data-sub-btn="audio-amplifier">Audio amplifier</a>
+            <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="audio-amplifier">
+              <div class="drop-inner">
+                <img src="/assets/photos/fm/audio-amplifier.png" alt="Audio amplifier schematic">
+                <p>The audio amplifier stage boosts the received audio signal to a level suitable for driving the speaker. The TPA321 is configured in a bridge-tied load arrangement to maximize output power while operating from a low supply voltage. AC coupling and biasing components condition the input signal and remove DC offsets. Local decoupling ensures stable operation under dynamic audio loads. The shutdown control allows the amplifier to be disabled when audio output is not required, reducing power consumption. In the overall system, this block converts demodulated RF audio into audible sound for the user.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- (Optional) placeholders for the other top-level headings you had -->
+    <section class="drop" data-drop>
+      <a class="section-link top-link" href="#" data-drop-btn>Hardware Implementation</a>
+      <div class="drop-panel" hidden aria-hidden="true" data-drop-panel>
+        <div class="drop-inner">
+          <p>Add your hardware implementation content here.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="drop" data-drop>
+      <a class="section-link top-link" href="#" data-drop-btn>Software/Control</a>
+      <div class="drop-panel" hidden aria-hidden="true" data-drop-panel>
+        <div class="drop-inner">
+                  <div class="zoom-wrap" data-zoom="2.0" data-lens="220">
+                  <img class="zoom-img"
+                       src="/assets/photos/fm/soft-flow.png"
+                       alt="Software block diagram" />
+                  <div class="zoom-lens" aria-hidden="true"></div>
+                </div>
+
+                <p>
+                  The system begins by initializing all modules and I/O ports before displaying key operating metrics on the graphical LCD.
+                  During normal operation, the transceiver remains in receive mode while continuously monitoring user inputs. The mode
+                  selection determines the function of the up and down buttons, allowing the user to change the active channel, adjust
+                  audio volume, or modify screen brightness. If the transmit button is pressed, the system temporarily switches to transmit
+                  mode and returns to receive mode once the button is released. This control loop repeats continuously to enable responsive,
+                  real-time interaction with the device.
+                </p>
+              </div>
+            </div>
+    </section>
+
+    <section class="drop" data-drop>
+      <a class="section-link top-link" href="#" data-drop-btn>Power &amp; Safety</a>
+      <div class="drop-panel" hidden aria-hidden="true" data-drop-panel>
+        <div class="drop-inner">
+          <p>Add your power &amp; safety content here.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="drop" data-drop>
+      <a class="section-link top-link" href="#" data-drop-btn>Skills and Outcomes</a>
+      <div class="drop-panel" hidden aria-hidden="true" data-drop-panel>
+        <div class="drop-inner">
+          <p>Add your skills/outcomes content here.</p>
+        </div>
+      </div>
+    </section>
 
     <script>
       // ===== helpers (ONLY ONCE) =====
@@ -511,284 +512,208 @@ Several scope adjustments were made over the course of the project to improve fe
         panel.setAttribute("aria-hidden", "true");
       }
 
-      // ===== Overview (software) =====
-      const softwareLink  = document.getElementById("softwareLink");
-      const softwarePanel = document.getElementById("softwarePanel");
-      let softwareOpen = false;
-      let softwareSliding = false;
-
-      async function softwareSlideToCenter(){
-        if (softwareSliding) return;
-        softwareSliding = true;
-
-        softwareLink.style.transform = "translateX(0px)";
-        softwareLink.getBoundingClientRect();
-
-        requestAnimationFrame(() => {
-          const shift = shiftToViewportCenter(softwareLink);
-          softwareLink.style.transform = `translateX(${shift}px)`;
+      function hardCloseInside(root){
+        root.querySelectorAll(".drop-panel").forEach((p) => {
+          p.classList.remove("is-open");
+          p.style.maxHeight = "0px";
+          p.hidden = true;
+          p.setAttribute("aria-hidden", "true");
         });
-
-        await waitForTransition(softwareLink, "transform");
-        softwareSliding = false;
+        root.querySelectorAll(".section-link").forEach((a) => a.classList.remove("is-selected"));
       }
 
-      async function softwareSlideBackLeft(){
-        if (softwareSliding) return;
-        softwareSliding = true;
+      // ===== Generic dropdowns (NO IDs) =====
+      document.querySelectorAll("[data-drop]").forEach((drop) => {
+        const topBtn = drop.querySelector("[data-drop-btn]");
+        const topPanel = drop.querySelector("[data-drop-panel]");
+        if (!topBtn || !topPanel) return;
 
-        softwareLink.style.transform = "translateX(0px)";
-        await waitForTransition(softwareLink, "transform");
+        let open = false;
+        let sliding = false;
 
-        softwareSliding = false;
-      }
+        async function slideToCenter(){
+          if (sliding) return;
+          sliding = true;
 
-      softwareLink.addEventListener("click", async (e) => {
-        e.preventDefault();
-        if (softwareSliding) return;
+          topBtn.style.transform = "translateX(0px)";
+          topBtn.getBoundingClientRect();
 
-        softwareOpen = !softwareOpen;
-
-        if (softwareOpen) {
-          softwareLink.classList.add("is-selected");
-          await softwareSlideToCenter();
-          await openPanel(softwarePanel);
-        } else {
-          // close nested panels
-          softwarePanel.querySelectorAll(".drop-panel").forEach((p) => {
-            p.classList.remove("is-open");
-            p.style.maxHeight = "0px";
-            p.hidden = true;
-            p.setAttribute("aria-hidden", "true");
+          requestAnimationFrame(() => {
+            const shift = shiftToViewportCenter(topBtn);
+            topBtn.style.transform = `translateX(${shift}px)`;
           });
-          softwarePanel.querySelectorAll(".section-link").forEach((a) => a.classList.remove("is-selected"));
 
-          await closePanel(softwarePanel);
-          softwareLink.classList.remove("is-selected");
-          await softwareSlideBackLeft();
+          await waitForTransition(topBtn, "transform");
+          sliding = false;
         }
-      });
 
-      document.querySelectorAll("[data-sw]").forEach((btn) => {
-        const key = btn.getAttribute("data-sw");
-        const panel = document.getElementById(`sw-${key}`);
-        if (!panel) return;
+        async function slideBackLeft(){
+          if (sliding) return;
+          sliding = true;
 
-        btn.addEventListener("click", async (e) => {
+          topBtn.style.transform = "translateX(0px)";
+          await waitForTransition(topBtn, "transform");
+
+          sliding = false;
+        }
+
+        topBtn.addEventListener("click", async (e) => {
           e.preventDefault();
-          if (softwarePanel.hidden) return;
+          if (sliding) return;
 
-          if (panel.hidden) {
-            btn.classList.add("is-selected");
-            await openPanel(panel);
+          open = !open;
+
+          if (open){
+            topBtn.classList.add("is-selected");
+            await slideToCenter();
+            await openPanel(topPanel);
           } else {
-            await closePanel(panel);
-            btn.classList.remove("is-selected");
+            hardCloseInside(topPanel);
+            await closePanel(topPanel);
+            topBtn.classList.remove("is-selected");
+            await slideBackLeft();
           }
         });
-      });
 
-      // ===== Schematics =====
-      const schematicsLink = document.getElementById("schematicsLink");
-      const schematicsPanel = document.getElementById("schematicsPanel");
-      let schematicsOpen = false;
-      let schematicsSliding = false;
-
-      async function schematicsSlideToCenter(){
-        if (schematicsSliding) return;
-        schematicsSliding = true;
-
-        schematicsLink.style.transform = "translateX(0px)";
-        schematicsLink.getBoundingClientRect();
-
-        requestAnimationFrame(() => {
-          const shift = shiftToViewportCenter(schematicsLink);
-          schematicsLink.style.transform = `translateX(${shift}px)`;
-        });
-
-        await waitForTransition(schematicsLink, "transform");
-        schematicsSliding = false;
-      }
-
-      async function schematicsSlideBackLeft(){
-        if (schematicsSliding) return;
-        schematicsSliding = true;
-
-        schematicsLink.style.transform = "translateX(0px)";
-        await waitForTransition(schematicsLink, "transform");
-
-        schematicsSliding = false;
-      }
-
-      schematicsLink.addEventListener("click", async (e) => {
-        e.preventDefault();
-        if (schematicsSliding) return;
-
-        schematicsOpen = !schematicsOpen;
-
-        if (schematicsOpen) {
-          schematicsLink.classList.add("is-selected");
-          await schematicsSlideToCenter();
-          await openPanel(schematicsPanel);
-        } else {
-          document.querySelectorAll(".schematics-list .drop-panel").forEach((p) => {
-            p.classList.remove("is-open");
-            p.style.maxHeight = "0px";
-            p.hidden = true;
-            p.setAttribute("aria-hidden", "true");
-          });
-          document.querySelectorAll(".schematics-list .section-link").forEach((a) => a.classList.remove("is-selected"));
-
-          await closePanel(schematicsPanel);
-          schematicsLink.classList.remove("is-selected");
-          await schematicsSlideBackLeft();
-        }
-      });
-
-      document.querySelectorAll(".schematics-list [data-dd]").forEach((btn) => {
-        const key = btn.getAttribute("data-dd");
-        const panel = document.getElementById(`dd-${key}`);
-        if (!panel) return;
-
-        btn.addEventListener("click", async (e) => {
-          e.preventDefault();
-          if (schematicsPanel.hidden) return;
-
-          if (panel.hidden) {
-            btn.classList.add("is-selected");
-            await openPanel(panel);
-          } else {
-            await closePanel(panel);
-            btn.classList.remove("is-selected");
-          }
-        });
-      });
-
-      // ===== Subsystem map click behavior =====
-      const regions = Array.from(document.querySelectorAll(".map-overlay .hot"));
-      const panels = new Map(
-        Array.from(document.querySelectorAll(".map-panels .drop-panel"))
-          .map(p => [p.id.replace("panel-",""), p])
-      );
-
-      let active = null;
-
-      regions.forEach(r => {
-        r.addEventListener("click", async () => {
-          const key = r.dataset.target;
-          const panel = panels.get(key);
+        // nested panels scoped to THIS dropdown only
+        drop.querySelectorAll("[data-sub-btn]").forEach((btn) => {
+          const key = btn.getAttribute("data-sub-btn");
+          const panel = drop.querySelector(`[data-sub-panel="${key}"]`);
           if (!panel) return;
 
-          if (active === key){
-            r.classList.remove("is-active");
-            await closePanel(panel);
-            active = null;
-            return;
+          btn.addEventListener("click", async (e) => {
+            e.preventDefault();
+            if (topPanel.hidden) return;
+
+            if (panel.hidden){
+              btn.classList.add("is-selected");
+              await openPanel(panel);
+            } else {
+              await closePanel(panel);
+              btn.classList.remove("is-selected");
+            }
+          });
+        });
+
+        // keep centered & heights good on resize (scoped)
+        window.addEventListener("resize", () => {
+          if (open){
+            topBtn.style.transform = `translateX(${shiftToViewportCenter(topBtn)}px)`;
+            if (!topPanel.hidden && topPanel.style.maxHeight !== "none"){
+              topPanel.style.maxHeight = topPanel.scrollHeight + "px";
+            }
           }
-
-          if (active){
-            const prevRegion = regions.find(x => x.dataset.target === active);
-            const prevPanel = panels.get(active);
-            if (prevRegion) prevRegion.classList.remove("is-active");
-            if (prevPanel && !prevPanel.hidden) await closePanel(prevPanel);
-          }
-
-          regions.forEach(x => x.classList.toggle("is-active", x.dataset.target === key));
-          await openPanel(panel);
-          active = key;
-
-          panel.scrollIntoView({ behavior: "smooth", block: "start" });
         });
       });
 
-      // ===== Pan/zoom =====
-     (function setupLensZoom(){
-  document.querySelectorAll(".zoom-wrap").forEach((wrap) => {
-    const img = wrap.querySelector(".zoom-img");
-    const lens = wrap.querySelector(".zoom-lens");
-    if (!img || !lens) return;
+      // ===== Subsystem map click behavior (NO IDs) =====
+      document.querySelectorAll(".subsystem-map").forEach((map) => {
+        const regions = Array.from(map.querySelectorAll(".map-overlay .hot"));
+        const panels = Array.from(map.querySelectorAll("[data-map-panel]"));
+        const panelByKey = new Map(panels.map(p => [p.getAttribute("data-map-panel"), p]));
 
-    function getNum(attr, fallback){
-      const v = Number(wrap.dataset[attr]);
-      return Number.isFinite(v) ? v : fallback;
-    }
+        let active = null;
 
-    function syncLensSize(){
-      const s = getNum("lens", 220);
-      lens.style.width = s + "px";
-      lens.style.height = s + "px";
-      return s;
-    }
+        regions.forEach((r) => {
+          r.addEventListener("click", async () => {
+            const key = r.dataset.target;
+            const panel = panelByKey.get(key);
+            if (!panel) return;
 
-    function updateBackground(){
-      // use rendered size so edges line up (no cutoff / no drift)
-      const r = img.getBoundingClientRect();
-      const zoom = getNum("zoom", 2.0);
+            if (active === key){
+              r.classList.remove("is-active");
+              await closePanel(panel);
+              active = null;
+              return;
+            }
 
-      lens.style.backgroundImage = `url(${img.src})`;
-      lens.style.backgroundSize = `${r.width * zoom}px ${r.height * zoom}px`;
-      return { r, zoom };
-    }
+            if (active){
+              const prevRegion = regions.find(x => x.dataset.target === active);
+              const prevPanel = panelByKey.get(active);
+              if (prevRegion) prevRegion.classList.remove("is-active");
+              if (prevPanel && !prevPanel.hidden) await closePanel(prevPanel);
+            }
 
-    function setPos(e){
-      const { r, zoom } = updateBackground();
-      const lensSize = syncLensSize();
-      const half = lensSize / 2;
+            regions.forEach(x => x.classList.toggle("is-active", x.dataset.target === key));
+            await openPanel(panel);
+            active = key;
 
-      // pointer position relative to image
-      let x = e.clientX - r.left;
-      let y = e.clientY - r.top;
-
-      // clamp so the lens can reach the image edge without showing “outside”
-      x = Math.max(0, Math.min(x, r.width));
-      y = Math.max(0, Math.min(y, r.height));
-
-      // lens position (relative to wrapper)
-      const lx = x - half;
-      const ly = y - half;
-
-      lens.style.transform = `translate(${lx}px, ${ly}px)`;
-
-      // background offset so the pixel under cursor is centered in the lens
-      const bx = -x * zoom + half;
-      const by = -y * zoom + half;
-      lens.style.backgroundPosition = `${bx}px ${by}px`;
-    }
-
-    function onEnter(){
-      syncLensSize();
-      updateBackground();
-      lens.style.opacity = "1";
-    }
-
-    function onLeave(){
-      lens.style.opacity = "0";
-      lens.style.transform = "translate(-9999px, -9999px)";
-    }
-
-    wrap.addEventListener("mouseenter", onEnter);
-    wrap.addEventListener("mousemove", setPos);
-    wrap.addEventListener("mouseleave", onLeave);
-
-    // if the page resizes, keep it accurate
-    window.addEventListener("resize", () => {
-      if (lens.style.opacity === "1") updateBackground();
-    });
-  });
-})();
-
-      // keep centered on resize for both headers
-      window.addEventListener("resize", () => {
-        if (softwareOpen){
-          softwareLink.style.transform = `translateX(${shiftToViewportCenter(softwareLink)}px)`;
-          if (!softwarePanel.hidden && softwarePanel.style.maxHeight !== "none") softwarePanel.style.maxHeight = softwarePanel.scrollHeight + "px";
-        }
-        if (schematicsOpen){
-          schematicsLink.style.transform = `translateX(${shiftToViewportCenter(schematicsLink)}px)`;
-          if (!schematicsPanel.hidden && schematicsPanel.style.maxHeight !== "none") schematicsPanel.style.maxHeight = schematicsPanel.scrollHeight + "px";
-        }
+            panel.scrollIntoView({ behavior: "smooth", block: "start" });
+          });
+        });
       });
+
+      // ===== Pan/zoom (unchanged, already ID-free) =====
+      (function setupLensZoom(){
+        document.querySelectorAll(".zoom-wrap").forEach((wrap) => {
+          const img = wrap.querySelector(".zoom-img");
+          const lens = wrap.querySelector(".zoom-lens");
+          if (!img || !lens) return;
+
+          function getNum(attr, fallback){
+            const v = Number(wrap.dataset[attr]);
+            return Number.isFinite(v) ? v : fallback;
+          }
+
+          function syncLensSize(){
+            const s = getNum("lens", 220);
+            lens.style.width = s + "px";
+            lens.style.height = s + "px";
+            return s;
+          }
+
+          function updateBackground(){
+            const r = img.getBoundingClientRect();
+            const zoom = getNum("zoom", 2.0);
+
+            lens.style.backgroundImage = `url(${img.src})`;
+            lens.style.backgroundSize = `${r.width * zoom}px ${r.height * zoom}px`;
+            return { r, zoom };
+          }
+
+          function setPos(e){
+            const { r, zoom } = updateBackground();
+            const lensSize = syncLensSize();
+            const half = lensSize / 2;
+
+            let x = e.clientX - r.left;
+            let y = e.clientY - r.top;
+
+            x = Math.max(0, Math.min(x, r.width));
+            y = Math.max(0, Math.min(y, r.height));
+
+            const lx = x - half;
+            const ly = y - half;
+
+            lens.style.transform = `translate(${lx}px, ${ly}px)`;
+
+            const bx = -x * zoom + half;
+            const by = -y * zoom + half;
+            lens.style.backgroundPosition = `${bx}px ${by}px`;
+          }
+
+          function onEnter(){
+            syncLensSize();
+            updateBackground();
+            lens.style.opacity = "1";
+          }
+
+          function onLeave(){
+            lens.style.opacity = "0";
+            lens.style.transform = "translate(-9999px, -9999px)";
+          }
+
+          wrap.addEventListener("mouseenter", onEnter);
+          wrap.addEventListener("mousemove", setPos);
+          wrap.addEventListener("mouseleave", onLeave);
+
+          window.addEventListener("resize", () => {
+            if (lens.style.opacity === "1") updateBackground();
+          });
+        });
+      })();
     </script>
+
   </div>
 </body>
 </html>
