@@ -510,9 +510,7 @@
           <p>
             Physical assembled prototype.
           </p>
-          <div id="stl-viewer-enclosure"
-             style="width:100%; height:520px; border:1px solid rgba(0,0,0,0.12); border-radius:8px;">
-          </div>
+
 
           <p>Fusion 360 enclosure design.</p>
           
@@ -774,119 +772,7 @@
           });
         });
       })();
-        import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
-  import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js";
-  import { STLLoader } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/STLLoader.js";
-
-  let stlInited = false;
-
-  function initSTLViewer(container, stlPath) {
-    // Must be visible (dropdown open), otherwise width/height = 0 and you'll get a blank render
-    const rect = container.getBoundingClientRect();
-    if (rect.width < 10 || rect.height < 10) return false;
-
-    // Scene
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xffffff);
-
-    // Camera
-    const camera = new THREE.PerspectiveCamera(45, rect.width / rect.height, 0.1, 100000);
-
-    // Renderer
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(rect.width, rect.height);
-    container.appendChild(renderer.domElement);
-
-    // Lights
-    scene.add(new THREE.AmbientLight(0xffffff, 0.7));
-    const dir = new THREE.DirectionalLight(0xffffff, 0.8);
-    dir.position.set(300, 500, 300);
-    scene.add(dir);
-
-    // Controls
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-
-    // Load STL
-    const loader = new STLLoader();
-    loader.load(
-      stlPath,
-      (geometry) => {
-        geometry.computeVertexNormals();
-
-        const material = new THREE.MeshStandardMaterial({
-          color: 0x9aa4b2,
-          metalness: 0.1,
-          roughness: 0.6
-        });
-
-        const mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
-
-        // Center + fit camera
-        const box = new THREE.Box3().setFromObject(mesh);
-        const size = box.getSize(new THREE.Vector3());
-        const center = box.getCenter(new THREE.Vector3());
-        mesh.position.sub(center);
-
-        const maxDim = Math.max(size.x, size.y, size.z);
-        const fov = camera.fov * (Math.PI / 180);
-        const dist = (maxDim / 2) / Math.tan(fov / 2);
-
-        camera.position.set(dist * 1.2, dist * 0.9, dist * 1.2);
-        camera.near = maxDim / 1000;
-        camera.far  = maxDim * 1000;
-        camera.updateProjectionMatrix();
-
-        controls.target.set(0, 0, 0);
-        controls.update();
-      },
-      undefined,
-      (err) => console.error("STL load failed:", err)
-    );
-
-    function resize() {
-      const r = container.getBoundingClientRect();
-      camera.aspect = r.width / r.height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(r.width, r.height);
-    }
-    window.addEventListener("resize", resize);
-
-    function animate() {
-      requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
-    }
-    animate();
-
-    return true;
-  }
-
-  // IMPORTANT: init ONLY when the dropdown is opened (so container has non-zero size)
-  document.querySelectorAll("[data-drop]").forEach((drop) => {
-    const btn = drop.querySelector("[data-drop-btn]");
-    if (!btn) return;
-
-    // Only hook the "Form & Enclosure" section
-    if (btn.textContent.trim() !== "Form & Enclosure") return;
-
-    btn.addEventListener("click", () => {
-      if (stlInited) return;
-
-      // wait for your openPanel animation/layout to finish
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          const container = document.getElementById("stl-viewer-enclosure");
-          if (!container) return;
-
-          const ok = initSTLViewer(container, "/assets/stl/mainbody.stl");
-          if (ok) stlInited = true;
-        });
-      });
-    });
-  });
+     
     </script>
 
   </div>
