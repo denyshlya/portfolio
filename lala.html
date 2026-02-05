@@ -224,9 +224,78 @@
             <a class="section-link" href="#" data-sub-btn="block">Block Diagram</a>
             <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="block">
               <div class="drop-inner">
-                <p>
-                  (Put your short “block diagram” intro here if you want.)
-                </p>
+            <a class="section-link" href="#" data-sub-btn="diagram">Block Diagram</a>
+            <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="diagram">
+              <div class="drop-inner">
+                <section class="subsystem-map">
+                  <div class="map-wrap" aria-label="Subsystem diagram">
+                    <img src="/assets/photos/fm/block-diagram.png" alt="FM Transceiver subsystem block diagram" />
+
+                    <svg class="map-overlay" viewBox="0 0 872 804" aria-hidden="true">
+                      <rect class="hot hot-red"     data-target="battery-management" x="77"  y="190" width="736" height="137" rx="18" />
+                      <rect class="hot hot-blue"    data-target="interrupts"        x="260" y="17"  width="325" height="307" rx="18" />
+                      <rect class="hot hot-cyan"    data-target="decoupling"        x="78"  y="330" width="195" height="142" rx="18" />
+                      <rect class="hot hot-black"   data-target="glcd"             x="85"  y="490" width="465" height="120" rx="18" />
+                      <rect class="hot hot-audio"   data-target="audio-amplifier"  x="325" y="355" width="225" height="120" rx="18" />
+                      <rect class="hot hot-uc"      data-target="microcontroller"  x="340" y="632" width="210" height="120" rx="18" />
+                      <rect class="hot hot-magenta" data-target="transceiver"      x="555" y="345" width="265" height="425" rx="18" />
+                    </svg>
+                  </div>
+
+                  <!-- NOTE: These panels are now keyed by data-map-panel (NO IDs) -->
+                  <div class="map-panels" data-map-panels>
+                    <div class="drop-panel" hidden aria-hidden="true" data-map-panel="battery-management">
+                      <div class="drop-inner">
+                        <h3>Battery management</h3>
+                        <p>The power supply block provides energy to the system and ensures safe battery operation. It includes the battery cell, a master disconnect switch for complete power isolation, and a battery management circuit that protects the cell and disconnects it under fault conditions.</p>
+                      </div>
+                    </div>
+
+                    <div class="drop-panel" hidden aria-hidden="true" data-map-panel="interrupts">
+                      <div class="drop-inner">
+                        <h3>System inputs</h3>
+                        <p>The system input block provides the primary user interface and power control for the device. It includes the microphone for audio input, user buttons for device control, and a main power switch that connects or disconnects the battery.</p>
+                      </div>
+                    </div>
+
+                    <div class="drop-panel" hidden aria-hidden="true" data-map-panel="decoupling">
+                      <div class="drop-inner">
+                        <h3>MCU support</h3>
+                        <p>The MCU support block contains the circuitry required for stable and reliable microcontroller operation. It includes decoupling capacitors that filter supply noise and stabilize the MCU power rails, as well as a crystal oscillator that provides the system clock.</p>
+                      </div>
+                    </div>
+
+                    <div class="drop-panel" hidden aria-hidden="true" data-map-panel="glcd">
+                      <div class="drop-inner">
+                        <h3>Outputs</h3>
+                        <p>The system output block includes the display and audio output components. A 1.3-inch screen presents key system information. Audio output is provided through a speaker driven by a dedicated amplifier.</p>
+                      </div>
+                    </div>
+
+                    <div class="drop-panel" hidden aria-hidden="true" data-map-panel="audio-amplifier">
+                      <div class="drop-inner">
+                        <h3>Audio amplifier</h3>
+                        <p>The audio amplifier block boosts the received audio signal to a level suitable for driving the speaker.</p>
+                      </div>
+                    </div>
+
+                    <div class="drop-panel" hidden aria-hidden="true" data-map-panel="microcontroller">
+                      <div class="drop-inner">
+                        <h3>Microcontroller</h3>
+                        <p>The MCU block serves as the central controller of the system. It processes user inputs, manages operating modes, and coordinates communication between the RF backend, display, and audio output.</p>
+                      </div>
+                    </div>
+
+                    <div class="drop-panel" hidden aria-hidden="true" data-map-panel="transceiver">
+                      <div class="drop-inner">
+                        <h3>RF backend</h3>
+                        <p>The RF backend handles all wireless communication functions. A single transceiver IC manages both transmit and receive operation. Matching components provide proper impedance matching and efficient RF performance.</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
               </div>
             </div>
 
@@ -302,78 +371,7 @@
               </div>
             </div>
 
-            <a class="section-link" href="#" data-sub-btn="diagram">Block Diagram</a>
-            <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="diagram">
-              <div class="drop-inner">
-                <section class="subsystem-map">
-                  <div class="map-wrap" aria-label="Subsystem diagram">
-                    <img src="/assets/photos/fm/block-diagram.png" alt="FM Transceiver subsystem block diagram" />
 
-                    <svg class="map-overlay" viewBox="0 0 872 804" aria-hidden="true">
-                      <rect class="hot hot-red"     data-target="battery-management" x="77"  y="190" width="736" height="137" rx="18" />
-                      <rect class="hot hot-blue"    data-target="interrupts"        x="260" y="17"  width="325" height="307" rx="18" />
-                      <rect class="hot hot-cyan"    data-target="decoupling"        x="78"  y="330" width="195" height="142" rx="18" />
-                      <rect class="hot hot-black"   data-target="glcd"             x="85"  y="490" width="465" height="120" rx="18" />
-                      <rect class="hot hot-audio"   data-target="audio-amplifier"  x="325" y="355" width="225" height="120" rx="18" />
-                      <rect class="hot hot-uc"      data-target="microcontroller"  x="340" y="632" width="210" height="120" rx="18" />
-                      <rect class="hot hot-magenta" data-target="transceiver"      x="555" y="345" width="265" height="425" rx="18" />
-                    </svg>
-                  </div>
-
-                  <!-- NOTE: These panels are now keyed by data-map-panel (NO IDs) -->
-                  <div class="map-panels" data-map-panels>
-                    <div class="drop-panel" hidden aria-hidden="true" data-map-panel="battery-management">
-                      <div class="drop-inner">
-                        <h3>Battery management</h3>
-                        <p>The power supply block provides energy to the system and ensures safe battery operation. It includes the battery cell, a master disconnect switch for complete power isolation, and a battery management circuit that protects the cell and disconnects it under fault conditions.</p>
-                      </div>
-                    </div>
-
-                    <div class="drop-panel" hidden aria-hidden="true" data-map-panel="interrupts">
-                      <div class="drop-inner">
-                        <h3>System inputs</h3>
-                        <p>The system input block provides the primary user interface and power control for the device. It includes the microphone for audio input, user buttons for device control, and a main power switch that connects or disconnects the battery.</p>
-                      </div>
-                    </div>
-
-                    <div class="drop-panel" hidden aria-hidden="true" data-map-panel="decoupling">
-                      <div class="drop-inner">
-                        <h3>MCU support</h3>
-                        <p>The MCU support block contains the circuitry required for stable and reliable microcontroller operation. It includes decoupling capacitors that filter supply noise and stabilize the MCU power rails, as well as a crystal oscillator that provides the system clock.</p>
-                      </div>
-                    </div>
-
-                    <div class="drop-panel" hidden aria-hidden="true" data-map-panel="glcd">
-                      <div class="drop-inner">
-                        <h3>Outputs</h3>
-                        <p>The system output block includes the display and audio output components. A 1.3-inch screen presents key system information. Audio output is provided through a speaker driven by a dedicated amplifier.</p>
-                      </div>
-                    </div>
-
-                    <div class="drop-panel" hidden aria-hidden="true" data-map-panel="audio-amplifier">
-                      <div class="drop-inner">
-                        <h3>Audio amplifier</h3>
-                        <p>The audio amplifier block boosts the received audio signal to a level suitable for driving the speaker.</p>
-                      </div>
-                    </div>
-
-                    <div class="drop-panel" hidden aria-hidden="true" data-map-panel="microcontroller">
-                      <div class="drop-inner">
-                        <h3>Microcontroller</h3>
-                        <p>The MCU block serves as the central controller of the system. It processes user inputs, manages operating modes, and coordinates communication between the RF backend, display, and audio output.</p>
-                      </div>
-                    </div>
-
-                    <div class="drop-panel" hidden aria-hidden="true" data-map-panel="transceiver">
-                      <div class="drop-inner">
-                        <h3>RF backend</h3>
-                        <p>The RF backend handles all wireless communication functions. A single transceiver IC manages both transmit and receive operation. Matching components provide proper impedance matching and efficient RF performance.</p>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-              </div>
-            </div>
 
           </div>
         </div>
