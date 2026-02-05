@@ -7,6 +7,27 @@
   <link rel="stylesheet" href="/style.css">
 
   <style>
+    .stats-table{
+    width: 100%;
+    max-width: 70ch;
+    margin: 0 auto;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  .stats-table th,
+  .stats-table td{
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    vertical-align: top;
+  }
+  .stats-table th{
+    width: 42%;
+    font-weight: 600;
+    opacity: 0.9;
+  }
+  .stats-table td{
+    opacity: 0.95;
+  }
     .schematics-list{
       text-align: center;
       margin-top: 8px;
@@ -166,22 +187,26 @@
       <div class="drop-panel" hidden aria-hidden="true" data-drop-panel>
         <div class="drop-inner">
           <div class="schematics-list">
-
-            <a class="section-link" href="#" data-sub-btn="exec">Executive summary</a>
-            <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="exec">
-              <div class="drop-inner">
-                <p>
-                  The FM Transceiver project aims to create a simple, effective, wireless solution for indoor two-way communication.
-                  Two devices were designed and built, each organized around five core functional blocks: system input, RF backend,
-                  MCU support, system output, and power supply, along with a small set of supporting components. The devices use
-                  frequency modulation (FM), which offers better noise immunity and stability compared to amplitude modulation.
-                  Received audio is output through an 8 Ω speaker driven by a low-power audio amplifier. A Microchip PIC24FJ1024GB606
-                  microcontroller is used to handle input processing and system control due to its simplicity and flexible I/O.
-                  RF communication is handled by the SI4720 transceiver, a highly integrated solution that manages all RF functions
-                  within the system.
-                </p>
-              </div>
-            </div>
+              <table class="stats-table">
+                <tbody>
+                  <tr><th>Project</th><td>FM Transceiver Pair (two devices)</td></tr>
+                  <tr><th>Program / Year</th><td>Electronic Engineering Technology, 2022 (Okanagan College)</td></tr>
+                  <tr><th>Modulation</th><td>FM (Frequency Modulation)</td></tr>
+                  <tr><th>Target Range</th><td>10 m (indoor short-range)</td></tr>
+                  <tr><th>Battery</th><td>Single 18650 Li-ion (3000 mAh)</td></tr>
+                  <tr><th>Standby Time (spec)</th><td>3 hours</td></tr>
+                  <tr><th>Continuous TX Time (spec)</th><td>30 minutes</td></tr>
+                  <tr><th>MCU</th><td>Microchip PIC24FJ1024GB606</td></tr>
+                  <tr><th>RF Transceiver</th><td>Silicon Labs SI4720 (76–108 MHz band)</td></tr>
+                  <tr><th>Audio Output</th><td>8 Ω speaker + TI TPA321 amplifier (BTL)</td></tr>
+                  <tr><th>Display</th><td>1.3&quot; SPI GLCD (Adafruit 4313, 240×240, ST7789 controller)</td></tr>
+                  <tr><th>Battery Protection</th><td>TI BQ77905 (“BATMAN”) + NTC + dual MOSFET cutoff</td></tr>
+                  <tr><th>Battery Monitoring</th><td>MCP3021 (10-bit I²C ADC) + buffer stage</td></tr>
+                  <tr><th>Status</th><td>Not fully functional (SPI timing/transfer issues prevented control of SI4720 + GLCD)</td></tr>
+                </tbody>
+            </table>
+            
+        
 
           </div>
         </div>
