@@ -191,6 +191,43 @@
   text-align: center;
   font-weight: 500;
 }
+      .stl-viewer{
+    width: 100%;
+    max-width: 1200px;
+    margin: 14px auto 0;
+    position: relative;
+  }
+  .stl-canvas{
+    width: 100%;
+    height: 520px;        /* adjust if you want taller */
+    display: block;
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: 10px;
+  }
+  .stl-ui{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    gap: 8px;
+    background: rgba(255,255,255,0.85);
+    border: 1px solid rgba(0,0,0,0.12);
+    padding: 8px;
+    border-radius: 10px;
+    backdrop-filter: blur(6px);
+  }
+  .stl-ui button{
+    font: inherit;
+    padding: 6px 10px;
+    border: 1px solid rgba(0,0,0,0.2);
+    background: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .stl-ui button:active{
+    transform: translateY(1px);
+  }
   </style>
 </head>
 
@@ -513,6 +550,15 @@
 
 
           <p>Fusion 360 enclosure design.</p>
+          <div class="stl-viewer" data-stl="/assets/stl/mainbody.stl">
+  <canvas class="stl-canvas"></canvas>
+
+  <div class="stl-ui" aria-label="3D controls">
+    <button type="button" data-stl-reset>Reset</button>
+    <button type="button" data-stl-wire>Wireframe</button>
+    <button type="button" data-stl-spin>Spin</button>
+  </div>
+</div>
           
           </div>
         </div>
@@ -774,6 +820,110 @@
         });
       })();
      
+
+    // material
+    const mat = new THREE.MeshStandardMaterial({
+      color: 0x9aa4b2,
+      metalness: 0.1,
+      roughness: 0.55
+    });
+
+    let mesh = null;
+    let wire = null;
+    let spinning = false;
+
+    const loader = new STLLoader();
+    loader.load(
+      url,
+      (geom) => {
+        geom.computeVertexNormals();
+
+        // center + scale to fit
+        geom.computeBoundingBox();
+        const box = geom.boundingBox;
+        const size = new THREE.Vector3();
+        box.getSize(size);
+
+        const center = new THREE.Vector3();
+        box.getCenter(center);
+        geom.translate(-center.x, -center.y, -center.z);
+
+        const maxDim = Math.max(size.x, size.y, size.z) || 1;
+        const target = 1.0;
+        const scale = target / maxDim;
+
+        const group = new THREE.Group();
+
+        mesh = new THREE.Mesh(geom, mat);
+        mesh.scale.setScalar(scale);
+        group.add(mesh);
+
+        // optional wireframe overlay
+        const wireMat = new THREE.LineBasicMaterial({ color: 0x111111, transparent: true, opacity: 0.35 });
+        const wireGeo = new THREE.WireframeGeometry(geom);
+        wire = new THREE.LineSegments(wireGeo, wireMat);
+        wire.scale.setScalar(scale);
+        wire.visible = false;
+        group.add(wire);
+
+        scene.add(group);
+
+        // place camera nicely
+        camera.position.set(0, 0.6, 1.6);
+        controls.target.set(0, 0, 0);
+        controls.update();
+      },
+      undefined,
+      (err) => {
+        console.error("STL load failed:", err);
+      }
+    );
+
+    function resize(){
+      const rect = canvas.getBoundingClientRect();
+      const w = Math.max(1, Math.floor(rect.width));
+      const h = Math.max(1, Math.floor(rect.height));
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+    resize();
+
+    // UI buttons
+    const btnReset = root.querySelector("[data-stl-reset]");
+    const btnWire  = root.querySelector("[data-stl-wire]");
+    const btnSpin  = root.querySelector("[data-stl-spin]");
+
+    btnReset?.addEventListener("click", () => {
+      camera.position.set(0, 0.6, 1.6);
+      controls.target.set(0, 0, 0);
+      controls.update();
+    });
+
+    btnWire?.addEventListener("click", () => {
+      if (!wire) return;
+      wire.visible = !wire.visible;
+    });
+
+    btnSpin?.addEventListener("click", () => {
+      spinning = !spinning;
+      btnSpin.textContent = spinning ? "Stop" : "Spin";
+    });
+
+    // render loop
+    function animate(){
+      requestAnimationFrame(animate);
+      controls.update();
+      if (spinning && mesh) mesh.rotation.y += 0.01;
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener("resize", resize);
+  }
+
+  document.querySelectorAll(".stl-viewer").forEach(initStlViewer);
+</script>
     </script>
 
   </div>
