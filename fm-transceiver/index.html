@@ -160,6 +160,43 @@
     .zoom-wrap:hover .zoom-lens{
       opacity: 1;
     }
+    /* ===== hardware image grid ===== */
+.hw-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+@media (max-width: 760px){
+  .hw-grid{
+    grid-template-columns: 1fr;
+  }
+}
+
+.hw-card{
+  width: 100%;
+}
+
+.hw-card .zoom-wrap{
+  max-width: none;     /* let it fill the grid cell */
+  margin: 0;
+}
+
+.hw-card .zoom-img{
+  width: 100%;
+  height: 320px;       /* forces same on-page size */
+  object-fit: cover;   /* crops evenly if aspect differs */
+  border-radius: 10px;
+}
+
+.hw-cap{
+  margin-top: 8px;
+  text-align: center;
+  opacity: 0.9;
+}
   </style>
 </head>
 
@@ -407,7 +444,32 @@
       <a class="section-link top-link" href="#" data-drop-btn>Hardware Implementation</a>
       <div class="drop-panel" hidden aria-hidden="true" data-drop-panel>
         <div class="drop-inner">
-          <p>Add your hardware implementation content here.</p>
+          <div class="schematics-list">
+              <div class="hw-grid">
+                <div class="hw-card">
+                  <div class="zoom-wrap" data-zoom="2.0" data-lens="220">
+                    <img class="zoom-img"
+                         src="/assets/photos/fm/pcb-front.png"
+                         alt="PCB front"
+                         draggable="false" />
+                    <div class="zoom-lens" aria-hidden="true"></div>
+                  </div>
+                  <div class="hw-cap">Front</div>
+                </div>
+                <div class="hw-card">
+                  <div class="zoom-wrap" data-zoom="2.0" data-lens="220">
+                    <img class="zoom-img"
+                         src="/assets/photos/fm/pcb-rear.png"
+                         alt="PCB rear"
+                         draggable="false" />
+                    <div class="zoom-lens" aria-hidden="true"></div>
+                  </div>
+                  <div class="hw-cap">Rear</div>
+                </div>
+              </div>
+
+</div>
+
         </div>
       </div>
     </section>
