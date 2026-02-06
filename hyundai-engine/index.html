@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="/style.css">
 
   <style>
-    /* match your FM page dropdown layout */
     .top-link{
       display: block;
       width: fit-content;
@@ -27,18 +26,144 @@
       margin: 0 auto 8px auto;
       max-width: 70ch;
     }
-    .content-center img{
+
+    /* ===== PHOTO GRID ===== */
+    .photo-grid-wrap{
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .photo-grid{
+      display: grid;
+      gap: 12px;
+      margin: 10px auto 0;
+      justify-content: center;            /* centers the entire grid */
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      width: min(100%, 1000px);
+    }
+
+    .photo-grid > .photo-item{
+      width: 100%;
+      max-width: 320px;                  
+      justify-self: center;             
+    }
+
+    .photo-item{
+      margin: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(0,0,0,0.03);
+      border: 1px solid rgba(0,0,0,0.10);
+      cursor: pointer;
+      position: relative;
+
+      transform: translateZ(0);
+      transition: transform 160ms ease;
+    }
+
+    .photo-item:hover{
+      transform: scale(1.03);
+    }
+
+    .photo-item img{
       display: block;
       width: 100%;
-      max-width: 900px;
       height: auto;
-      margin: 10px auto 0;
+      aspect-ratio: 4 / 3;               
+      object-fit: cover;                  
     }
-    .caption{
-      margin-top: 8px;
+
+
+    .photo-caption{
+      margin: 12px auto 0;
+      width: min(100%, 1000px);
+      max-width: 70ch;
       text-align: center;
-      opacity: 0.9;
+      opacity: 0.92;
       font-size: 0.95rem;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(0,0,0,0.03);
+      border: 1px solid rgba(0,0,0,0.10);
+      min-height: 44px; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+
+    .img-overlay{
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(0,0,0,0.55);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 180ms ease;
+    }
+    .img-overlay.is-open{
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .img-overlay .stage{
+      width: min(1000px, 92vw);
+      max-height: 82vh;
+      display: grid;
+      grid-template-rows: auto auto;
+      gap: 10px;
+    }
+
+    .img-overlay .stage-img{
+      width: 100%;
+      max-height: 72vh;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #000;
+      border: 1px solid rgba(255,255,255,0.18);
+      position: relative;
+    }
+
+    .img-overlay .stage-img img{
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: #000;
+    }
+
+    .img-overlay .stage-caption{
+      color: rgba(255,255,255,0.92);
+      font-size: 0.95rem;
+      text-align: center;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+
+ 
+    .img-clone{
+      position: fixed;
+      z-index: 10000;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+      will-change: transform, width, height, top, left;
+      transition: transform 260ms cubic-bezier(.2,.8,.2,1),
+                  width 260ms cubic-bezier(.2,.8,.2,1),
+                  height 260ms cubic-bezier(.2,.8,.2,1),
+                  top 260ms cubic-bezier(.2,.8,.2,1),
+                  left 260ms cubic-bezier(.2,.8,.2,1);
+    }
+    .img-clone img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
   </style>
 </head>
@@ -49,12 +174,10 @@
     <h1>Automotive Engine Rebuild</h1>
 
     <p>
-I rebuilt a Hyundai 2.0 L engine, replacing the head gasket and valve stem seals along with the supporting components required to access and service the cylinder head. The project involved careful disassembly, cleaning, inspection, and reassembly of the engine to restore proper sealing, compression, and reliable operation.
+      I rebuilt a Hyundai 2.0 L engine, replacing the head gasket and valve stem seals along with the supporting components required to access and service the cylinder head. The project involved careful disassembly, cleaning, inspection, and reassembly of the engine to restore proper sealing, compression, and reliable operation.
     </p>
 
     <hr>
-
-    <!-- ===== Top-level dropdowns (2) ===== -->
 
     <!-- OVERVIEW -->
     <section class="drop" data-drop>
@@ -63,9 +186,7 @@ I rebuilt a Hyundai 2.0 L engine, replacing the head gasket and valve stem seals
       <div class="drop-panel" hidden aria-hidden="true" data-drop-panel>
         <div class="drop-inner">
           <div class="content-center">
-
-<p>test</p>
-
+            <p>test</p>
           </div>
         </div>
       </div>
@@ -79,16 +200,61 @@ I rebuilt a Hyundai 2.0 L engine, replacing the head gasket and valve stem seals
         <div class="drop-inner">
           <div class="content-center">
 
- 
-<p>test</p>
+            <div class="photo-grid-wrap">
+              <div class="photo-grid" data-photo-grid>
+               
+                <figure class="photo-item" data-photo-item data-caption="2016 Hyundai Elantra">
+                  <img src="/assets/photos/hyundai/h1.jpg" alt="Photo 1">
+                </figure>
+
+                <figure class="photo-item" data-photo-item data-caption="2016 Hyundai Elantra">
+                  <img src="/assets/photos/hyundai/h2.jpg" alt="Photo 2">
+                </figure>
+
+                <figure class="photo-item" data-photo-item data-caption="2016 Hyundai Elantra">
+                  <img src="/assets/photos/hyundai/h3.jpg" alt="Photo 3">
+                </figure>
+
+                
+                <figure class="photo-item" data-photo-item data-caption="Dissasembly Process">
+                  <img src="/assets/photos/hyundai/h4.jpg" alt="Photo 4">
+                </figure>
+
+                
+                <figure class="photo-item" data-photo-item data-caption="Prior to Dissasembly">
+                  <img src="/assets/photos/hyundai/h5.jpg" alt="Photo 5">
+                </figure>
+
+                
+                <figure class="photo-item" data-photo-item data-caption="Removing valve springs from cylinder head.">
+                  <img src="/assets/photos/hyundai/h6.jpg" alt="Photo 6">
+                </figure>
+                <!-- ...more photos -->
+              </div>
+
+              <div class="photo-caption" data-photo-caption>
+                Hover a photo for a closer look. Click to expand.
+              </div>
+            </div>
 
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ===== Script (same dropdown behavior as your FM page) ===== -->
+    <!-- Overlay for expanded image -->
+    <div class="img-overlay" data-img-overlay aria-hidden="true">
+      <div class="stage">
+        <div class="stage-img">
+          <img data-overlay-img src="" alt="">
+        </div>
+        <div class="stage-caption" data-overlay-caption></div>
+      </div>
+    </div>
+
+    <!-- ===== Script (dropdown behavior + photo grid interactions) ===== -->
     <script>
+      /* ===== existing dropdown script (unchanged) ===== */
       function shiftToViewportCenter(el){
         const r = el.getBoundingClientRect();
         const elCenter = r.left + r.width / 2;
@@ -226,6 +392,177 @@ I rebuilt a Hyundai 2.0 L engine, replacing the head gasket and valve stem seals
           }
         });
       });
+
+      /* ===== PHOTO GRID INTERACTIONS ===== */
+      (function initPhotoGrid(){
+        const grid = document.querySelector("[data-photo-grid]");
+        if (!grid) return;
+
+        const captionBar = document.querySelector("[data-photo-caption]");
+        const overlay = document.querySelector("[data-img-overlay]");
+        const overlayImg = document.querySelector("[data-overlay-img]");
+        const overlayCaption = document.querySelector("[data-overlay-caption]");
+
+        let activeItem = null;
+        let animating = false;
+
+        function setCaption(text){
+          if (!captionBar) return;
+          captionBar.textContent = text || "";
+        }
+
+        grid.querySelectorAll("[data-photo-item]").forEach((item) => {
+          const cap = item.getAttribute("data-caption") || "";
+          item.addEventListener("mouseenter", () => setCaption(cap));
+          item.addEventListener("mouseleave", () => setCaption("Hover a photo for a closer look. Click to expand."));
+        });
+
+        function rectToBox(r){
+          return { top: r.top, left: r.left, width: r.width, height: r.height };
+        }
+
+        function placeCloneFromRect(clone, box){
+          clone.style.top = box.top + "px";
+          clone.style.left = box.left + "px";
+          clone.style.width = box.width + "px";
+          clone.style.height = box.height + "px";
+          clone.style.transform = "translateZ(0)";
+        }
+
+        async function flipOpen(item){
+          if (animating) return;
+          animating = true;
+          activeItem = item;
+
+          const img = item.querySelector("img");
+          const src = img?.getAttribute("src") || "";
+          const alt = img?.getAttribute("alt") || "";
+          const cap = item.getAttribute("data-caption") || "";
+
+          // get start rect (grid image)
+          const startRect = img.getBoundingClientRect();
+          const startBox = rectToBox(startRect);
+
+          // prepare overlay content (but keep overlay transparent until after clone starts moving)
+          overlayImg.src = src;
+          overlayImg.alt = alt;
+          overlayCaption.textContent = cap;
+
+          // create clone
+          const clone = document.createElement("div");
+          clone.className = "img-clone";
+          clone.innerHTML = `<img src="${src}" alt="">`;
+          document.body.appendChild(clone);
+
+          placeCloneFromRect(clone, startBox);
+
+          // open overlay (for final target size measurement)
+          overlay.classList.add("is-open");
+          overlay.setAttribute("aria-hidden", "false");
+
+          // force layout so overlay is measurable
+          overlay.getBoundingClientRect();
+
+          // target rect = overlay image container (stage-img)
+          const targetEl = overlay.querySelector(".stage-img");
+          const targetRect = targetEl.getBoundingClientRect();
+          const targetBox = rectToBox(targetRect);
+
+          // animate clone to target
+          requestAnimationFrame(() => {
+            clone.style.top = targetBox.top + "px";
+            clone.style.left = targetBox.left + "px";
+            clone.style.width = targetBox.width + "px";
+            clone.style.height = targetBox.height + "px";
+            clone.querySelector("img").style.objectFit = "cover";
+          });
+
+          // wait transition end
+          await new Promise((res) => setTimeout(res, 280));
+
+          // remove clone, show overlay content fully
+          clone.remove();
+          animating = false;
+        }
+
+        async function flipClose(){
+          if (!activeItem || animating) return;
+          animating = true;
+
+          const item = activeItem;
+          const img = item.querySelector("img");
+          const src = img?.getAttribute("src") || "";
+          const cap = item.getAttribute("data-caption") || "";
+
+          // start rect = overlay stage-img
+          const startEl = overlay.querySelector(".stage-img");
+          const startRect = startEl.getBoundingClientRect();
+          const startBox = rectToBox(startRect);
+
+          // end rect = grid image
+          const endRect = img.getBoundingClientRect();
+          const endBox = rectToBox(endRect);
+
+          // create clone at overlay size
+          const clone = document.createElement("div");
+          clone.className = "img-clone";
+          clone.innerHTML = `<img src="${src}" alt="">`;
+          document.body.appendChild(clone);
+
+          placeCloneFromRect(clone, startBox);
+
+          // hide overlay (fade) while clone animates back
+          overlay.classList.remove("is-open");
+          overlay.setAttribute("aria-hidden", "true");
+
+          requestAnimationFrame(() => {
+            clone.style.top = endBox.top + "px";
+            clone.style.left = endBox.left + "px";
+            clone.style.width = endBox.width + "px";
+            clone.style.height = endBox.height + "px";
+          });
+
+          await new Promise((res) => setTimeout(res, 280));
+          clone.remove();
+
+          activeItem = null;
+          animating = false;
+
+          setCaption(cap ? cap : "Hover a photo for a closer look. Click to expand.");
+        }
+
+        // click on any photo toggles open (or closes if it's already open)
+        grid.addEventListener("click", (e) => {
+          const item = e.target.closest("[data-photo-item]");
+          if (!item) return;
+
+          if (activeItem && item === activeItem){
+            flipClose();
+          } else if (!activeItem){
+            flipOpen(item);
+          } else {
+            // if another is open, close then open new (simple/clean)
+            flipClose().then(() => flipOpen(item));
+          }
+        });
+
+        // click outside image closes
+        overlay.addEventListener("click", (e) => {
+          // allow clicking anywhere to close
+          flipClose();
+        });
+
+        // escape closes
+        window.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") flipClose();
+        });
+
+        // keep animation targets sane on resize
+        window.addEventListener("resize", () => {
+          if (!activeItem) return;
+          // no live resizing while open; overlay handles responsive layout
+        });
+      })();
     </script>
   </div>
 </body>
