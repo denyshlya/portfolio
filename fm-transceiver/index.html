@@ -890,16 +890,37 @@ import { STLLoader } from "three/addons/loaders/STLLoader.js";
 
 
     // lights
-    scene.add(new THREE.AmbientLight(0xffffff, 0.65));
-    const dir = new THREE.DirectionalLight(0xffffff, 0.9);
-    dir.position.set(2, 3, 2);
-    scene.add(dir);
+// lights (more shape definition)
+scene.add(new THREE.AmbientLight(0xffffff, 0.35));
+
+const key = new THREE.DirectionalLight(0xffffff, 1.1);
+key.position.set(2.5, 3.5, 2.0);
+scene.add(key);
+
+const fill = new THREE.DirectionalLight(0xffffff, 0.55);
+fill.position.set(-2.0, 1.5, 1.5);
+scene.add(fill);
+
+const rim = new THREE.DirectionalLight(0xffffff, 0.75);
+rim.position.set(-1.5, 2.5, -2.5);
+scene.add(rim);
+    renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+key.castShadow = true;
+
+
     // material
-    const mat = new THREE.MeshStandardMaterial({
-      color: 0x9aa4b2,
-      metalness: 0.1,
-      roughness: 0.55
-    });
+   // material (more contrast + clearer shape)
+const mat = new THREE.MeshPhysicalMaterial({
+  color: 0xd6dbe3,      // light neutral
+  metalness: 0.0,
+  roughness: 0.25,
+  clearcoat: 0.25,
+  clearcoatRoughness: 0.2,
+  sheen: 0.15,
+  sheenRoughness: 0.6
+});
+
 
     let mesh = null;
     let wire = null;
