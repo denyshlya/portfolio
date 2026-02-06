@@ -168,17 +168,35 @@
     }
     /* ===== hardware image grid ===== */
 
-  max-width: none;
-  margin: 0;
+ .hw-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-/* force same visible size, NO grey, NO clipping */
+.hw-card{
+  background: transparent;
+}
+
 .hw-card .zoom-img{
   width: 100%;
-  height: 420px;       /* BIGGER */
-  object-fit: cover;  /* fills fully */
-  background: none;   /* removes grey field */
-  border-radius: 0;
+  height: 420px;
+  object-fit: cover;
+  background: none;
+  border-radius: 10px;
+}
+
+/* lens should match the image style */
+.hw-card .zoom-lens{
+  border-radius: 10px;
+}
+
+.hw-cap{
+  margin-top: 10px;
+  text-align: center;
+  font-weight: 500;
 }
 
 /* lens should also be square */
@@ -907,14 +925,17 @@
       (err) => {
         console.error("STL load failed:", err);
       }
-    );
-    ndingClientRect();
+     );
+
+    function resize(){
+      const rect = canvas.getBoundingClientRect();
       const w = Math.max(1, Math.floor(rect.width));
       const h = Math.max(1, Math.floor(rect.height));
       renderer.setSize(w, h, false);
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
     }
+
     resize();
 
     // UI buttons
