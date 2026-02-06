@@ -123,13 +123,19 @@
       background: transparent;
     }
 
-    .img-overlay .stage-img img{
-      display: none;
-    }
+.img-overlay .stage-img img,
+.img-overlay .stage-img video{
+  display: block;
+}
 
-    .img-overlay .stage-img video{
-      display: none;
-    }
+.img-overlay[data-mode="image"] .stage-img video{
+  display: none;
+}
+
+.img-overlay[data-mode="video"] .stage-img img{
+  display: none;
+}
+
 
     .img-overlay .stage-caption{
       color: rgba(0,0,0,0.85);
@@ -296,7 +302,8 @@
             <button type="button" class="mute is-muted" data-video-mute>🔊</button>
           </div>
           <img data-overlay-img src="" alt="">
-          <video data-overlay-video playsinline autoplay loop preload="metadata"></video>
+          <video data-overlay-video playsinline autoplay loop muted preload="metadata"></video>
+
         </div>
         <div class="stage-caption" data-overlay-caption></div>
       </div>
@@ -340,13 +347,13 @@
   }
 
   function hardCloseInside(root){
-    root.querySelectorAll(".drop-panel").forEach(p => {
+    root.querySelectorAll(".drop-panel").forEach((p) => {
       p.classList.remove("is-open");
       p.style.maxHeight = "0px";
       p.hidden = true;
       p.setAttribute("aria-hidden", "true");
     });
-    root.querySelectorAll(".section-link").forEach(a => a.classList.remove("is-selected"));
+    root.querySelectorAll(".section-link").forEach((a) => a.classList.remove("is-selected"));
   }
 
   document.querySelectorAll("[data-drop]").forEach((drop) => {
@@ -378,6 +385,7 @@
     btn.addEventListener("click", async (e) => {
       e.preventDefault();
       open = !open;
+
       if (open){
         btn.classList.add("is-selected");
         await slideToCenter();
@@ -397,6 +405,8 @@
 
       subBtn.addEventListener("click", async (e) => {
         e.preventDefault();
+        if (panel.hidden) return;
+
         if (subPanel.hidden){
           subBtn.classList.add("is-selected");
           await openPanel(subPanel);
@@ -405,6 +415,14 @@
           subBtn.classList.remove("is-selected");
         }
       });
+    });
+
+    window.addEventListener("resize", () => {
+      if (!open) return;
+      btn.style.transform = `translateX(${shiftToViewportCenter(btn)}px)`;
+      if (!panel.hidden && panel.style.maxHeight !== "none"){
+        panel.style.maxHeight = panel.scrollHeight + "px";
+      }
     });
   });
 
@@ -434,82 +452,72 @@
       el.style.height = b.height + "px";
     }
 
-    function showImage(src){
-      overlayVideo.pause();
-      overlayVideo.removeAttribute("src");
-      overlayVideo.style.display = "none";
-      videoUI.style.display = "none";
-      overlayImg.src = src;
-      overlayImg.style.display = "block";
+    function setOverlayMode(mode){
+      overlay.setAttribute("data-mode", mode);
     }
 
-function showVideo(src){
-  overlayImg.removeAttribute("src");
-  overlayImg.style.display = "none";
+    function resetOverlayMedia(){
+      overlayImg.style.visibility = "hidden";
+      overlayVideo.style.visibility = "hidden";
 
-  overlayVideo.pause();
-  overlayVideo.removeAttribute("src");
-  overlayVideo.load();
+      overlayImg.removeAttribute("src");
 
-  overlayVideo.src = src;
-  overlayVideo.style.display = "block";
-  videoUI.style.display = "flex";
-}
+      overlayVideo.pause();
+      overlayVideo.removeAttribute("src");
+      overlayVideo.load();
+    }
 
+    async function safePlayWithFallback(){
+      overlayVideo.currentTime = 0;
+
+      overlayVideo.muted = false;
+      btnMute.classList.remove("is-muted");
+
+      try {
+        await overlayVideo.play();
+        return;
+      } catch (e) {}
+
+      overlayVideo.muted = true;
+      btnMute.classList.add("is-muted");
+      try { await overlayVideo.play(); } catch (e) {}
+    }
 
     async function openItem(item){
       if (animating) return;
       animating = true;
       activeItem = item;
 
-      const type = item.dataset.type;
-      const src = item.dataset.src;
+      const type = item.dataset.type || "image";
+      const src = item.dataset.src || "";
       const cap = item.dataset.caption || "";
 
       const thumb = item.querySelector("img");
       if (!thumb){
         animating = false;
+        activeItem = null;
         return;
       }
 
-      const start = box(thumb.getBoundingClientRect());
       caption.textContent = cap;
+      resetOverlayMedia();
 
-     if (type === "video"){
-  showVideo(src);
-} else {
-  showImage(src);
-}
+      if (type === "video"){
+        setOverlayMode("video");
+        videoUI.style.display = "flex";
+        overlayVideo.src = src;
+        overlayVideo.load();
+      } else {
+        setOverlayMode("image");
+        videoUI.style.display = "none";
+        overlayImg.src = src;
+      }
 
-overlayImg.style.visibility = "hidden";
-overlayVideo.style.visibility = "hidden";
-
-if (type === "video"){
-  const tryPlay = async () => {
-    overlayVideo.currentTime = 0;
-
-    overlayVideo.muted = false;
-    btnMute.classList.remove("is-muted");
-
-    try {
-      await overlayVideo.play();
-      return;
-    } catch (e) {}
-
-    overlayVideo.muted = true;
-    btnMute.classList.add("is-muted");
-    try { await overlayVideo.play(); } catch (e) {}
-  };
-
-  overlayVideo.onloadeddata = () => { tryPlay(); };
-  overlayVideo.onerror = () => {};
-  overlayVideo.load();
-}
-
+      const start = box(thumb.getBoundingClientRect());
 
       const clone = document.createElement("div");
       clone.className = "img-clone";
-      clone.innerHTML = `<img src="${thumb.src}">`;
+      clone.innerHTML = `<img src="${thumb.src}" alt="">`;
       document.body.appendChild(clone);
       place(clone, start);
 
@@ -520,11 +528,16 @@ if (type === "video"){
       const target = box(overlay.querySelector(".stage-img").getBoundingClientRect());
 
       requestAnimationFrame(() => place(clone, target));
-      await new Promise(r => setTimeout(r, 460));
+      await new Promise((r) => setTimeout(r, 460));
 
-      overlayImg.style.visibility = "visible";
-      overlayVideo.style.visibility = "visible";
       clone.remove();
+
+      if (type === "video"){
+        overlayVideo.style.visibility = "visible";
+        overlayVideo.onloadeddata = () => { safePlayWithFallback(); };
+      } else {
+        overlayImg.style.visibility = "visible";
+      }
 
       animating = false;
     }
@@ -536,8 +549,11 @@ if (type === "video"){
       const thumb = activeItem.querySelector("img");
       if (!thumb){
         overlay.classList.remove("is-open");
-        animating = false;
+        overlay.setAttribute("aria-hidden", "true");
+        resetOverlayMedia();
+        videoUI.style.display = "none";
         activeItem = null;
+        animating = false;
         return;
       }
 
@@ -546,18 +562,22 @@ if (type === "video"){
 
       const clone = document.createElement("div");
       clone.className = "img-clone";
-      clone.innerHTML = `<img src="${thumb.src}">`;
+      clone.innerHTML = `<img src="${thumb.src}" alt="">`;
       document.body.appendChild(clone);
       place(clone, start);
 
-      overlay.classList.remove("is-open");
-      overlay.setAttribute("aria-hidden", "true");
       overlayVideo.pause();
 
+      overlay.classList.remove("is-open");
+      overlay.setAttribute("aria-hidden", "true");
+
       requestAnimationFrame(() => place(clone, end));
-      await new Promise(r => setTimeout(r, 460));
+      await new Promise((r) => setTimeout(r, 460));
 
       clone.remove();
+
+      resetOverlayMedia();
+      videoUI.style.display = "none";
       activeItem = null;
       animating = false;
     }
@@ -565,6 +585,7 @@ if (type === "video"){
     grid.addEventListener("click", (e) => {
       const item = e.target.closest("[data-photo-item]");
       if (!item) return;
+
       if (item === activeItem) closeItem();
       else if (!activeItem) openItem(item);
       else closeItem().then(() => openItem(item));
@@ -583,7 +604,7 @@ if (type === "video"){
       e.preventDefault();
       e.stopPropagation();
       overlayVideo.currentTime = 0;
-      overlayVideo.play().catch(()=>{});
+      overlayVideo.play().catch(() => {});
     });
 
     btnMute.addEventListener("click", (e) => {
@@ -591,9 +612,11 @@ if (type === "video"){
       e.stopPropagation();
       overlayVideo.muted = !overlayVideo.muted;
       btnMute.classList.toggle("is-muted", overlayVideo.muted);
+      overlayVideo.play().catch(() => {});
     });
   })();
 </script>
+
 
   </div>
 </body>
