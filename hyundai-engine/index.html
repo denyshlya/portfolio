@@ -33,19 +33,19 @@
       margin: 0 auto;
     }
 
+       
     .photo-grid{
-      display: grid;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
       gap: 12px;
       margin: 10px auto 0;
-      justify-content: center;            /* centers the entire grid */
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       width: min(100%, 1000px);
     }
-
+    
     .photo-grid > .photo-item{
-      width: 100%;
-      max-width: 320px;                  
-      justify-self: center;             
+      flex: 0 1 240px;    
+      max-width: 320px;
     }
 
     .photo-item{
@@ -92,40 +92,42 @@
     }
 
 
-    .img-overlay{
+      .img-overlay{
       position: fixed;
       inset: 0;
       z-index: 9999;
       display: grid;
       place-items: center;
       padding: 24px;
-      background: rgba(0,0,0,0.55);
+    
+      background: transparent;   
       opacity: 0;
       pointer-events: none;
       transition: opacity 180ms ease;
     }
+
     .img-overlay.is-open{
       opacity: 1;
       pointer-events: auto;
     }
-
-    .img-overlay .stage{
-      width: min(1000px, 92vw);
-      max-height: 82vh;
-      display: grid;
-      grid-template-rows: auto auto;
-      gap: 10px;
-    }
-
     .img-overlay .stage-img{
       width: 100%;
       max-height: 72vh;
       border-radius: 14px;
       overflow: hidden;
-      background: #000;
-      border: 1px solid rgba(255,255,255,0.18);
+      background: transparent;   /* <-- was #000 */
+      border: 1px solid rgba(0,0,0,0.12); /* optional, looks cleaner w/out dark overlay */
       position: relative;
     }
+    
+    .img-overlay .stage-img img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;         /* <-- was contain */
+      display: block;
+      background: transparent;
+    }
+
 
     .img-overlay .stage-img img{
       width: 100%;
@@ -232,9 +234,7 @@
                 <!-- ...more photos -->
               </div>
 
-              <div class="photo-caption" data-photo-caption>
-                Hover a photo for a closer look. Click to expand.
-              </div>
+              
             </div>
 
           </div>
