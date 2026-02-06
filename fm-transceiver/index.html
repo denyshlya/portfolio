@@ -929,15 +929,28 @@
      );
 
     function resize(){
-      const rect = canvas.getBoundingClientRect();
-      const w = Math.max(1, Math.floor(rect.width));
-      const h = Math.max(1, Math.floor(rect.height));
-      renderer.setSize(w, h, false);
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-    }
+  const rect = canvas.getBoundingClientRect();
+  const w = Math.max(1, Math.floor(rect.width));
+  const h = Math.max(1, Math.floor(rect.height));
 
-    resize();
+  // if still hidden/collapsed, don't lock in 1x1 forever
+  if (w < 5 || h < 5) return;
+
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+
+// Call once now (might do nothing if hidden)
+resize();
+
+// Resize whenever layout changes (e.g., dropdown opens)
+const ro = new ResizeObserver(() => resize());
+ro.observe(root);
+
+// Also keep the normal window resize
+window.addEventListener("resize", resize);
+
 
     // UI buttons
     const btnReset = root.querySelector("[data-stl-reset]");
