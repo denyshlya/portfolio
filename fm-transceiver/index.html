@@ -368,14 +368,14 @@
                     <div class="drop-panel" hidden aria-hidden="true" data-map-panel="microcontroller">
                       <div class="drop-inner">
                         <h3>Microcontroller</h3>
-                        <p>The MCU block serves as the central controller of the system. It processes user inputs, manages operating modes, and coordinates communication between the RF backend, display, and audio output.</p>
+                        <p>The MCU acts as the central controller for the system, handling user inputs, managing operating modes, and coordinating communication between the RF backend, display, and audio output.</p>
                       </div>
                     </div>
 
                     <div class="drop-panel" hidden aria-hidden="true" data-map-panel="transceiver">
                       <div class="drop-inner">
                         <h3>RF backend</h3>
-                        <p>The RF backend handles all wireless communication functions. A single transceiver IC manages both transmit and receive operation. Matching components provide proper impedance matching and efficient RF performance.</p>
+                        <p>The RF backend is responsible for all wireless communication within the system. A single transceiver IC handles both transmit and receive operation, simplifying the overall RF architecture. Carefully selected matching components are used to ensure proper impedance matching and efficient RF performance.</p>
                       </div>
                     </div>
                   </div>
@@ -398,7 +398,7 @@
             <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="battery-management">
               <div class="drop-inner">
                 <img src="/assets/photos/fm/battery-management.png" alt="Battery management schematic">
-                <p>The BATMAN battery management subsystem for the FM Transceiver project and is centered around the Texas Instruments BQ77905 battery manager IC. Its primary function is to safely manage a single 18650 Li-ion cell by providing over-voltage, under-voltage, over-current, short-circuit, and temperature protection. The BATMAN IC continuously monitors cell voltage, charge/discharge current through a sense resistor, and cell temperature via an external NTC thermistor. Two external MOSFETs are driven by BATMAN to disconnect the battery from the system load when unsafe conditions are detected. Status outputs such as CHG, DSG, and LD provide the system controller with real-time information about battery and load state. In the broader scope of the project, this subsystem forms the core of the power supply block, ensuring user safety and protecting all downstream electronics. By isolating fault conditions at the battery level, BATMAN improves overall system reliability and allows the FM transceiver to operate safely from a removable high-energy Li-ion cell.</p>
+                <p>The BATMAN battery management subsystem is built around the Texas Instruments BQ77905 battery manager and is responsible for safely managing a single 18650 Li-ion cell. Its primary role is to protect the battery by providing over-voltage, under-voltage, over-current, short-circuit, and temperature protection. The BATMAN IC continuously monitors cell voltage, charge and discharge current through a sense resistor, and cell temperature using an external NTC thermistor. When unsafe conditions are detected, the device drives two external MOSFETs to disconnect the battery from the system load. Status signals such as CHG, DSG, and LD give the system controller real-time insight into battery and load conditions. Within the overall design, this subsystem forms the core of the power supply, ensuring user safety and protecting all downstream electronics. By isolating fault conditions at the battery level, BATMAN improves system reliability and allows the transceiver to operate safely from a removable high-energy Li-ion cell.</p>
               </div>
             </div>
 
@@ -406,7 +406,7 @@
             <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="voltage-regulator">
               <div class="drop-inner">
                 <img src="/assets/photos/fm/voltage-regulator.png" alt="Voltage regulator schematic">
-                <p>The S-1172 voltage regulator stage used to condition battery power for the rest of the system. The regulator takes the protected battery output (PREBAT) and produces a stable, regulated supply rail for sensitive electronics downstream. Input and output capacitors are placed close to the device to ensure stability, suppress noise, and handle transient current demands. The ON/OFF pin allows the regulator to be cleanly enabled or disabled as part of the system power-up sequence. By regulating the inherently variable voltage of an 18650 Li-ion cell, this stage prevents brownouts and over-voltage stress on digital and RF components. In the broader scope of the project, this schematic sits directly after the BATMAN battery manager and acts as the final power conditioning step. Together, these blocks ensure the transceiver operates reliably across the full battery discharge curve.</p>
+                <p>The S-1172 voltage regulator stage is used to condition battery power for the rest of the system. It takes the protected battery output (PREBAT) and generates a stable, regulated supply rail for the downstream digital and RF electronics. Input and output capacitors are placed close to the device to ensure regulator stability, suppress noise, and handle transient current demands. The ON/OFF control pin allows the regulator to be cleanly enabled or disabled as part of the system power-up sequence. By regulating the inherently variable voltage of a single 18650 Li-ion cell, this stage helps prevent brownouts and over-voltage stress on sensitive components. In the overall design, this block sits directly after the BATMAN battery manager and serves as the final power-conditioning step, ensuring reliable operation across the full battery discharge curve.</p>
               </div>
             </div>
 
@@ -414,7 +414,7 @@
             <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="battery-percentage">
               <div class="drop-inner">
                 <img src="/assets/photos/fm/battery-percentage.png" alt="Battery percentage schematic">
-                <p>The battery voltage monitoring circuit measures the protected battery rail and provides a low-power, MCU-readable representation of remaining charge. A high-value resistor divider scales the battery voltage while minimizing continuous current draw. The TC75 op-amp buffers this divided signal, presenting a stable, low-impedance output that is insensitive to ADC loading. This buffered voltage is then fed into the MCP3021 I²C ADC for digitization. The ADC allows the microcontroller to periodically sample battery voltage without directly loading the battery or analog node. In the broader system, this block enables battery percentage estimation and low-battery warning functionality while preserving overall power efficiency.</p>
+                <p>The battery voltage monitoring circuit measures the protected battery rail and provides a low-power way for the microcontroller to estimate remaining charge. A high-value resistor divider is used to scale the battery voltage while keeping continuous current draw to a minimum. The divided signal is buffered using a TC75 op-amp, which presents a stable, low-impedance output that isn’t affected by ADC loading. This buffered voltage is then digitized by the MCP3021 I²C ADC. Using a dedicated ADC allows the microcontroller to periodically sample the battery voltage without directly loading the battery or sensitive analog node. In the overall system, this block supports battery percentage estimation and low-battery warnings while maintaining good power efficiency.</p>
               </div>
             </div>
 
@@ -422,7 +422,7 @@
             <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="microcontroller">
               <div class="drop-inner">
                 <img src="/assets/photos/fm/microcontroller.png" alt="Microcontroller schematic">
-                <p>The microcontroller handles all high-level control, coordination, and user interaction for the system. It interfaces with peripherals over SPI and I²C, manages external interrupts from user inputs, and controls system states such as transmit/receive mode, display updates, and power behavior. Multiple power and ground pins are used to properly isolate digital and analog domains and reduce noise sensitivity. Programming and debugging are supported through dedicated ICSP lines. External interrupts allow responsive, event-driven input handling without continuous polling. In the broader project, this device acts as the central controller that ties together the RF, power management, audio, and user interface subsystems.</p>
+                <p>The microcontroller serves as the central controller for the system, handling high-level logic, coordination between subsystems, and all user interaction. It communicates with peripherals over SPI and I²C, processes external interrupts from user inputs, and manages system states such as transmit/receive operation, display updates, and power behavior. Separate power and ground pins are used to help isolate digital and analog domains and reduce noise sensitivity. Firmware programming and debugging are supported through dedicated ICSP connections. By relying on interrupt-driven inputs rather than continuous polling, the system remains responsive while minimizing processor overhead. In the context of the full design, the microcontroller ties together the RF, power management, audio, and user interface subsystems.</p>
               </div>
             </div>
 
@@ -430,7 +430,7 @@
             <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="glcd">
               <div class="drop-inner">
                 <img src="/assets/photos/fm/glcd.png" alt="GLCD schematic">
-                <p>The graphical LCD interface provides the primary visual output for the device, displaying system state and user feedback. It is powered directly from the system supply and communicates with the microcontroller over an SPI interface. Dedicated control lines handle reset, data/command selection, chip select, and backlight control. This separation of control and data signals allows for efficient screen updates and flexible display operation. The backlight enable line allows brightness control or power savings when the display is not needed. In the overall project, this module serves as the main user interface, presenting information such as battery level, operating mode, and channel selection.</p>
+                <p>The graphical LCD serves as the primary visual interface for the device, presenting system status and user feedback during operation. It is powered directly from the system supply and communicates with the microcontroller over an SPI interface. Dedicated control lines manage reset, data/command selection, chip select, and backlight control, allowing the display to be updated efficiently and flexibly. The backlight enable line provides the option to adjust brightness or disable the backlight entirely to save power when the display is not in use. Within the overall system, this module functions as the main user interface, displaying information such as battery level, operating mode, and channel selection.</p>
               </div>
             </div>
 
@@ -438,7 +438,7 @@
             <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="interrupts">
               <div class="drop-inner">
                 <img src="/assets/photos/fm/interrupts.png" alt="Interrupts schematic">
-                <p>The input and interrupt circuit captures all user button interactions and converts them into clean, reliable digital signals for the microcontroller. Each pushbutton is biased from the battery rail and uses an RC network to debounce the mechanical switch action. The resulting signals are routed directly to dedicated external interrupt pins, enabling immediate, event-driven response. One dual-switch device is used to reduce component count while maintaining independent inputs. This approach eliminates the need for constant polling and reduces processor overhead. In the broader system, this block provides responsive user control for mode selection, adjustments, and transmit/receive operation.</p>
+                <p>The input and interrupt circuit handles all user button interactions and converts them into clean, reliable digital signals for the microcontroller. Each pushbutton is biased from the battery rail and uses an RC network to debounce the mechanical switch action. The conditioned signals are routed directly to dedicated external interrupt pins, allowing the system to respond immediately to user input rather than relying on continuous polling. A dual-switch device is used to reduce component count while still maintaining independent inputs. This approach lowers processor overhead and improves responsiveness. In the context of the full system, this block enables smooth and reliable user control for mode selection, adjustments, and transmit/receive operation.</p>
               </div>
             </div>
 
@@ -446,7 +446,7 @@
             <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="icsp">
               <div class="drop-inner">
                 <img src="/assets/photos/fm/icsp.png" alt="ICSP schematic">
-                <p>The ICSP programming interface allows the microcontroller to be programmed and debugged in-circuit without removing it from the board. It exposes the required power, ground, reset, and programming data and clock lines. This enables firmware updates, debugging, and recovery during development and testing. The interface follows Microchip’s standard ICSP pinout for compatibility with common programming tools. Keeping this header on the board simplifies iteration and troubleshooting. In the overall project, it provides the essential link between firmware development and the physical hardware.</p>
+                <p>The ICSP programming interface allows the microcontroller to be programmed and debugged directly on the board without needing to remove it from the circuit. It brings out the necessary power, ground, reset, and programming data and clock lines needed for in-circuit programming. This makes firmware updates, debugging, and recovery much easier during development and testing. The interface follows Microchip’s standard ICSP pinout, ensuring compatibility with common programming tools. Keeping this header on the board simplified iteration and troubleshooting throughout the project, and it serves as the critical link between firmware development and the physical hardware.</p>
               </div>
             </div>
 
@@ -454,7 +454,7 @@
             <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="reset">
               <div class="drop-inner">
                 <img src="/assets/photos/fm/reset.png" alt="Reset schematic">
-                <p>The reset and startup circuit ensures the microcontroller enters a known, stable state during power-up and user-initiated resets. A pull-up resistor holds the reset line high under normal operation, while the pushbutton allows manual assertion of reset. An RC network introduces a brief delay at startup to prevent false triggering during supply ramp-up. A series resistor protects the reset pin and improves signal integrity. The jumper allows flexibility during development or troubleshooting by modifying reset behavior. In the overall system, this block guarantees predictable boot behavior and reliable recovery from fault conditions.</p>
+                <p>The reset and startup circuit ensures the microcontroller always powers up in a known, stable state and can be reliably reset by the user when needed. A pull-up resistor holds the reset line high during normal operation, while a pushbutton allows the reset line to be asserted manually. An RC network adds a short delay during power-up to prevent false resets while the supply voltage is ramping. A series resistor helps protect the reset pin and improves signal integrity. A jumper is included to provide flexibility during development and troubleshooting by allowing the reset behavior to be modified. Together, this circuitry ensures predictable startup behavior and reliable recovery from fault conditions.</p>
               </div>
             </div>
 
@@ -462,7 +462,7 @@
             <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="decoupling">
               <div class="drop-inner">
                 <img src="/assets/photos/fm/decoupling.png" alt="Decoupling schematic">
-                <p>The power decoupling network stabilizes the supply rails feeding the digital and analog sections of the system. Local bypass capacitors provide a low-impedance path to ground for high-frequency noise and transient current spikes. Separating VDD and AVDD domains helps reduce coupling between digital switching noise and sensitive analog circuitry. This layout improves power integrity and overall signal quality across the board. By filtering disturbances close to the load, the circuit protects against erratic behavior and resets. In the broader project, this block is critical for reliable operation of the microcontroller and mixed-signal peripherals.</p>
+                <p>The power decoupling network stabilizes the supply rails that feed both the digital and analog sections of the system. Local bypass capacitors provide a low-impedance path to ground for high-frequency noise and short current spikes caused by switching activity. Separating the VDD and AVDD domains helps prevent digital noise from coupling into more sensitive analog circuitry, improving overall signal quality. By placing the decoupling components as close as possible to the load, disturbances are filtered before they can spread across the board, reducing the chance of erratic behavior or unintended resets. In the context of the full design, this block is critical to the reliable operation of the microcontroller and other mixed-signal components.</p>
               </div>
             </div>
 
@@ -470,7 +470,7 @@
             <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="transceiver">
               <div class="drop-inner">
                 <img src="/assets/photos/fm/transceiver.png" alt="Transceiver schematic">
-                <p>The FM transceiver block handles all wireless transmission and reception as well as audio signal interfacing for the device. The SI4720 integrates modulation, demodulation, and RF signal processing into a single IC, reducing external component count and RF design complexity. An external antenna and matching inductor form the RF front end for efficient transmission and reception. Digital control and data exchange with the microcontroller are handled through a serial interface, allowing dynamic configuration of frequency, mode, and power. Audio input from the microphone is AC-coupled into the transceiver, while received audio is routed out for amplification. In the overall project, this block serves as the core communication engine that enables two-way FM voice operation.</p>
+                <p>The FM transceiver block is responsible for all wireless transmit and receive functionality, as well as interfacing the audio signals used by the system. The SI4720 integrates modulation, demodulation, and RF signal processing into a single device, which helped reduce both external component count and overall RF design complexity. An external antenna, along with a matching inductor, forms the RF front end to support efficient transmission and reception. The microcontroller communicates with the transceiver over a serial interface, allowing the operating frequency, mode, and power settings to be configured in software. Audio from the microphone is AC-coupled into the transceiver, while received audio is routed to the downstream amplifier. As a whole, this block acts as the core communication engine that enables two-way FM voice operation.</p>
               </div>
             </div>
 
@@ -478,7 +478,7 @@
             <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="crystal-oscillator">
               <div class="drop-inner">
                 <img src="/assets/photos/fm/crystal-oscillator.png" alt="Crystal oscillator schematic">
-                <p>The crystal oscillator provides a stable and accurate reference clock for the transceiver’s internal timing and frequency synthesis. A 32.768 kHz crystal is used with matched load capacitors to ensure reliable oscillation and long-term frequency stability. This low-frequency reference supports precise tuning and consistent RF performance. Proper grounding and symmetric loading minimize phase noise and startup issues. In the broader system, this clock source underpins accurate modulation, demodulation, and channel stability.</p>
+                <p>The crystal oscillator supplies a stable reference clock for the transceiver’s internal timing and frequency generation. A 32.768 kHz crystal, paired with matched load capacitors, is used to ensure reliable startup and long-term frequency stability. This low-frequency reference enables consistent tuning and repeatable RF performance. Careful grounding and symmetric loading were used to reduce phase noise and avoid startup issues. In the overall system, this clock source isi>s foundational to accurate modulation, demodulation, and channel stability.</p>
               </div>
             </div>
 
@@ -486,7 +486,7 @@
             <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="audio-amplifier">
               <div class="drop-inner">
                 <img src="/assets/photos/fm/audio-amplifier.png" alt="Audio amplifier schematic">
-                <p>The audio amplifier stage boosts the received audio signal to a level suitable for driving the speaker. The TPA321 is configured in a bridge-tied load arrangement to maximize output power while operating from a low supply voltage. AC coupling and biasing components condition the input signal and remove DC offsets. Local decoupling ensures stable operation under dynamic audio loads. The shutdown control allows the amplifier to be disabled when audio output is not required, reducing power consumption. In the overall system, this block converts demodulated RF audio into audible sound for the user.</p>
+                <p>The audio amplifier stage takes the low-level audio output from the transceiver and boosts it to a level suitable for driving the speaker. The TPA321 is configured in a bridge-tied load arrangement, allowing higher output power from a low supply voltage without the need for a large coupling capacitor. Input coupling and biasing components condition the signal and remove any DC offset before amplification. Local decoupling is used to keep the amplifier stable under changing audio loads. A shutdown control line allows the amplifier to be disabled when audio output isn’t needed, helping reduce overall power consumption. In the system as a whole, this block translates the demodulated RF signal into clear, audible sound for the user.</p>
               </div>
             </div>
 
@@ -529,9 +529,9 @@
           
           </div>
 
-        <p>The PCB was designed with functional partitioning and signal-integrity considerations in mind. Components are grouped by subsystem (MCU support, RF front-end, audio, and power management) to keep routing intuitive and minimize trace length for critical signals. High-pin-count devices are centrally located to simplify fan-out routing, while decoupling capacitors are placed as close as possible to IC power pins to reduce supply noise and improve stability. A continuous ground reference and short return paths were prioritized throughout the layout to improve overall robustness.</p>
+        <p>The PCB layout was approached with functional partitioning and signal integrity as primary goals. Components were grouped by subsystem—such as MCU support, RF front end, audio, and power management—to keep routing logical and reduce trace lengths for sensitive signals. High pin-count devices were placed centrally to simplify fan-out and reduce routing congestion, while decoupling capacitors were positioned as close as possible to IC power pins to help control supply noise. A continuous ground reference and short return paths were maintained across the board to improve overall stability and robustness.</p>
 
-<hr><p>The RF IC was intentionally placed in the bottom-right corner of the board near the antenna connection point (E1). This placement reduces the amount of small-signal and RF-sensitive routing that must travel across the PCB, helping limit noise coupling from digital and power circuitry. Keeping the RF section localized also simplified impedance-aware routing between the RF IC and antenna interface.</p>
+<hr><p>The RF transceiver was intentionally placed in the bottom-right corner of the PCB, close to the antenna connection point (E1). Positioning the RF section near the antenna minimized the length of sensitive RF and small-signal traces, reducing the chance of noise coupling from digital logic and power circuitry elsewhere on the board. Localizing the RF components also made impedance-aware routing more straightforward and helped keep the antenna interface clean and predictable.</p>
         </div>
       </div>
     </section>
@@ -547,12 +547,7 @@
                   <div class="zoom-lens" aria-hidden="true"></div>
                   </div>
                 <p>
-                  The system begins by initializing all modules and I/O ports before displaying key operating metrics on the graphical LCD.
-                  During normal operation, the transceiver remains in receive mode while continuously monitoring user inputs. The mode
-                  selection determines the function of the up and down buttons, allowing the user to change the active channel, adjust
-                  audio volume, or modify screen brightness. If the transmit button is pressed, the system temporarily switches to transmit
-                  mode and returns to receive mode once the button is released. This control loop repeats continuously to enable responsive,
-                  real-time interaction with the device.
+On startup, the system initializes all hardware modules and I/O lines, then brings up the graphical LCD to show the current operating state. During normal use, the radio stays in receive mode and continuously listens for user input. The selected mode determines what the up and down buttons control, allowing the user to switch channels, adjust the audio volume, or change the display brightness. When the transmit button is pressed, the system briefly switches into transmit mode and automatically returns to receive once the button is released. This loop runs continuously, allowing the device to respond quickly and predictably to user interactions.
                 </p>
               </div>
             </div>
@@ -588,7 +583,7 @@
       <a class="section-link top-link" href="#" data-drop-btn>Skills and Outcomes</a>
       <div class="drop-panel" hidden aria-hidden="true" data-drop-panel>
         <div class="drop-inner">
-          <p>This project provided hands-on experience across the full hardware development cycle, from schematic capture and PCB layout to enclosure design and system integration. It was my first time assembling a mixed-signal RF board using a reflow oven, with the majority of passive components soldered manually, which strengthened my understanding of practical assembly constraints and rework techniques. I also designed a custom enclosure in CAD for the first time, translating electrical and mechanical requirements into a manufacturable physical form. While the system was not fully functional due to an issue in my I²C driver that prevented proper initialization of the SI4720 RF transceiver, diagnosing this failure reinforced the importance of firmware–hardware co-design and low-level interface validation. Through this project I gained a solid foundation in RF-aware PCB layout, including grounding strategies, component placement, impedance-sensitive routing, and noise isolation between digital, analog, and RF domains. Overall, the project developed my ability to design, build, and critically evaluate complex embedded systems, and to identify and learn from integration-level failures—skills directly applicable to real-world engineering environments.</p>
+          <p>This project was a major learning experience for me and involved several first-time milestones in both hardware and mechanical design. It was my first time assembling a PCB using a reflow oven, with most of the passive components soldered by hand, which forced me to be deliberate about placement, inspection, and rework. I also designed a custom enclosure in CAD for the first time, learning how mechanical constraints, board geometry, and connector placement all have to work together in a real device. While the system was not fully functional in its final state, the failure was traced back to a timing issue in my SPI library that prevented the SI4720 transceiver from initializing correctly—specifically, incorrect clock polarity and setup timing during early configuration commands. Debugging this exposed how sensitive RF ICs can be to low-level digital timing and reinforced the importance of validating firmware assumptions against datasheet requirements. Through this project, I developed a much stronger understanding of RF-aware PCB layout, power integrity, decoupling, and subsystem partitioning, as well as practical experience diagnosing problems that span firmware, digital interfaces, and analog RF hardware.</p>
         </div>
       </div>
     </section>
