@@ -2,43 +2,205 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Marine Engine Rebuild | Denys Shlyakhtovskyy</title>
+  <title>Boat Rebuild | Denys Shlyakhtovskyy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="/style.css">
 
   <style>
-    /* match your FM page dropdown layout */
     .top-link{
       display: block;
       width: fit-content;
       margin: 14px 0 8px 0;
     }
+
     .content-center{
       text-align: center;
       margin-top: 8px;
     }
+
     .content-center .section-link{
       display: block;
       width: 100%;
       margin: 14px 0 8px 0;
     }
+
     .content-center .drop-panel{
       text-align: center;
       margin: 0 auto 8px auto;
       max-width: 70ch;
     }
-    .content-center img{
+
+    .drop-panel .drop-panel .drop-inner{
+      text-align: left;
+    }
+
+    .photo-grid-wrap{
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .photo-grid{
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin: 10px auto 0;
+      width: min(100%, 1000px);
+    }
+
+    .photo-grid > .photo-item{
+      flex: 0 1 240px;
+      max-width: 320px;
+    }
+
+    .photo-item{
+      margin: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(0,0,0,0.03);
+      border: 1px solid rgba(0,0,0,0.10);
+      cursor: pointer;
+      position: relative;
+      transform: translateZ(0);
+      transition: transform 180ms ease;
+    }
+
+    .photo-item:hover{
+      transform: scale(1.03);
+    }
+
+    .photo-item img,
+    .photo-item video{
       display: block;
       width: 100%;
-      max-width: 900px;
       height: auto;
-      margin: 10px auto 0;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
     }
-    .caption{
-      margin-top: 8px;
-      text-align: center;
-      opacity: 0.9;
+
+    .img-overlay{
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: transparent;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 220ms ease;
+    }
+
+    .img-overlay.is-open{
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .img-overlay .stage{
+      width: min(1000px, 92vw);
+      max-height: 82vh;
+      display: grid;
+      grid-template-rows: auto auto;
+      gap: 10px;
+    }
+
+    .img-overlay .stage-img{
+      width: 100%;
+      max-height: 72vh;
+      border-radius: 14px;
+      overflow: hidden;
+      background: transparent;
+      border: none;
+      position: relative;
+    }
+
+    .img-overlay .stage-img img,
+    .img-overlay .stage-img video{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      background: transparent;
+    }
+
+    .img-overlay .stage-img img{
+      display: none;
+    }
+
+    .img-overlay .stage-img video{
+      display: none;
+    }
+
+    .img-overlay .stage-caption{
+      color: rgba(0,0,0,0.85);
       font-size: 0.95rem;
+      text-align: center;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(0,0,0,0.06);
+      border: 1px solid rgba(0,0,0,0.10);
+    }
+
+    .img-clone{
+      position: fixed;
+      z-index: 10000;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.25);
+      will-change: width, height, top, left;
+      transition: width 420ms cubic-bezier(.2,.8,.2,1),
+                  height 420ms cubic-bezier(.2,.8,.2,1),
+                  top 420ms cubic-bezier(.2,.8,.2,1),
+                  left 420ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .img-clone img,
+    .img-clone video{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .video-ui{
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      display: none;
+      gap: 8px;
+      z-index: 5;
+    }
+
+    .video-ui button{
+      appearance: none;
+      border: 1px solid rgba(0,0,0,0.18);
+      background: rgba(255,255,255,0.85);
+      border-radius: 10px;
+      padding: 8px 10px;
+      line-height: 1;
+      cursor: pointer;
+      font-size: 16px;
+      user-select: none;
+    }
+
+    .video-ui button:active{
+      transform: translateY(1px);
+    }
+
+    .video-ui .mute.is-muted{
+      position: relative;
+    }
+
+    .video-ui .mute.is-muted::after{
+      content: "";
+      position: absolute;
+      left: 6px;
+      right: 6px;
+      top: 50%;
+      height: 2px;
+      background: rgba(0,0,0,0.65);
+      transform: rotate(-25deg);
+      transform-origin: center;
     }
   </style>
 </head>
@@ -46,17 +208,14 @@
 <body>
   <div class="container">
     <a class="back" href="/projects/">← Back to Projects</a>
-    <h1>Marine Engine Rebuild</h1>
+    <h1>Boat Rebuild</h1>
 
     <p>
-I bought a boat with a cracked engine block and replaced it by sourcing a compatible truck-variant Chevrolet 4.3 L V6, swapping the block and reassembling the engine for marine use. The project required pulling the engine from the hull, transferring marine components onto the replacement block, and rebuilding the stern drive to ensure the drivetrain was sealed, aligned, and reliable in the water.
+      I bought a boat with a cracked engine block and rebuilt it by sourcing a truck-variant 4.3L Chevy V6 long block and swapping it in. The job required pulling the engine, transferring marine-specific hardware, and rebuilding the sterndrive before testing and reassembly.
     </p>
 
     <hr>
 
-    <!-- ===== Top-level dropdowns (2) ===== -->
-
-    <!-- OVERVIEW -->
     <section class="drop" data-drop>
       <a class="section-link top-link" href="#" data-drop-btn>Overview</a>
 
@@ -64,30 +223,75 @@ I bought a boat with a cracked engine block and replaced it by sourcing a compat
         <div class="drop-inner">
           <div class="content-center">
 
-<p>test</p>
+            <a class="section-link" href="#" data-sub-btn="symptoms-diagnostics">Diagnostics</a>
+            <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="symptoms-diagnostics">
+              <div class="drop-inner"></div>
+            </div>
+
+            <a class="section-link" href="#" data-sub-btn="repair">Repair</a>
+            <div class="drop-panel" hidden aria-hidden="true" data-sub-panel="repair">
+              <div class="drop-inner"></div>
+            </div>
 
           </div>
         </div>
       </div>
     </section>
 
-    <!-- PHOTOS -->
     <section class="drop" data-drop>
       <a class="section-link top-link" href="#" data-drop-btn>Photos</a>
 
       <div class="drop-panel" hidden aria-hidden="true" data-drop-panel>
         <div class="drop-inner">
           <div class="content-center">
+            <div class="photo-grid-wrap">
+              <div class="photo-grid" data-photo-grid>
 
- 
-<p>test</p>
+                <figure class="photo-item" data-photo-item data-type="image" data-src="/assets/photos/boat/b1.jpg" data-caption="">
+                  <img src="/assets/photos/boat/b1.jpg" alt="Photo 1">
+                </figure>
 
+                <figure class="photo-item" data-photo-item data-type="image" data-src="/assets/photos/boat/b2.jpg" data-caption="">
+                  <img src="/assets/photos/boat/b2.jpg" alt="Photo 2">
+                </figure>
+
+                <figure class="photo-item" data-photo-item data-type="image" data-src="/assets/photos/boat/b3.jpg" data-caption="">
+                  <img src="/assets/photos/boat/b3.jpg" alt="Photo 3">
+                </figure>
+
+                <figure class="photo-item" data-photo-item data-type="image" data-src="/assets/photos/boat/b4.jpg" data-caption="">
+                  <img src="/assets/photos/boat/b4.jpg" alt="Photo 4">
+                </figure>
+
+                <figure class="photo-item" data-photo-item data-type="image" data-src="/assets/photos/boat/b5.jpg" data-caption="">
+                  <img src="/assets/photos/boat/b5.jpg" alt="Photo 5">
+                </figure>
+
+                <figure class="photo-item" data-photo-item data-type="video" data-src="/assets/photos/boat/b6.mov" data-caption="">
+                  <video src="/assets/photos/boat/boat-rebuild.mp4" muted autoplay loop playsinline preload="metadata"></video>
+                </figure>
+
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ===== Script (same dropdown behavior as your FM page) ===== -->
+    <div class="img-overlay" data-img-overlay aria-hidden="true">
+      <div class="stage">
+        <div class="stage-img">
+          <div class="video-ui" data-video-ui>
+            <button type="button" class="replay" data-video-replay>↺</button>
+            <button type="button" class="mute is-muted" data-video-mute>🔊</button>
+          </div>
+          <img data-overlay-img src="" alt="">
+          <video data-overlay-video playsinline autoplay loop preload="metadata"></video>
+        </div>
+        <div class="stage-caption" data-overlay-caption></div>
+      </div>
+    </div>
+
     <script>
       function shiftToViewportCenter(el){
         const r = el.getBoundingClientRect();
@@ -110,13 +314,10 @@ I bought a boat with a cracked engine block and replaced it by sourcing a compat
       async function openPanel(panel){
         panel.hidden = false;
         panel.setAttribute("aria-hidden", "false");
-
         panel.style.maxHeight = "0px";
         panel.getBoundingClientRect();
-
         panel.classList.add("is-open");
         panel.style.maxHeight = panel.scrollHeight + "px";
-
         await waitForTransition(panel, "max-height");
         panel.style.maxHeight = "none";
       }
@@ -124,12 +325,9 @@ I bought a boat with a cracked engine block and replaced it by sourcing a compat
       async function closePanel(panel){
         panel.style.maxHeight = panel.scrollHeight + "px";
         panel.getBoundingClientRect();
-
         panel.classList.remove("is-open");
         panel.style.maxHeight = "0px";
-
         await waitForTransition(panel, "max-height");
-
         panel.hidden = true;
         panel.setAttribute("aria-hidden", "true");
       }
@@ -155,15 +353,12 @@ I bought a boat with a cracked engine block and replaced it by sourcing a compat
         async function slideToCenter(){
           if (sliding) return;
           sliding = true;
-
           topBtn.style.transform = "translateX(0px)";
           topBtn.getBoundingClientRect();
-
           requestAnimationFrame(() => {
             const shift = shiftToViewportCenter(topBtn);
             topBtn.style.transform = `translateX(${shift}px)`;
           });
-
           await waitForTransition(topBtn, "transform");
           sliding = false;
         }
@@ -171,19 +366,15 @@ I bought a boat with a cracked engine block and replaced it by sourcing a compat
         async function slideBackLeft(){
           if (sliding) return;
           sliding = true;
-
           topBtn.style.transform = "translateX(0px)";
           await waitForTransition(topBtn, "transform");
-
           sliding = false;
         }
 
         topBtn.addEventListener("click", async (e) => {
           e.preventDefault();
           if (sliding) return;
-
           open = !open;
-
           if (open){
             topBtn.classList.add("is-selected");
             await slideToCenter();
@@ -196,7 +387,6 @@ I bought a boat with a cracked engine block and replaced it by sourcing a compat
           }
         });
 
-        // nested panels inside THIS dropdown
         drop.querySelectorAll("[data-sub-btn]").forEach((btn) => {
           const key = btn.getAttribute("data-sub-btn");
           const panel = drop.querySelector(`[data-sub-panel="${key}"]`);
@@ -205,7 +395,6 @@ I bought a boat with a cracked engine block and replaced it by sourcing a compat
           btn.addEventListener("click", async (e) => {
             e.preventDefault();
             if (topPanel.hidden) return;
-
             if (panel.hidden){
               btn.classList.add("is-selected");
               await openPanel(panel);
@@ -216,16 +405,216 @@ I bought a boat with a cracked engine block and replaced it by sourcing a compat
           });
         });
 
-        // keep centered & heights correct on resize
         window.addEventListener("resize", () => {
           if (!open) return;
-
           topBtn.style.transform = `translateX(${shiftToViewportCenter(topBtn)}px)`;
           if (!topPanel.hidden && topPanel.style.maxHeight !== "none"){
             topPanel.style.maxHeight = topPanel.scrollHeight + "px";
           }
         });
       });
+
+      (function initMediaGrid(){
+        const grid = document.querySelector("[data-photo-grid]");
+        if (!grid) return;
+
+        const overlay = document.querySelector("[data-img-overlay]");
+        const overlayImg = document.querySelector("[data-overlay-img]");
+        const overlayVideo = document.querySelector("[data-overlay-video]");
+        const overlayCaption = document.querySelector("[data-overlay-caption]");
+        const videoUI = document.querySelector("[data-video-ui]");
+        const btnReplay = document.querySelector("[data-video-replay]");
+        const btnMute = document.querySelector("[data-video-mute]");
+
+        let activeItem = null;
+        let animating = false;
+
+        function rectToBox(r){
+          return { top: r.top, left: r.left, width: r.width, height: r.height };
+        }
+
+        function placeCloneFromRect(clone, box){
+          clone.style.top = box.top + "px";
+          clone.style.left = box.left + "px";
+          clone.style.width = box.width + "px";
+          clone.style.height = box.height + "px";
+        }
+
+        function showImage(){
+          overlayVideo.pause();
+          overlayVideo.removeAttribute("src");
+          overlayVideo.load();
+          overlayVideo.style.display = "none";
+          videoUI.style.display = "none";
+          overlayImg.style.display = "block";
+        }
+
+        function showVideo(){
+          overlayImg.removeAttribute("src");
+          overlayImg.style.display = "none";
+          overlayVideo.style.display = "block";
+          videoUI.style.display = "flex";
+          overlayVideo.muted = true;
+          btnMute.classList.add("is-muted");
+          btnMute.textContent = "🔊";
+        }
+
+        async function flipOpen(item){
+          if (animating) return;
+          animating = true;
+          activeItem = item;
+
+          const type = item.getAttribute("data-type") || "image";
+          const src = item.getAttribute("data-src") || "";
+          const cap = item.getAttribute("data-caption") || "";
+
+          const mediaEl = type === "video" ? item.querySelector("video") : item.querySelector("img");
+          const startRect = mediaEl.getBoundingClientRect();
+          const startBox = rectToBox(startRect);
+
+          overlayCaption.textContent = cap;
+
+          if (type === "video"){
+            showVideo();
+            overlayVideo.src = src;
+          } else {
+            showImage();
+            overlayImg.src = src;
+          }
+
+          overlayImg.style.visibility = "hidden";
+          overlayVideo.style.visibility = "hidden";
+
+          const clone = document.createElement("div");
+          clone.className = "img-clone";
+          if (type === "video"){
+            clone.innerHTML = `<video src="${src}" muted autoplay loop playsinline></video>`;
+          } else {
+            clone.innerHTML = `<img src="${src}" alt="">`;
+          }
+          document.body.appendChild(clone);
+
+          placeCloneFromRect(clone, startBox);
+
+          overlay.classList.add("is-open");
+          overlay.setAttribute("aria-hidden", "false");
+
+          overlay.getBoundingClientRect();
+
+          const targetEl = overlay.querySelector(".stage-img");
+          const targetRect = targetEl.getBoundingClientRect();
+          const targetBox = rectToBox(targetRect);
+
+          requestAnimationFrame(() => {
+            clone.style.top = targetBox.top + "px";
+            clone.style.left = targetBox.left + "px";
+            clone.style.width = targetBox.width + "px";
+            clone.style.height = targetBox.height + "px";
+          });
+
+          await new Promise((res) => setTimeout(res, 460));
+
+          overlayImg.style.visibility = "visible";
+          overlayVideo.style.visibility = "visible";
+          clone.remove();
+
+          if (type === "video"){
+            overlayVideo.currentTime = 0;
+            overlayVideo.play().catch(() => {});
+          }
+
+          animating = false;
+        }
+
+        async function flipClose(){
+          if (!activeItem || animating) return;
+          animating = true;
+
+          const item = activeItem;
+          const type = item.getAttribute("data-type") || "image";
+          const src = item.getAttribute("data-src") || "";
+
+          const endEl = type === "video" ? item.querySelector("video") : item.querySelector("img");
+          const endRect = endEl.getBoundingClientRect();
+          const endBox = rectToBox(endRect);
+
+          const startEl = overlay.querySelector(".stage-img");
+          const startRect = startEl.getBoundingClientRect();
+          const startBox = rectToBox(startRect);
+
+          const clone = document.createElement("div");
+          clone.className = "img-clone";
+          if (type === "video"){
+            clone.innerHTML = `<video src="${src}" muted autoplay loop playsinline></video>`;
+          } else {
+            clone.innerHTML = `<img src="${src}" alt="">`;
+          }
+          document.body.appendChild(clone);
+
+          placeCloneFromRect(clone, startBox);
+
+          overlay.classList.remove("is-open");
+          overlay.setAttribute("aria-hidden", "true");
+
+          overlayVideo.pause();
+
+          requestAnimationFrame(() => {
+            clone.style.top = endBox.top + "px";
+            clone.style.left = endBox.left + "px";
+            clone.style.width = endBox.width + "px";
+            clone.style.height = endBox.height + "px";
+          });
+
+          await new Promise((res) => setTimeout(res, 460));
+          clone.remove();
+
+          activeItem = null;
+          animating = false;
+        }
+
+        grid.addEventListener("click", (e) => {
+          const item = e.target.closest("[data-photo-item]");
+          if (!item) return;
+
+          if (activeItem && item === activeItem){
+            flipClose();
+          } else if (!activeItem){
+            flipOpen(item);
+          } else {
+            flipClose().then(() => flipOpen(item));
+          }
+        });
+
+        overlay.addEventListener("click", (e) => {
+          const inUI = e.target.closest("[data-video-ui]");
+          if (inUI) return;
+          flipClose();
+        });
+
+        window.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") flipClose();
+        });
+
+        btnReplay.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          overlayVideo.currentTime = 0;
+          overlayVideo.play().catch(() => {});
+        });
+
+        btnMute.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const muted = !overlayVideo.muted;
+          overlayVideo.muted = muted;
+          if (overlayVideo.muted){
+            btnMute.classList.add("is-muted");
+          } else {
+            btnMute.classList.remove("is-muted");
+            overlayVideo.play().catch(() => {});
+          }
+        });
+      })();
     </script>
   </div>
 </body>
