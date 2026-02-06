@@ -851,6 +851,7 @@
   function initStlViewer(root){
     const canvas = root.querySelector(".stl-canvas");
     const url = root.getAttribute("data-stl");
+    console.log("STL URL:", url);
     if (!canvas || !url) return;
       const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -922,9 +923,9 @@
         controls.update();
       },
       undefined,
-      (err) => {
-        console.error("STL load failed:", err);
-      }
+ (err) => {
+  console.error("STL load failed:", err, "URL:", url);
+}
      );
 
     function resize(){
