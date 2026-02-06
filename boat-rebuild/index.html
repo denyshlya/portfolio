@@ -2,17 +2,231 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Project | Denys Shlyakhtovskyy</title>
+  <title>Marine Engine Rebuild | Denys Shlyakhtovskyy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="/style.css">
+
+  <style>
+    /* match your FM page dropdown layout */
+    .top-link{
+      display: block;
+      width: fit-content;
+      margin: 14px 0 8px 0;
+    }
+    .content-center{
+      text-align: center;
+      margin-top: 8px;
+    }
+    .content-center .section-link{
+      display: block;
+      width: 100%;
+      margin: 14px 0 8px 0;
+    }
+    .content-center .drop-panel{
+      text-align: center;
+      margin: 0 auto 8px auto;
+      max-width: 70ch;
+    }
+    .content-center img{
+      display: block;
+      width: 100%;
+      max-width: 900px;
+      height: auto;
+      margin: 10px auto 0;
+    }
+    .caption{
+      margin-top: 8px;
+      text-align: center;
+      opacity: 0.9;
+      font-size: 0.95rem;
+    }
+  </style>
 </head>
+
 <body>
   <div class="container">
-    <h1>Project Title</h1>
-    <p>Content coming soon.</p>
-    <a href="/projects/">← Back to projects</a>
+    <a class="back" href="/projects/">← Back to Projects</a>
+    <h1>Automotive Engine Rebuild</h1>
+
+    <p>
+I bought a boat with a cracked engine block and replaced it by sourcing a compatible truck-variant Chevrolet 4.3 L V6, swapping the block and reassembling the engine for marine use. The project required pulling the engine from the hull, transferring marine components onto the replacement block, and rebuilding the stern drive to ensure the drivetrain was sealed, aligned, and reliable in the water.
+    </p>
+
+    <hr>
+
+    <!-- ===== Top-level dropdowns (2) ===== -->
+
+    <!-- OVERVIEW -->
+    <section class="drop" data-drop>
+      <a class="section-link top-link" href="#" data-drop-btn>Overview</a>
+
+      <div class="drop-panel" hidden aria-hidden="true" data-drop-panel>
+        <div class="drop-inner">
+          <div class="content-center">
+
+<p>test</p>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PHOTOS -->
+    <section class="drop" data-drop>
+      <a class="section-link top-link" href="#" data-drop-btn>Photos</a>
+
+      <div class="drop-panel" hidden aria-hidden="true" data-drop-panel>
+        <div class="drop-inner">
+          <div class="content-center">
+
+ 
+<p>test</p>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Script (same dropdown behavior as your FM page) ===== -->
+    <script>
+      function shiftToViewportCenter(el){
+        const r = el.getBoundingClientRect();
+        const elCenter = r.left + r.width / 2;
+        const viewportCenter = window.innerWidth / 2;
+        return viewportCenter - elCenter;
+      }
+
+      function waitForTransition(el, prop){
+        return new Promise((resolve) => {
+          const onEnd = (e) => {
+            if (e.propertyName !== prop) return;
+            el.removeEventListener("transitionend", onEnd);
+            resolve();
+          };
+          el.addEventListener("transitionend", onEnd);
+        });
+      }
+
+      async function openPanel(panel){
+        panel.hidden = false;
+        panel.setAttribute("aria-hidden", "false");
+
+        panel.style.maxHeight = "0px";
+        panel.getBoundingClientRect();
+
+        panel.classList.add("is-open");
+        panel.style.maxHeight = panel.scrollHeight + "px";
+
+        await waitForTransition(panel, "max-height");
+        panel.style.maxHeight = "none";
+      }
+
+      async function closePanel(panel){
+        panel.style.maxHeight = panel.scrollHeight + "px";
+        panel.getBoundingClientRect();
+
+        panel.classList.remove("is-open");
+        panel.style.maxHeight = "0px";
+
+        await waitForTransition(panel, "max-height");
+
+        panel.hidden = true;
+        panel.setAttribute("aria-hidden", "true");
+      }
+
+      function hardCloseInside(root){
+        root.querySelectorAll(".drop-panel").forEach((p) => {
+          p.classList.remove("is-open");
+          p.style.maxHeight = "0px";
+          p.hidden = true;
+          p.setAttribute("aria-hidden", "true");
+        });
+        root.querySelectorAll(".section-link").forEach((a) => a.classList.remove("is-selected"));
+      }
+
+      document.querySelectorAll("[data-drop]").forEach((drop) => {
+        const topBtn = drop.querySelector("[data-drop-btn]");
+        const topPanel = drop.querySelector("[data-drop-panel]");
+        if (!topBtn || !topPanel) return;
+
+        let open = false;
+        let sliding = false;
+
+        async function slideToCenter(){
+          if (sliding) return;
+          sliding = true;
+
+          topBtn.style.transform = "translateX(0px)";
+          topBtn.getBoundingClientRect();
+
+          requestAnimationFrame(() => {
+            const shift = shiftToViewportCenter(topBtn);
+            topBtn.style.transform = `translateX(${shift}px)`;
+          });
+
+          await waitForTransition(topBtn, "transform");
+          sliding = false;
+        }
+
+        async function slideBackLeft(){
+          if (sliding) return;
+          sliding = true;
+
+          topBtn.style.transform = "translateX(0px)";
+          await waitForTransition(topBtn, "transform");
+
+          sliding = false;
+        }
+
+        topBtn.addEventListener("click", async (e) => {
+          e.preventDefault();
+          if (sliding) return;
+
+          open = !open;
+
+          if (open){
+            topBtn.classList.add("is-selected");
+            await slideToCenter();
+            await openPanel(topPanel);
+          } else {
+            hardCloseInside(topPanel);
+            await closePanel(topPanel);
+            topBtn.classList.remove("is-selected");
+            await slideBackLeft();
+          }
+        });
+
+        // nested panels inside THIS dropdown
+        drop.querySelectorAll("[data-sub-btn]").forEach((btn) => {
+          const key = btn.getAttribute("data-sub-btn");
+          const panel = drop.querySelector(`[data-sub-panel="${key}"]`);
+          if (!panel) return;
+
+          btn.addEventListener("click", async (e) => {
+            e.preventDefault();
+            if (topPanel.hidden) return;
+
+            if (panel.hidden){
+              btn.classList.add("is-selected");
+              await openPanel(panel);
+            } else {
+              await closePanel(panel);
+              btn.classList.remove("is-selected");
+            }
+          });
+        });
+
+        // keep centered & heights correct on resize
+        window.addEventListener("resize", () => {
+          if (!open) return;
+
+          topBtn.style.transform = `translateX(${shiftToViewportCenter(topBtn)}px)`;
+          if (!topPanel.hidden && topPanel.style.maxHeight !== "none"){
+            topPanel.style.maxHeight = topPanel.scrollHeight + "px";
+          }
+        });
+      });
+    </script>
   </div>
 </body>
 </html>
-
-
