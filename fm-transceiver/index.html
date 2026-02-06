@@ -962,13 +962,7 @@ const mat = new THREE.MeshPhysicalMaterial({
         mesh.rotation.x = -Math.PI / 2; 
 
 
-        // optional wireframe overlay
-        const wireMat = new THREE.LineBasicMaterial({ color: 0x111111, transparent: true, opacity: 0.35 });
-        const wireGeo = new THREE.WireframeGeometry(geom);
-        wire = new THREE.LineSegments(wireGeo, wireMat);
-        wire.scale.setScalar(scale);
-        wire.visible = false;
-        group.add(wire);
+
 
         scene.add(group);
 
