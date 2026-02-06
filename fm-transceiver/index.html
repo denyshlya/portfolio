@@ -875,6 +875,19 @@ import { STLLoader } from "three/addons/loaders/STLLoader.js";
     const controls = new OrbitControls(camera, canvas);
     controls.enableDamping = true;
     controls.dampingFactor = 0.08;
+    controls.enablePan = true;
+    controls.enableZoom = true;
+    controls.enableRotate = true;
+
+    controls.minDistance = 0;
+    controls.maxDistance = Infinity;
+
+    controls.minPolarAngle = 0;
+    controls.maxPolarAngle = Math.PI;
+
+    controls.minAzimuthAngle = -Infinity;
+    controls.maxAzimuthAngle = Infinity;
+
 
     // lights
     scene.add(new THREE.AmbientLight(0xffffff, 0.65));
