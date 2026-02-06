@@ -443,15 +443,19 @@
       overlayImg.style.display = "block";
     }
 
-    function showVideo(src){
-      overlayImg.removeAttribute("src");
-      overlayImg.style.display = "none";
-      overlayVideo.src = src;
-      overlayVideo.muted = true;
-      overlayVideo.style.display = "block";
-      videoUI.style.display = "flex";
-      btnMute.classList.add("is-muted");
-    }
+function showVideo(src){
+  overlayImg.removeAttribute("src");
+  overlayImg.style.display = "none";
+
+  overlayVideo.pause();
+  overlayVideo.removeAttribute("src");
+  overlayVideo.load();
+
+  overlayVideo.src = src;
+  overlayVideo.style.display = "block";
+  videoUI.style.display = "flex";
+}
+
 
     async function openItem(item){
       if (animating) return;
@@ -471,11 +475,37 @@
       const start = box(thumb.getBoundingClientRect());
       caption.textContent = cap;
 
-      if (type === "video") showVideo(src);
-      else showImage(src);
+     if (type === "video"){
+  showVideo(src);
+} else {
+  showImage(src);
+}
 
-      overlayImg.style.visibility = "hidden";
-      overlayVideo.style.visibility = "hidden";
+overlayImg.style.visibility = "hidden";
+overlayVideo.style.visibility = "hidden";
+
+if (type === "video"){
+  const tryPlay = async () => {
+    overlayVideo.currentTime = 0;
+
+    overlayVideo.muted = false;
+    btnMute.classList.remove("is-muted");
+
+    try {
+      await overlayVideo.play();
+      return;
+    } catch (e) {}
+
+    overlayVideo.muted = true;
+    btnMute.classList.add("is-muted");
+    try { await overlayVideo.play(); } catch (e) {}
+  };
+
+  overlayVideo.onloadeddata = () => { tryPlay(); };
+  overlayVideo.onerror = () => {};
+  overlayVideo.load();
+}
+
 
       const clone = document.createElement("div");
       clone.className = "img-clone";
@@ -495,11 +525,6 @@
       overlayImg.style.visibility = "visible";
       overlayVideo.style.visibility = "visible";
       clone.remove();
-
-      if (type === "video"){
-        overlayVideo.currentTime = 0;
-        overlayVideo.play().catch(()=>{});
-      }
 
       animating = false;
     }
