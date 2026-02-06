@@ -883,18 +883,22 @@ import { STLLoader } from "three/addons/loaders/STLLoader.js";
     controls.minAzimuthAngle = -Infinity;
     controls.maxAzimuthAngle = Infinity;
     // ===== one-time hint ("Drag to rotate") =====
+// ===== one-time hint, triggered on first hover =====
 const hint = root.querySelector(".stl-hint");
 const hintKey = "stl_hint_seen_v1";
 
 if (hint && !localStorage.getItem(hintKey)) {
-  localStorage.setItem(hintKey, "1");
+  const showHintOnce = () => {
+    localStorage.setItem(hintKey, "1");
+    hint.classList.add("is-show");
+    setTimeout(() => hint.classList.remove("is-show"), 2200);
+    root.removeEventListener("mouseenter", showHintOnce);
+  };
 
-  // show after a tiny delay so it fades in nicely
-  setTimeout(() => hint.classList.add("is-show"), 200);
-
-  // hide after ~2.5s
-  setTimeout(() => hint.classList.remove("is-show"), 2700);
+  // show only after the user actually hovers the viewer
+  root.addEventListener("mouseenter", showHintOnce, { once: true });
 }
+
 
 
 
