@@ -8,162 +8,142 @@
 
   <style>
     .top-link{
-      display: block;
-      width: fit-content;
-      margin: 14px 0 8px 0;
+      display:block;
+      width:fit-content;
+      margin:14px 0 8px 0;
     }
     .content-center{
-      text-align: center;
-      margin-top: 8px;
+      text-align:center;
+      margin-top:8px;
     }
     .content-center .section-link{
-      display: block;
-      width: 100%;
-      margin: 14px 0 8px 0;
+      display:block;
+      width:100%;
+      margin:14px 0 8px 0;
     }
     .content-center .drop-panel{
-      text-align: center;
-      margin: 0 auto 8px auto;
-      max-width: 70ch;
+      text-align:center;
+      margin:0 auto 8px auto;
+      max-width:70ch;
     }
 
-    /* ===== PHOTO GRID ===== */
     .photo-grid-wrap{
-      max-width: 1000px;
-      margin: 0 auto;
+      max-width:1000px;
+      margin:0 auto;
     }
 
     .photo-grid{
-      display: grid;
-      gap: 12px;
-      margin: 10px auto 0;
-      justify-content: center;            /* centers the entire grid */
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      width: min(100%, 1000px);
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:12px;
+      margin:10px auto 0;
+      width:min(100%,1000px);
     }
 
     .photo-grid > .photo-item{
-      width: 100%;
-      max-width: 320px;                  
-      justify-self: center;             
+      flex:0 1 300px;
+      max-width:300px;
     }
 
     .photo-item{
-      margin: 0;
-      border-radius: 12px;
-      overflow: hidden;
-      background: rgba(0,0,0,0.03);
-      border: 1px solid rgba(0,0,0,0.10);
-      cursor: pointer;
-      position: relative;
-
-      transform: translateZ(0);
-      transition: transform 160ms ease;
+      margin:0;
+      border-radius:12px;
+      overflow:hidden;
+      background:rgba(0,0,0,0.03);
+      border:1px solid rgba(0,0,0,0.10);
+      cursor:pointer;
+      transform:translateZ(0);
+      transition:transform 220ms ease;
     }
 
     .photo-item:hover{
-      transform: scale(1.03);
+      transform:scale(1.03);
     }
 
     .photo-item img{
-      display: block;
-      width: 100%;
-      height: auto;
-      aspect-ratio: 4 / 3;               
-      object-fit: cover;                  
+      display:block;
+      width:100%;
+      height:220px;
+      object-fit:contain;
+      background:transparent;
     }
-
-
-    .photo-caption{
-      margin: 12px auto 0;
-      width: min(100%, 1000px);
-      max-width: 70ch;
-      text-align: center;
-      opacity: 0.92;
-      font-size: 0.95rem;
-      padding: 10px 12px;
-      border-radius: 10px;
-      background: rgba(0,0,0,0.03);
-      border: 1px solid rgba(0,0,0,0.10);
-      min-height: 44px; 
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
 
     .img-overlay{
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      display: grid;
-      place-items: center;
-      padding: 24px;
-      background: rgba(0,0,0,0.55);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 180ms ease;
+      position:fixed;
+      inset:0;
+      z-index:9999;
+      display:grid;
+      place-items:center;
+      padding:24px;
+      background:transparent;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity 240ms ease;
     }
+
     .img-overlay.is-open{
-      opacity: 1;
-      pointer-events: auto;
+      opacity:1;
+      pointer-events:auto;
     }
 
     .img-overlay .stage{
-      width: min(1000px, 92vw);
-      max-height: 82vh;
-      display: grid;
-      grid-template-rows: auto auto;
-      gap: 10px;
+      width:min(1000px,92vw);
+      max-height:88vh;
+      display:grid;
+      grid-template-rows:auto auto;
+      gap:10px;
     }
 
     .img-overlay .stage-img{
-      width: 100%;
-      max-height: 72vh;
-      border-radius: 14px;
-      overflow: hidden;
-      background: #000;
-      border: 1px solid rgba(255,255,255,0.18);
-      position: relative;
+      width:100%;
+      height:min(78vh,700px);
+      border-radius:14px;
+      overflow:hidden;
+      position:relative;
+      background:transparent;
+      border:1px solid rgba(0,0,0,0.12);
     }
 
     .img-overlay .stage-img img{
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-      background: #000;
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      object-position:center;
+      display:block;
+      background:transparent;
     }
 
     .img-overlay .stage-caption{
-      color: rgba(255,255,255,0.92);
-      font-size: 0.95rem;
-      text-align: center;
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: rgba(0,0,0,0.35);
-      border: 1px solid rgba(255,255,255,0.18);
+      color:rgba(0,0,0,0.78);
+      font-size:0.95rem;
+      text-align:center;
+      padding:0;
+      background:transparent;
+      border:none;
     }
 
- 
     .img-clone{
-      position: fixed;
-      z-index: 10000;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.35);
-      will-change: transform, width, height, top, left;
-      transition: transform 260ms cubic-bezier(.2,.8,.2,1),
-                  width 260ms cubic-bezier(.2,.8,.2,1),
-                  height 260ms cubic-bezier(.2,.8,.2,1),
-                  top 260ms cubic-bezier(.2,.8,.2,1),
-                  left 260ms cubic-bezier(.2,.8,.2,1);
+      position:fixed;
+      z-index:10000;
+      border-radius:12px;
+      overflow:hidden;
+      box-shadow:0 12px 40px rgba(0,0,0,0.25);
+      will-change:width,height,top,left;
+      transition:
+        width 420ms cubic-bezier(.2,.8,.2,1),
+        height 420ms cubic-bezier(.2,.8,.2,1),
+        top 420ms cubic-bezier(.2,.8,.2,1),
+        left 420ms cubic-bezier(.2,.8,.2,1);
+      background:transparent;
     }
+
     .img-clone img{
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      display:block;
+      background:transparent;
     }
   </style>
 </head>
@@ -179,7 +159,6 @@
 
     <hr>
 
-    <!-- OVERVIEW -->
     <section class="drop" data-drop>
       <a class="section-link top-link" href="#" data-drop-btn>Overview</a>
 
@@ -192,7 +171,6 @@
       </div>
     </section>
 
-    <!-- PHOTOS -->
     <section class="drop" data-drop>
       <a class="section-link top-link" href="#" data-drop-btn>Photos</a>
 
@@ -202,7 +180,6 @@
 
             <div class="photo-grid-wrap">
               <div class="photo-grid" data-photo-grid>
-               
                 <figure class="photo-item" data-photo-item data-caption="2016 Hyundai Elantra">
                   <img src="/assets/photos/hyundai/h1.jpg" alt="Photo 1">
                 </figure>
@@ -215,25 +192,17 @@
                   <img src="/assets/photos/hyundai/h3.jpg" alt="Photo 3">
                 </figure>
 
-                
-                <figure class="photo-item" data-photo-item data-caption="Dissasembly Process">
+                <figure class="photo-item" data-photo-item data-caption="Disassembly Process">
                   <img src="/assets/photos/hyundai/h4.jpg" alt="Photo 4">
                 </figure>
 
-                
-                <figure class="photo-item" data-photo-item data-caption="Prior to Dissasembly">
+                <figure class="photo-item" data-photo-item data-caption="Prior to Disassembly">
                   <img src="/assets/photos/hyundai/h5.jpg" alt="Photo 5">
                 </figure>
 
-                
                 <figure class="photo-item" data-photo-item data-caption="Removing valve springs from cylinder head.">
                   <img src="/assets/photos/hyundai/h6.jpg" alt="Photo 6">
                 </figure>
-                <!-- ...more photos -->
-              </div>
-
-              <div class="photo-caption" data-photo-caption>
-                Hover a photo for a closer look. Click to expand.
               </div>
             </div>
 
@@ -242,7 +211,6 @@
       </div>
     </section>
 
-    <!-- Overlay for expanded image -->
     <div class="img-overlay" data-img-overlay aria-hidden="true">
       <div class="stage">
         <div class="stage-img">
@@ -252,9 +220,7 @@
       </div>
     </div>
 
-    <!-- ===== Script (dropdown behavior + photo grid interactions) ===== -->
     <script>
-      /* ===== existing dropdown script (unchanged) ===== */
       function shiftToViewportCenter(el){
         const r = el.getBoundingClientRect();
         const elCenter = r.left + r.width / 2;
@@ -276,13 +242,10 @@
       async function openPanel(panel){
         panel.hidden = false;
         panel.setAttribute("aria-hidden", "false");
-
         panel.style.maxHeight = "0px";
         panel.getBoundingClientRect();
-
         panel.classList.add("is-open");
         panel.style.maxHeight = panel.scrollHeight + "px";
-
         await waitForTransition(panel, "max-height");
         panel.style.maxHeight = "none";
       }
@@ -290,12 +253,9 @@
       async function closePanel(panel){
         panel.style.maxHeight = panel.scrollHeight + "px";
         panel.getBoundingClientRect();
-
         panel.classList.remove("is-open");
         panel.style.maxHeight = "0px";
-
         await waitForTransition(panel, "max-height");
-
         panel.hidden = true;
         panel.setAttribute("aria-hidden", "true");
       }
@@ -362,7 +322,6 @@
           }
         });
 
-        // nested panels inside THIS dropdown
         drop.querySelectorAll("[data-sub-btn]").forEach((btn) => {
           const key = btn.getAttribute("data-sub-btn");
           const panel = drop.querySelector(`[data-sub-panel="${key}"]`);
@@ -382,7 +341,6 @@
           });
         });
 
-        // keep centered & heights correct on resize
         window.addEventListener("resize", () => {
           if (!open) return;
 
@@ -393,29 +351,16 @@
         });
       });
 
-      /* ===== PHOTO GRID INTERACTIONS ===== */
       (function initPhotoGrid(){
         const grid = document.querySelector("[data-photo-grid]");
         if (!grid) return;
 
-        const captionBar = document.querySelector("[data-photo-caption]");
         const overlay = document.querySelector("[data-img-overlay]");
         const overlayImg = document.querySelector("[data-overlay-img]");
         const overlayCaption = document.querySelector("[data-overlay-caption]");
 
         let activeItem = null;
         let animating = false;
-
-        function setCaption(text){
-          if (!captionBar) return;
-          captionBar.textContent = text || "";
-        }
-
-        grid.querySelectorAll("[data-photo-item]").forEach((item) => {
-          const cap = item.getAttribute("data-caption") || "";
-          item.addEventListener("mouseenter", () => setCaption(cap));
-          item.addEventListener("mouseleave", () => setCaption("Hover a photo for a closer look. Click to expand."));
-        });
 
         function rectToBox(r){
           return { top: r.top, left: r.left, width: r.width, height: r.height };
@@ -426,7 +371,6 @@
           clone.style.left = box.left + "px";
           clone.style.width = box.width + "px";
           clone.style.height = box.height + "px";
-          clone.style.transform = "translateZ(0)";
         }
 
         async function flipOpen(item){
@@ -439,16 +383,13 @@
           const alt = img?.getAttribute("alt") || "";
           const cap = item.getAttribute("data-caption") || "";
 
-          // get start rect (grid image)
           const startRect = img.getBoundingClientRect();
           const startBox = rectToBox(startRect);
 
-          // prepare overlay content (but keep overlay transparent until after clone starts moving)
           overlayImg.src = src;
           overlayImg.alt = alt;
           overlayCaption.textContent = cap;
 
-          // create clone
           const clone = document.createElement("div");
           clone.className = "img-clone";
           clone.innerHTML = `<img src="${src}" alt="">`;
@@ -456,31 +397,23 @@
 
           placeCloneFromRect(clone, startBox);
 
-          // open overlay (for final target size measurement)
           overlay.classList.add("is-open");
           overlay.setAttribute("aria-hidden", "false");
-
-          // force layout so overlay is measurable
           overlay.getBoundingClientRect();
 
-          // target rect = overlay image container (stage-img)
           const targetEl = overlay.querySelector(".stage-img");
           const targetRect = targetEl.getBoundingClientRect();
           const targetBox = rectToBox(targetRect);
 
-          // animate clone to target
           requestAnimationFrame(() => {
             clone.style.top = targetBox.top + "px";
             clone.style.left = targetBox.left + "px";
             clone.style.width = targetBox.width + "px";
             clone.style.height = targetBox.height + "px";
-            clone.querySelector("img").style.objectFit = "cover";
           });
 
-          // wait transition end
-          await new Promise((res) => setTimeout(res, 280));
+          await new Promise((res) => setTimeout(res, 460));
 
-          // remove clone, show overlay content fully
           clone.remove();
           animating = false;
         }
@@ -492,18 +425,14 @@
           const item = activeItem;
           const img = item.querySelector("img");
           const src = img?.getAttribute("src") || "";
-          const cap = item.getAttribute("data-caption") || "";
 
-          // start rect = overlay stage-img
           const startEl = overlay.querySelector(".stage-img");
           const startRect = startEl.getBoundingClientRect();
           const startBox = rectToBox(startRect);
 
-          // end rect = grid image
           const endRect = img.getBoundingClientRect();
           const endBox = rectToBox(endRect);
 
-          // create clone at overlay size
           const clone = document.createElement("div");
           clone.className = "img-clone";
           clone.innerHTML = `<img src="${src}" alt="">`;
@@ -511,7 +440,6 @@
 
           placeCloneFromRect(clone, startBox);
 
-          // hide overlay (fade) while clone animates back
           overlay.classList.remove("is-open");
           overlay.setAttribute("aria-hidden", "true");
 
@@ -522,16 +450,13 @@
             clone.style.height = endBox.height + "px";
           });
 
-          await new Promise((res) => setTimeout(res, 280));
+          await new Promise((res) => setTimeout(res, 460));
           clone.remove();
 
           activeItem = null;
           animating = false;
-
-          setCaption(cap ? cap : "Hover a photo for a closer look. Click to expand.");
         }
 
-        // click on any photo toggles open (or closes if it's already open)
         grid.addEventListener("click", (e) => {
           const item = e.target.closest("[data-photo-item]");
           if (!item) return;
@@ -541,26 +466,16 @@
           } else if (!activeItem){
             flipOpen(item);
           } else {
-            // if another is open, close then open new (simple/clean)
             flipClose().then(() => flipOpen(item));
           }
         });
 
-        // click outside image closes
-        overlay.addEventListener("click", (e) => {
-          // allow clicking anywhere to close
+        overlay.addEventListener("click", () => {
           flipClose();
         });
 
-        // escape closes
         window.addEventListener("keydown", (e) => {
           if (e.key === "Escape") flipClose();
-        });
-
-        // keep animation targets sane on resize
-        window.addEventListener("resize", () => {
-          if (!activeItem) return;
-          // no live resizing while open; overlay handles responsive layout
         });
       })();
     </script>
