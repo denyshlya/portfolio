@@ -266,13 +266,14 @@
     <img src="/assets/photos/boat/b5.jpg" alt="Photo 5">
   </figure>
 
-  <figure class="photo-item"
-          data-photo-item
-          data-type="video"
-          data-src="/assets/photos/boat/boat-rebuild.mov"
-          data-caption="">
-    <img src="/assets/photos/boat/boat-rebuild-thumb.png" alt="Video">
-  </figure>
+<figure class="photo-item"
+        data-photo-item
+        data-type="video"
+        data-src="/assets/photos/boat/boat-rebuild.mov"
+        data-thumb="/assets/photos/boat/boat-thumb.png"
+        data-caption="">
+  <img src="/assets/photos/boat/boat-rebuild-thumb.png" alt="Video">
+</figure>
 </div>
 
             </div>
@@ -294,331 +295,275 @@
         <div class="stage-caption" data-overlay-caption></div>
       </div>
     </div>
+<script>
+  function shiftToViewportCenter(el){
+    const r = el.getBoundingClientRect();
+    return (window.innerWidth / 2) - (r.left + r.width / 2);
+  }
 
-    <script>
-      function shiftToViewportCenter(el){
-        const r = el.getBoundingClientRect();
-        const elCenter = r.left + r.width / 2;
-        const viewportCenter = window.innerWidth / 2;
-        return viewportCenter - elCenter;
+  function waitForTransition(el, prop){
+    return new Promise((resolve) => {
+      const onEnd = (e) => {
+        if (e.propertyName !== prop) return;
+        el.removeEventListener("transitionend", onEnd);
+        resolve();
+      };
+      el.addEventListener("transitionend", onEnd);
+    });
+  }
+
+  async function openPanel(panel){
+    panel.hidden = false;
+    panel.setAttribute("aria-hidden", "false");
+    panel.style.maxHeight = "0px";
+    panel.getBoundingClientRect();
+    panel.classList.add("is-open");
+    panel.style.maxHeight = panel.scrollHeight + "px";
+    await waitForTransition(panel, "max-height");
+    panel.style.maxHeight = "none";
+  }
+
+  async function closePanel(panel){
+    panel.style.maxHeight = panel.scrollHeight + "px";
+    panel.getBoundingClientRect();
+    panel.classList.remove("is-open");
+    panel.style.maxHeight = "0px";
+    await waitForTransition(panel, "max-height");
+    panel.hidden = true;
+    panel.setAttribute("aria-hidden", "true");
+  }
+
+  function hardCloseInside(root){
+    root.querySelectorAll(".drop-panel").forEach(p => {
+      p.classList.remove("is-open");
+      p.style.maxHeight = "0px";
+      p.hidden = true;
+      p.setAttribute("aria-hidden", "true");
+    });
+    root.querySelectorAll(".section-link").forEach(a => a.classList.remove("is-selected"));
+  }
+
+  document.querySelectorAll("[data-drop]").forEach((drop) => {
+    const btn = drop.querySelector("[data-drop-btn]");
+    const panel = drop.querySelector("[data-drop-panel]");
+    if (!btn || !panel) return;
+
+    let open = false;
+    let sliding = false;
+
+    async function slideToCenter(){
+      if (sliding) return;
+      sliding = true;
+      btn.style.transform = "translateX(0)";
+      btn.getBoundingClientRect();
+      btn.style.transform = `translateX(${shiftToViewportCenter(btn)}px)`;
+      await waitForTransition(btn, "transform");
+      sliding = false;
+    }
+
+    async function slideBack(){
+      if (sliding) return;
+      sliding = true;
+      btn.style.transform = "translateX(0)";
+      await waitForTransition(btn, "transform");
+      sliding = false;
+    }
+
+    btn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      open = !open;
+      if (open){
+        btn.classList.add("is-selected");
+        await slideToCenter();
+        await openPanel(panel);
+      } else {
+        hardCloseInside(panel);
+        await closePanel(panel);
+        btn.classList.remove("is-selected");
+        await slideBack();
       }
+    });
 
-      function waitForTransition(el, prop){
-        return new Promise((resolve) => {
-          const onEnd = (e) => {
-            if (e.propertyName !== prop) return;
-            el.removeEventListener("transitionend", onEnd);
-            resolve();
-          };
-          el.addEventListener("transitionend", onEnd);
-        });
-      }
+    drop.querySelectorAll("[data-sub-btn]").forEach((subBtn) => {
+      const key = subBtn.getAttribute("data-sub-btn");
+      const subPanel = drop.querySelector(`[data-sub-panel="${key}"]`);
+      if (!subPanel) return;
 
-      async function openPanel(panel){
-        panel.hidden = false;
-        panel.setAttribute("aria-hidden", "false");
-        panel.style.maxHeight = "0px";
-        panel.getBoundingClientRect();
-        panel.classList.add("is-open");
-        panel.style.maxHeight = panel.scrollHeight + "px";
-        await waitForTransition(panel, "max-height");
-        panel.style.maxHeight = "none";
-      }
-
-      async function closePanel(panel){
-        panel.style.maxHeight = panel.scrollHeight + "px";
-        panel.getBoundingClientRect();
-        panel.classList.remove("is-open");
-        panel.style.maxHeight = "0px";
-        await waitForTransition(panel, "max-height");
-        panel.hidden = true;
-        panel.setAttribute("aria-hidden", "true");
-      }
-
-      function hardCloseInside(root){
-        root.querySelectorAll(".drop-panel").forEach((p) => {
-          p.classList.remove("is-open");
-          p.style.maxHeight = "0px";
-          p.hidden = true;
-          p.setAttribute("aria-hidden", "true");
-        });
-        root.querySelectorAll(".section-link").forEach((a) => a.classList.remove("is-selected"));
-      }
-
-      document.querySelectorAll("[data-drop]").forEach((drop) => {
-        const topBtn = drop.querySelector("[data-drop-btn]");
-        const topPanel = drop.querySelector("[data-drop-panel]");
-        if (!topBtn || !topPanel) return;
-
-        let open = false;
-        let sliding = false;
-
-        async function slideToCenter(){
-          if (sliding) return;
-          sliding = true;
-          topBtn.style.transform = "translateX(0px)";
-          topBtn.getBoundingClientRect();
-          requestAnimationFrame(() => {
-            const shift = shiftToViewportCenter(topBtn);
-            topBtn.style.transform = `translateX(${shift}px)`;
-          });
-          await waitForTransition(topBtn, "transform");
-          sliding = false;
+      subBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        if (subPanel.hidden){
+          subBtn.classList.add("is-selected");
+          await openPanel(subPanel);
+        } else {
+          await closePanel(subPanel);
+          subBtn.classList.remove("is-selected");
         }
-
-        async function slideBackLeft(){
-          if (sliding) return;
-          sliding = true;
-          topBtn.style.transform = "translateX(0px)";
-          await waitForTransition(topBtn, "transform");
-          sliding = false;
-        }
-
-        topBtn.addEventListener("click", async (e) => {
-          e.preventDefault();
-          if (sliding) return;
-          open = !open;
-          if (open){
-            topBtn.classList.add("is-selected");
-            await slideToCenter();
-            await openPanel(topPanel);
-          } else {
-            hardCloseInside(topPanel);
-            await closePanel(topPanel);
-            topBtn.classList.remove("is-selected");
-            await slideBackLeft();
-          }
-        });
-
-        drop.querySelectorAll("[data-sub-btn]").forEach((btn) => {
-          const key = btn.getAttribute("data-sub-btn");
-          const panel = drop.querySelector(`[data-sub-panel="${key}"]`);
-          if (!panel) return;
-
-          btn.addEventListener("click", async (e) => {
-            e.preventDefault();
-            if (topPanel.hidden) return;
-            if (panel.hidden){
-              btn.classList.add("is-selected");
-              await openPanel(panel);
-            } else {
-              await closePanel(panel);
-              btn.classList.remove("is-selected");
-            }
-          });
-        });
-
-        window.addEventListener("resize", () => {
-          if (!open) return;
-          topBtn.style.transform = `translateX(${shiftToViewportCenter(topBtn)}px)`;
-          if (!topPanel.hidden && topPanel.style.maxHeight !== "none"){
-            topPanel.style.maxHeight = topPanel.scrollHeight + "px";
-          }
-        });
       });
+    });
+  });
 
-      (function initMediaGrid(){
-        const grid = document.querySelector("[data-photo-grid]");
-        if (!grid) return;
+  (function initMediaGrid(){
+    const grid = document.querySelector("[data-photo-grid]");
+    if (!grid) return;
 
-        const overlay = document.querySelector("[data-img-overlay]");
-        const overlayImg = document.querySelector("[data-overlay-img]");
-        const overlayVideo = document.querySelector("[data-overlay-video]");
-        const overlayCaption = document.querySelector("[data-overlay-caption]");
-        const videoUI = document.querySelector("[data-video-ui]");
-        const btnReplay = document.querySelector("[data-video-replay]");
-        const btnMute = document.querySelector("[data-video-mute]");
+    const overlay = document.querySelector("[data-img-overlay]");
+    const overlayImg = document.querySelector("[data-overlay-img]");
+    const overlayVideo = document.querySelector("[data-overlay-video]");
+    const caption = document.querySelector("[data-overlay-caption]");
+    const videoUI = document.querySelector("[data-video-ui]");
+    const btnReplay = document.querySelector("[data-video-replay]");
+    const btnMute = document.querySelector("[data-video-mute]");
 
-        let activeItem = null;
-        let animating = false;
+    let activeItem = null;
+    let animating = false;
 
-        function rectToBox(r){
-          return { top: r.top, left: r.left, width: r.width, height: r.height };
-        }
+    function box(r){
+      return { top: r.top, left: r.left, width: r.width, height: r.height };
+    }
 
-        function placeCloneFromRect(clone, box){
-          clone.style.top = box.top + "px";
-          clone.style.left = box.left + "px";
-          clone.style.width = box.width + "px";
-          clone.style.height = box.height + "px";
-        }
+    function place(el, b){
+      el.style.top = b.top + "px";
+      el.style.left = b.left + "px";
+      el.style.width = b.width + "px";
+      el.style.height = b.height + "px";
+    }
 
-        function showImage(){
-          overlayVideo.pause();
-          overlayVideo.removeAttribute("src");
-          overlayVideo.load();
-          overlayVideo.style.display = "none";
-          videoUI.style.display = "none";
-          overlayImg.style.display = "block";
-        }
+    function showImage(src){
+      overlayVideo.pause();
+      overlayVideo.removeAttribute("src");
+      overlayVideo.style.display = "none";
+      videoUI.style.display = "none";
+      overlayImg.src = src;
+      overlayImg.style.display = "block";
+    }
 
-        function showVideo(){
-          overlayImg.removeAttribute("src");
-          overlayImg.style.display = "none";
-          overlayVideo.style.display = "block";
-          videoUI.style.display = "flex";
-          overlayVideo.muted = true;
-          btnMute.classList.add("is-muted");
-          btnMute.textContent = "🔊";
-        }
+    function showVideo(src){
+      overlayImg.removeAttribute("src");
+      overlayImg.style.display = "none";
+      overlayVideo.src = src;
+      overlayVideo.muted = true;
+      overlayVideo.style.display = "block";
+      videoUI.style.display = "flex";
+      btnMute.classList.add("is-muted");
+    }
 
-        async function flipOpen(item){
-          if (animating) return;
-          animating = true;
-          activeItem = item;
+    async function openItem(item){
+      if (animating) return;
+      animating = true;
+      activeItem = item;
 
-          const type = item.getAttribute("data-type") || "image";
-          const src = item.getAttribute("data-src") || "";
-          const cap = item.getAttribute("data-caption") || "";
+      const type = item.dataset.type;
+      const src = item.dataset.src;
+      const cap = item.dataset.caption || "";
 
-          const mediaEl = type === "video" ? item.querySelector("video") : item.querySelector("img");
-          const startRect = mediaEl.getBoundingClientRect();
-          const startBox = rectToBox(startRect);
+      const thumb = item.querySelector("img");
+      if (!thumb){
+        animating = false;
+        return;
+      }
 
-          overlayCaption.textContent = cap;
+      const start = box(thumb.getBoundingClientRect());
+      caption.textContent = cap;
 
-          if (type === "video"){
-            showVideo();
-            overlayVideo.src = src;
-          } else {
-            showImage();
-            overlayImg.src = src;
-          }
+      if (type === "video") showVideo(src);
+      else showImage(src);
 
-          overlayImg.style.visibility = "hidden";
-          overlayVideo.style.visibility = "hidden";
+      overlayImg.style.visibility = "hidden";
+      overlayVideo.style.visibility = "hidden";
 
-          const clone = document.createElement("div");
-          clone.className = "img-clone";
-          if (type === "video"){
-            clone.innerHTML = `<video src="${src}" muted autoplay loop playsinline></video>`;
-          } else {
-            clone.innerHTML = `<img src="${src}" alt="">`;
-          }
-          document.body.appendChild(clone);
+      const clone = document.createElement("div");
+      clone.className = "img-clone";
+      clone.innerHTML = `<img src="${thumb.src}">`;
+      document.body.appendChild(clone);
+      place(clone, start);
 
-          placeCloneFromRect(clone, startBox);
+      overlay.classList.add("is-open");
+      overlay.setAttribute("aria-hidden", "false");
+      overlay.getBoundingClientRect();
 
-          overlay.classList.add("is-open");
-          overlay.setAttribute("aria-hidden", "false");
+      const target = box(overlay.querySelector(".stage-img").getBoundingClientRect());
 
-          overlay.getBoundingClientRect();
+      requestAnimationFrame(() => place(clone, target));
+      await new Promise(r => setTimeout(r, 460));
 
-          const targetEl = overlay.querySelector(".stage-img");
-          const targetRect = targetEl.getBoundingClientRect();
-          const targetBox = rectToBox(targetRect);
+      overlayImg.style.visibility = "visible";
+      overlayVideo.style.visibility = "visible";
+      clone.remove();
 
-          requestAnimationFrame(() => {
-            clone.style.top = targetBox.top + "px";
-            clone.style.left = targetBox.left + "px";
-            clone.style.width = targetBox.width + "px";
-            clone.style.height = targetBox.height + "px";
-          });
+      if (type === "video"){
+        overlayVideo.currentTime = 0;
+        overlayVideo.play().catch(()=>{});
+      }
 
-          await new Promise((res) => setTimeout(res, 460));
+      animating = false;
+    }
 
-          overlayImg.style.visibility = "visible";
-          overlayVideo.style.visibility = "visible";
-          clone.remove();
+    async function closeItem(){
+      if (!activeItem || animating) return;
+      animating = true;
 
-          if (type === "video"){
-            overlayVideo.currentTime = 0;
-            overlayVideo.play().catch(() => {});
-          }
+      const thumb = activeItem.querySelector("img");
+      if (!thumb){
+        overlay.classList.remove("is-open");
+        animating = false;
+        activeItem = null;
+        return;
+      }
 
-          animating = false;
-        }
+      const end = box(thumb.getBoundingClientRect());
+      const start = box(overlay.querySelector(".stage-img").getBoundingClientRect());
 
-        async function flipClose(){
-          if (!activeItem || animating) return;
-          animating = true;
+      const clone = document.createElement("div");
+      clone.className = "img-clone";
+      clone.innerHTML = `<img src="${thumb.src}">`;
+      document.body.appendChild(clone);
+      place(clone, start);
 
-          const item = activeItem;
-          const type = item.getAttribute("data-type") || "image";
-          const src = item.getAttribute("data-src") || "";
+      overlay.classList.remove("is-open");
+      overlay.setAttribute("aria-hidden", "true");
+      overlayVideo.pause();
 
-          const endEl = type === "video" ? item.querySelector("video") : item.querySelector("img");
-          const endRect = endEl.getBoundingClientRect();
-          const endBox = rectToBox(endRect);
+      requestAnimationFrame(() => place(clone, end));
+      await new Promise(r => setTimeout(r, 460));
 
-          const startEl = overlay.querySelector(".stage-img");
-          const startRect = startEl.getBoundingClientRect();
-          const startBox = rectToBox(startRect);
+      clone.remove();
+      activeItem = null;
+      animating = false;
+    }
 
-          const clone = document.createElement("div");
-          clone.className = "img-clone";
-          if (type === "video"){
-            clone.innerHTML = `<video src="${src}" muted autoplay loop playsinline></video>`;
-          } else {
-            clone.innerHTML = `<img src="${src}" alt="">`;
-          }
-          document.body.appendChild(clone);
+    grid.addEventListener("click", (e) => {
+      const item = e.target.closest("[data-photo-item]");
+      if (!item) return;
+      if (item === activeItem) closeItem();
+      else if (!activeItem) openItem(item);
+      else closeItem().then(() => openItem(item));
+    });
 
-          placeCloneFromRect(clone, startBox);
+    overlay.addEventListener("click", (e) => {
+      if (e.target.closest("[data-video-ui]")) return;
+      closeItem();
+    });
 
-          overlay.classList.remove("is-open");
-          overlay.setAttribute("aria-hidden", "true");
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeItem();
+    });
 
-          overlayVideo.pause();
+    btnReplay.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      overlayVideo.currentTime = 0;
+      overlayVideo.play().catch(()=>{});
+    });
 
-          requestAnimationFrame(() => {
-            clone.style.top = endBox.top + "px";
-            clone.style.left = endBox.left + "px";
-            clone.style.width = endBox.width + "px";
-            clone.style.height = endBox.height + "px";
-          });
+    btnMute.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      overlayVideo.muted = !overlayVideo.muted;
+      btnMute.classList.toggle("is-muted", overlayVideo.muted);
+    });
+  })();
+</script>
 
-          await new Promise((res) => setTimeout(res, 460));
-          clone.remove();
-
-          activeItem = null;
-          animating = false;
-        }
-
-        grid.addEventListener("click", (e) => {
-          const item = e.target.closest("[data-photo-item]");
-          if (!item) return;
-
-          if (activeItem && item === activeItem){
-            flipClose();
-          } else if (!activeItem){
-            flipOpen(item);
-          } else {
-            flipClose().then(() => flipOpen(item));
-          }
-        });
-
-        overlay.addEventListener("click", (e) => {
-          const inUI = e.target.closest("[data-video-ui]");
-          if (inUI) return;
-          flipClose();
-        });
-
-        window.addEventListener("keydown", (e) => {
-          if (e.key === "Escape") flipClose();
-        });
-
-        btnReplay.addEventListener("click", (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          overlayVideo.currentTime = 0;
-          overlayVideo.play().catch(() => {});
-        });
-
-        btnMute.addEventListener("click", (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          const muted = !overlayVideo.muted;
-          overlayVideo.muted = muted;
-          if (overlayVideo.muted){
-            btnMute.classList.add("is-muted");
-          } else {
-            btnMute.classList.remove("is-muted");
-            overlayVideo.play().catch(() => {});
-          }
-        });
-      })();
-    </script>
   </div>
 </body>
 </html>
