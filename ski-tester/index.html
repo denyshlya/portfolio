@@ -7,74 +7,19 @@
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
+      <p>
+      <a href="/projects/">← Back to projects</a>
+    </p>
   <div class="container">
 
     <h1>Ski Pressure Testing System</h1>
 
     <p>
-      A distributed force measurement system designed to characterize
-      ski camber and pressure distribution under controlled loading.
+      Content coming soon.
     </p>
 
-    <h2>Problem Statement</h2>
-    <p>
-      Commercial ski fitting and testing tools provide limited quantitative
-      insight into pressure distribution along the ski length. The goal of
-      this project was to design a low-cost, scalable system capable of
-      measuring localized forces across the ski surface while supporting
-      repeatable loading conditions.
-    </p>
+  
 
-    <h2>System Overview</h2>
-    <p>
-      The system consists of an instrumented mounting frame with
-      50+ force sensors, signal conditioning electronics, a microcontroller
-      for data acquisition, and a PC-based data analysis pipeline.
-    </p>
-
-    <!-- PLACEHOLDER FOR DIAGRAM -->
-    <p><em>[System block diagram goes here]</em></p>
-
-    <h2>Sensor Selection & Trade-offs</h2>
-    <p>
-      Multiple sensing technologies were evaluated, including piezoelectric
-      sensors and strain-gauge-based load cells. Cost, sensitivity at low
-      loads, mechanical robustness, and channel scalability were key
-      constraints influencing the final design.
-    </p>
-
-    <h2>Electronics & Firmware</h2>
-    <p>
-      Each sensor channel interfaces with an ADC front-end, with multiplexing
-      used to scale the system beyond the native input count of the
-      microcontroller. Firmware handles timed sampling, channel selection,
-      and streaming of calibrated data to a host PC.
-    </p>
-
-    <h2>Calibration & Validation</h2>
-    <p>
-      Individual sensors were calibrated using known loads to account for
-      sensor-to-sensor variation. Repeatability and hysteresis were evaluated
-      to quantify measurement uncertainty across the system.
-    </p>
-
-    <h2>Results</h2>
-    <p>
-      The system successfully captured pressure profiles along the ski
-      length, enabling visualization of camber characteristics under
-      different loading scenarios.
-    </p>
-
-    <h2>Lessons Learned & Future Improvements</h2>
-    <ul>
-      <li>Improved mechanical isolation between sensor channels</li>
-      <li>Higher-resolution ADCs for low-force measurements</li>
-      <li>Automated calibration routines</li>
-    </ul>
-
-    <p>
-      <a href="/projects/">← Back to projects</a>
-    </p>
 
   </div>
 </body>
