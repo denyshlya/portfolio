@@ -5,10 +5,7 @@
   <title>Professional Experience | Denys Shlyakhtovskyy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="/style.css">
-
-  <!-- page-only helpers (matches your dropdown/slide system) -->
   <style>
-    /* stack top-level headers vertically */
     #albertaLink,
     #dbmLink{
       display: block;
@@ -16,7 +13,6 @@
       margin: 14px 0 8px 0;
     }
 
-    /* keeps submenus vertical + centered like your other pages */
     .schematics-list{
       text-align: left;
       margin-top: 8px;
@@ -42,12 +38,32 @@
       text-align: left;
       margin-top: 10px;
     }
+
+    .skills-table{
+      width: 100%;
+      max-width: 70ch;
+      margin: 0 auto;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    .skills-table th,
+    .skills-table td{
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(0,0,0,0.12);
+      vertical-align: top;
+    }
+    .skills-table th{
+      font-weight: 600;
+    }
+    .skills-table ul{
+      margin: 0;
+      padding-left: 18px;
+    }
   </style>
 </head>
 
 <body>
   <div class="container">
-    <!-- change href if you want this to go back to index.html instead -->
     <a class="back" href="/">← Back to Portfolio</a>
 
     <h1>Professional Experience</h1>
@@ -59,7 +75,6 @@
 
     <hr>
 
-    <!-- ===== Government of Alberta ===== -->
     <a class="section-link" id="albertaLink" href="#">Government of Alberta</a>
 
     <div id="albertaPanel" class="drop-panel" hidden aria-hidden="true">
@@ -70,80 +85,137 @@
           <div class="drop-panel" id="ab-overview" hidden aria-hidden="true">
             <div class="drop-inner">
               <p>
-<p>
-During my time with Alberta Wildfire Communications, my role operated in two distinct modes: 
-<strong>steady-state operations</strong> and <strong>active wildfire incident response</strong>. 
-</p>
-   <p>
-<table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%; max-width: 700px;">
-  <tr>
-    <th>Operating Mode</th>
-    <th>Primary Responsibilities</th>
-  </tr>
-  <tr>
-    <td>Steady-State Operations</td>
-    <td>
-      RF site maintenance and troubleshooting, service ticket resolution, generator servicing coordination,
-      repeater module replacement, antenna and connector repair, and deployment of Starlink-Ubiquiti
-      connectivity systems at remote communications sites.
-    </td>
-  </tr>
-  <tr>
-    <td>Active Fire Response</td>
-    <td>
-      Incident camp communications setup, mobile cell repeater deployment, Starlink mesh networking,
-      satellite backhaul configuration, portable repeater deployment, and integration of incident-level
-      communications into the provincial FireNet repeater network.
-    </td>
-  </tr>
-</table>
-</p>           
-<p>In steady-state operations, I supported the province-wide communications infrastructure that 
-wildfire response teams depend on year-round. This included closing service tickets in the work 
-tracking system, troubleshooting site connectivity issues, coordinating generator servicing, 
-diagnosing RF faults at repeater sites, and replacing damaged or degraded RF components such as 
-antennas, connectors, and Daniels repeater modules. I also helped oversee a provincial transition 
-to Starlink-based connectivity at remote locations, integrating Starlink terminals with Ubiquiti 
-networking equipment to create reliable Wi-Fi mesh networks at communications sites across Alberta.
-</p>
-
-<p>
-During active fire incidents, my responsibilities shifted toward rapid deployment communications 
-and incident-camp infrastructure. I assisted with incident response camp setup by ensuring trailer 
-and asset placement did not interfere with RF propagation or communications reliability. I worked 
-directly with contractors to deploy mobile cellular repeater trailers equipped with ~150-foot 
-portable towers, providing cellular connectivity for camps supporting up to 1,000 personnel. 
-I also deployed Starlink mesh networks for command-and-control trailers and established satellite 
-backhaul connectivity for Incident Command Posts.
-</p>
-
-<p>
-A critical component of wildfire communications is Alberta’s provincial RF repeater system 
-(FireNet), which enables long-range radio communication between aircraft, ground crews, and 
-dispatch centers located in fire centers across the province. During large wildfire events, 
-dispatch operations must often be relocated from permanent facilities to the incident response 
-camp. This creates unique RF challenges, particularly ensuring that all aircraft communications 
-are transmitted through repeated channels so communications can be logged and coordinated through 
-the provincial dispatch network. In these situations, I deployed portable repeaters and integrated 
-them into the existing FireNet system to extend coverage and maintain reliable communication 
-between helicopters, ground crews, and dispatch operations.
-</p>
-
-
-
+                During my time with Alberta Wildfire Communications, my role operated in two distinct modes:
+                <strong>steady-state operations</strong> and <strong>active wildfire incident response</strong>.
               </p>
+
+              <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%; max-width: 700px;">
+                <tr>
+                  <th>Operating Mode</th>
+                  <th>Primary Responsibilities</th>
+                </tr>
+                <tr>
+                  <td>Steady-State Operations</td>
+                  <td>
+                    RF site maintenance and troubleshooting, service ticket resolution, generator servicing coordination,
+                    repeater module replacement, antenna and connector repair, and deployment of Starlink-Ubiquiti
+                    connectivity systems at remote communications sites.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Active Fire Response</td>
+                  <td>
+                    Incident camp communications setup, mobile cell repeater deployment, Starlink mesh networking,
+                    satellite backhaul configuration, portable repeater deployment, and integration of incident-level
+                    communications into the provincial FireNet repeater network.
+                  </td>
+                </tr>
+              </table>
+
+              <p>
+                In steady-state operations, I supported the province-wide communications infrastructure that wildfire response teams depend on
+                year-round. This included closing service tickets in the work tracking system, troubleshooting site connectivity issues,
+                coordinating generator servicing, diagnosing RF faults at repeater sites, and replacing damaged or degraded RF components such as
+                antennas, connectors, and Daniels repeater modules. I also helped oversee a provincial transition to Starlink-based connectivity
+                at remote locations, integrating Starlink terminals with Ubiquiti networking equipment to create reliable Wi-Fi mesh networks at
+                communications sites across Alberta.
+              </p>
+
+              <p>
+                During active fire incidents, my responsibilities shifted toward rapid deployment communications and incident-camp infrastructure.
+                I assisted with incident response camp setup by ensuring trailer and asset placement did not interfere with RF propagation or
+                communications reliability. I worked directly with contractors to deploy mobile cellular repeater trailers equipped with ~150-foot
+                portable towers, providing cellular connectivity for camps supporting up to 1,000 personnel. I also deployed Starlink mesh networks
+                for command-and-control trailers and established satellite backhaul connectivity for Incident Command Posts.
+              </p>
+
+              <p>
+                A critical component of wildfire communications is Alberta’s provincial RF repeater system (FireNet), which enables long-range radio
+                communication between aircraft, ground crews, and dispatch centers located in fire centers across the province. During large wildfire
+                events, dispatch operations must often be relocated from permanent facilities to the incident response camp. This creates unique RF
+                challenges, particularly ensuring that all aircraft communications are transmitted through repeated channels so communications can be
+                logged and coordinated through the provincial dispatch network. In these situations, I deployed portable repeaters and integrated them
+                into the existing FireNet system to extend coverage and maintain reliable communication between helicopters, ground crews, and dispatch
+                operations.
+              </p>
+            </div>
+          </div>
+
+          <a class="section-link" href="#" data-ab="skills">Skills and Outcomes</a>
+          <div class="drop-panel" id="ab-skills" hidden aria-hidden="true">
+            <div class="drop-inner">
+              <table class="skills-table">
+                <tr>
+                  <th>Category</th>
+                  <th>Skills and Outcomes</th>
+                </tr>
+                <tr>
+                  <td>RF Systems</td>
+                  <td>
+                    <ul>
+                      <li>VHF/UHF repeater system troubleshooting, validation, and restoration</li>
+                      <li>Portable repeater deployment and integration into a wider provincial network</li>
+                      <li>RF coverage support for aviation/helo operations during incidents</li>
+                      <li>Antenna, feedline, and connector diagnostics (fault isolation, replacement, verification)</li>
+                      <li>Interference/noise investigation and practical mitigation in field conditions</li>
+                      <li>Site-level reliability practices for mission-critical RF infrastructure</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Networking and Backhaul</td>
+                  <td>
+                    <ul>
+                      <li>Starlink deployment for remote sites and incident command connectivity</li>
+                      <li>Ubiquiti-based Wi-Fi bridging/mesh design, configuration, and validation</li>
+                      <li>Remote network troubleshooting (connectivity, latency, link stability, throughput constraints)</li>
+                      <li>Field integration of satellite backhaul with local LAN/Wi-Fi for operational users</li>
+                      <li>Practical network segmentation and service prioritization under limited bandwidth</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Power and Site Infrastructure</td>
+                  <td>
+                    <ul>
+                      <li>Generator service coordination and site power reliability awareness</li>
+                      <li>Battery/power subsystem understanding for remote electronics (charging, load constraints, failure modes)</li>
+                      <li>Environmental hardening awareness (weather exposure, vibration, mechanical strain relief)</li>
+                      <li>Basic instrumentation workflow (measurements, verification, fault documentation)</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Incident Response Operations</td>
+                  <td>
+                    <ul>
+                      <li>Rapid deployment mindset: planning, staging, and implementing comms under time pressure</li>
+                      <li>Incident camp layout awareness to protect RF performance and operational continuity</li>
+                      <li>Contractor coordination for mobile infrastructure deployment (cell repeater trailers, towers)</li>
+                      <li>Supporting dispatch/air operations communications continuity during relocation to ICP</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Process and Professional Skills</td>
+                  <td>
+                    <ul>
+                      <li>Ticket-driven workflow, prioritization, and closure quality in a service tracking system</li>
+                      <li>Clear technical communication with stakeholders (field teams, dispatch, contractors, internal staff)</li>
+                      <li>Documentation habits: before/after state, corrective actions, and verification steps</li>
+                      <li>Safety-first work practices around towers, generators, remote sites, and aviation operations</li>
+                    </ul>
+                  </td>
+                </tr>
+              </table>
             </div>
           </div>
 
           <a class="section-link" href="#" data-ab="photos">Photos</a>
           <div class="drop-panel" id="ab-photos" hidden aria-hidden="true">
             <div class="drop-inner">
-              <!-- Replace with your real images -->
               <img src="assets/photos/experience/alberta-1.jpg" alt="Government of Alberta work photo">
-              
-
               <img src="assets/photos/experience/alberta-2.jpg" alt="Government of Alberta work photo">
-              
             </div>
           </div>
 
@@ -151,7 +223,6 @@ between helicopters, ground crews, and dispatch operations.
       </div>
     </div>
 
-    <!-- ===== dBm Communications ===== -->
     <a class="section-link" id="dbmLink" href="#">dBm Communications</a>
 
     <div id="dbmPanel" class="drop-panel" hidden aria-hidden="true">
@@ -161,58 +232,114 @@ between helicopters, ground crews, and dispatch operations.
           <a class="section-link" href="#" data-db="overview">Overview</a>
           <div class="drop-panel" id="db-overview" hidden aria-hidden="true">
             <div class="drop-inner">
-<p>
-DBM Communications is a small communications consulting and field-service business operating 
-throughout British Columbia. Originally established as a sole proprietorship, the company provides 
-RF communications, networking, and infrastructure support to municipalities, rural ISPs, and 
-remote industrial clients. My role combined communications consulting, field deployment, and 
-maintenance of remote RF infrastructure across challenging terrain.
-</p>
+              <p>
+                DBM Communications is a small communications consulting and field-service business operating throughout British Columbia.
+                Originally established as a sole proprietorship, the company provides RF communications, networking, and infrastructure support
+                to municipalities, rural ISPs, and remote clients. My role combined communications consulting, field deployment, and maintenance
+                of remote RF infrastructure across challenging terrain.
+              </p>
 
-<p>
-A major portion of my work involved supporting municipalities in the Okanagan and Kamloops regions 
-as they upgraded legacy SCADA communications systems. We acted as communications consultants, 
-advising on component selection, system architecture, and infrastructure planning to ensure 
-reliable operation in geographically complex environments. This included evaluating RF propagation 
-constraints, planning repeater placement, and verifying system performance during deployment. 
-In parallel, we supported independent rural internet service providers by troubleshooting network 
-throughput limitations, optimizing wireless coverage, and performing infrastructure maintenance 
-on tower-based and mountaintop communication equipment.
-</p>
+              <p>
+                A major portion of my work involved supporting municipalities in the Okanagan and Kamloops regions as they upgraded legacy SCADA
+                communications systems. We acted as communications consultants, advising on component selection, system architecture, and infrastructure
+                planning to ensure reliable operation in geographically complex environments. This included evaluating RF propagation constraints,
+                planning repeater placement, and verifying system performance during deployment. In parallel, we supported independent rural internet
+                service providers by troubleshooting network throughput limitations, optimizing wireless coverage, and performing infrastructure
+                maintenance on tower-based and mountaintop communication equipment.
+              </p>
 
-<p>
-The other major component of my work involved annual service, maintenance, and construction 
-contracts with heli-skiing operations across British Columbia. These operations require reliable 
-radio communication across extremely remote and mountainous terrain so that lodge dispatchers can 
-maintain continuous contact with helicopters and field staff. To enable this, a distributed network 
-of RF repeater sites was installed on mountain peaks to provide both local coverage and long-range 
-repeating capability between valleys and operating zones.
-</p>
+              <p>
+                The other major component of my work involved annual service, maintenance, and construction contracts with heli-skiing operations
+                across British Columbia. These operations require reliable radio communication across extremely remote and mountainous terrain so that
+                lodge dispatchers can maintain continuous contact with helicopters and field staff. To enable this, a distributed network of RF repeater
+                sites was installed on mountain peaks to provide both local coverage and long-range repeating capability between valleys and operating zones.
+              </p>
 
-<p>
-These repeater installations typically consisted of Daniels repeater systems powered by solar 
-arrays and large battery banks, with antennas mounted above fiberglass protective enclosures that 
-were tethered directly into the mountain. All sites were accessible only by helicopter, making 
-preventative maintenance, troubleshooting, and construction work logistically complex and highly 
-weather-dependent. My responsibilities included servicing repeater electronics, maintaining power 
-systems, performing RF diagnostics, and assisting with installation and upgrades of new mountaintop 
-communication sites. This work required careful planning, strong RF troubleshooting skills, and the 
-ability to operate safely in remote environments where communications infrastructure is critical 
-to flight operations and personnel safety.
-</p>
+              <p>
+                These repeater installations typically consisted of Daniels repeater systems powered by solar arrays and large battery banks, with antennas
+                mounted above fiberglass protective enclosures that were tethered directly into the mountain. All sites were accessible only by helicopter,
+                making preventative maintenance, troubleshooting, and construction work logistically complex and highly weather-dependent. My responsibilities
+                included servicing repeater electronics, maintaining power systems, performing RF diagnostics, and assisting with installation and upgrades of
+                new mountaintop communication sites. This work required careful planning, strong RF troubleshooting skills, and the ability to operate safely
+                in remote environments where communications infrastructure is critical to flight operations and personnel safety.
+              </p>
+            </div>
+          </div>
 
+          <a class="section-link" href="#" data-db="skills">Skills and Outcomes</a>
+          <div class="drop-panel" id="db-skills" hidden aria-hidden="true">
+            <div class="drop-inner">
+              <table class="skills-table">
+                <tr>
+                  <th>Category</th>
+                  <th>Skills and Outcomes</th>
+                </tr>
+                <tr>
+                  <td>SCADA and Municipal Consulting</td>
+                  <td>
+                    <ul>
+                      <li>SCADA communications planning support (radio links, site placement, reliability considerations)</li>
+                      <li>Component selection guidance and integration thinking (radios, antennas, power, enclosures)</li>
+                      <li>RF propagation awareness: terrain constraints, link feasibility, coverage tradeoffs</li>
+                      <li>Commissioning mindset: verify intended operation and document results</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Wireless ISP Support</td>
+                  <td>
+                    <ul>
+                      <li>Throughput limitation diagnosis and practical capacity management</li>
+                      <li>Coverage optimization (alignment, link tuning, equipment placement, interference awareness)</li>
+                      <li>Preventative maintenance on tower and remote-site equipment</li>
+                      <li>General network troubleshooting: link stability, latency, packet loss, and user-impact triage</li>
+                      <li>Field integration of CPE/backhaul equipment and service restoration workflows</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Remote RF Repeater Networks</td>
+                  <td>
+                    <ul>
+                      <li>Design/maintenance mindset for multi-site repeater coverage across mountainous terrain</li>
+                      <li>Daniels repeater servicing, fault isolation, and reliability-focused upkeep</li>
+                      <li>Repeaters used for both local coverage and long-distance repeating between valleys</li>
+                      <li>Antenna/feedline work: inspection, replacement, sealing/weatherproofing, verification</li>
+                      <li>Logistics planning for fly-in-only sites and safe execution in remote environments</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Power Electronics and Off-Grid Systems</td>
+                  <td>
+                    <ul>
+                      <li>Solar + battery bank system awareness: charging behavior, load budgeting, and failure modes</li>
+                      <li>Battery maintenance practices (connections, corrosion, health checks, basic diagnostics)</li>
+                      <li>Low-temperature reliability considerations for power and RF electronics</li>
+                      <li>Basic DC power distribution and protective practices for remote comms shelters</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Field Operations</td>
+                  <td>
+                    <ul>
+                      <li>Working safely around helicopters, slung loads, and remote landing zones</li>
+                      <li>Tooling discipline and spares planning for single-visit repairs</li>
+                      <li>System-level troubleshooting under time, weather, and access constraints</li>
+                      <li>Client-facing professionalism with municipalities, ISPs, and heli-ski operators</li>
+                    </ul>
+                  </td>
+                </tr>
+              </table>
             </div>
           </div>
 
           <a class="section-link" href="#" data-db="photos">Photos</a>
           <div class="drop-panel" id="db-photos" hidden aria-hidden="true">
             <div class="drop-inner">
-              <!-- Replace with your real images -->
               <img src="assets/photos/experience/dbm-1.jpg" alt="dBm Communications work photo">
-
-
               <img src="assets/photos/experience/dbm-2.jpg" alt="dBm Communications work photo">
-
             </div>
           </div>
 
@@ -221,7 +348,6 @@ to flight operations and personnel safety.
     </div>
 
     <script>
-      // ===== helpers (ONLY ONCE) =====
       function shiftToViewportCenter(el){
         const r = el.getBoundingClientRect();
         const elCenter = r.left + r.width / 2;
@@ -243,13 +369,10 @@ to flight operations and personnel safety.
       async function openPanel(panel){
         panel.hidden = false;
         panel.setAttribute("aria-hidden", "false");
-
         panel.style.maxHeight = "0px";
         panel.getBoundingClientRect();
-
         panel.classList.add("is-open");
         panel.style.maxHeight = panel.scrollHeight + "px";
-
         await waitForTransition(panel, "max-height");
         panel.style.maxHeight = "none";
       }
@@ -257,17 +380,13 @@ to flight operations and personnel safety.
       async function closePanel(panel){
         panel.style.maxHeight = panel.scrollHeight + "px";
         panel.getBoundingClientRect();
-
         panel.classList.remove("is-open");
         panel.style.maxHeight = "0px";
-
         await waitForTransition(panel, "max-height");
-
         panel.hidden = true;
         panel.setAttribute("aria-hidden", "true");
       }
 
-      // ===== generic top-level slider (reused for both) =====
       function setupTopSlider(linkId, panelId, subAttr){
         const link  = document.getElementById(linkId);
         const panel = document.getElementById(panelId);
@@ -311,7 +430,6 @@ to flight operations and personnel safety.
             await slideToCenter();
             await openPanel(panel);
           } else {
-            // close nested panels inside this top panel
             panel.querySelectorAll(".drop-panel").forEach((p) => {
               p.classList.remove("is-open");
               p.style.maxHeight = "0px";
@@ -326,7 +444,6 @@ to flight operations and personnel safety.
           }
         });
 
-        // sub dropdowns inside this section
         panel.querySelectorAll(`[${subAttr}]`).forEach((btn) => {
           const key = btn.getAttribute(subAttr);
           const subPanelId =
@@ -350,7 +467,6 @@ to flight operations and personnel safety.
           });
         });
 
-        // keep centered on resize
         window.addEventListener("resize", () => {
           if (!open) return;
           link.style.transform = `translateX(${shiftToViewportCenter(link)}px)`;
@@ -360,7 +476,6 @@ to flight operations and personnel safety.
         });
       }
 
-      // init both sections
       setupTopSlider("albertaLink", "albertaPanel", "data-ab");
       setupTopSlider("dbmLink", "dbmPanel", "data-db");
     </script>
