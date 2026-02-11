@@ -251,6 +251,21 @@
         <div class="drop-inner">
   <div class="stl-viewer" data-stl-viewer style="width: 100%; height: 520px;">
     <div class="rotate-hint" aria-hidden="true" title="Drag to rotate">⟳ Drag</div>
+    <p>
+This project is currently in progress, so related media and documentation are limited at this time as the system is still being developed, tested, and refined.
+</p>
+
+<h3>Technical Overview</h3>
+<hr>
+
+<p>
+The ski pressure testing system uses distributed load-cell sensing to measure force distribution along a mounted ski. Each sensing module consists of a load cell connected to an HX711 analog-to-digital converter (ADC). Eight HX711 ADCs are connected to a single Arduino Nano, and a total of fifteen Arduino Nano boards are used to collect load-cell measurements across the system.
+</p>
+
+<p>
+A separate Arduino is dedicated to actuator control, managing the extension of a linear actuator used to apply controlled force to the ski. All microcontrollers are connected to a laptop through a powered USB hub. The laptop software aggregates weight readings from the sensor network, generates a pressure-distribution graph of the ski, and monitors the applied force in real time during actuator extension to ensure the desired load is applied.
+</p>
+
 </div>
         </div>
       </div>
