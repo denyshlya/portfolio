@@ -67,6 +67,7 @@
       max-width: 1200px;
       margin: 14px auto 0;
       position: relative;
+      height: 520px;
     }
 
     .rotate-hint{
@@ -81,12 +82,13 @@
       font: inherit;
       font-weight: 500;
       pointer-events: none;
+      z-index: 2;
     }
 
-    canvas{
+    .stl-viewer canvas{
       display: block;
       width: 100%;
-      height: 520px;
+      height: 100%;
     }
   </style>
 </head>
@@ -104,7 +106,7 @@
 
       <div class="drop-panel" hidden aria-hidden="true" data-drop-panel>
         <div class="drop-inner">
-          <div class="stl-viewer" data-stl-viewer data-stl="/assets/stl/beam.stl" style="height: 520px;">
+          <div class="stl-viewer" data-stl-viewer data-stl="/assets/stl/beam.stl">
             <div class="rotate-hint" aria-hidden="true" title="Drag to rotate">⟳ Drag</div>
           </div>
 
@@ -274,23 +276,29 @@
       import { STLLoader } from "https://unpkg.com/three@0.161.0/examples/jsm/loaders/STLLoader.js";
 
       function initSTLViewer(container){
+        if (container.dataset.viewerInited === "1") return;
+        container.dataset.viewerInited = "1";
+
         const hint = container.querySelector(".rotate-hint");
         const stlPath = container.getAttribute("data-stl") || "/assets/stl/beam.stl";
 
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0xfafafa);
 
-        const camera = new THREE.PerspectiveCamera(
-          45,
-          container.clientWidth / container.clientHeight,
-          0.1,
-          10000
-        );
+        const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 10000);
 
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setSize(container.clientWidth, container.clientHeight);
         container.appendChild(renderer.domElement);
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enablePan = false;
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.08;
+        controls.minPolarAngle = 0;
+        controls.maxPolarAngle = Math.PI;
+        controls.minAzimuthAngle = -Infinity;
+        controls.maxAzimuthAngle = Infinity;
 
         renderer.domElement.addEventListener("pointerdown", () => { if (hint) hint.style.display = "none"; }, { once: true });
         renderer.domElement.addEventListener("wheel", () => { if (hint) hint.style.display = "none"; }, { once: true });
@@ -302,15 +310,6 @@
         dir.position.set(120, -120, 240);
         scene.add(dir);
 
-        const controls = new OrbitControls(camera, renderer.domElement);
-        controls.enablePan = false;
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.08;
-        controls.minPolarAngle = 0;
-        controls.maxPolarAngle = Math.PI;
-        controls.minAzimuthAngle = -Infinity;
-        controls.maxAzimuthAngle = Infinity;
-
         const material = new THREE.MeshStandardMaterial({
           color: 0xcfcfcf,
           metalness: 0.15,
@@ -318,6 +317,20 @@
         });
 
         const loader = new STLLoader();
+
+        function measure(){
+          const r = container.getBoundingClientRect();
+          const w = Math.max(1, Math.round(r.width));
+          const h = Math.max(1, Math.round(r.height));
+          return { w, h };
+        }
+
+        function resize(){
+          const { w, h } = measure();
+          camera.aspect = w / h;
+          camera.updateProjectionMatrix();
+          renderer.setSize(w, h, false);
+        }
 
         function fitCameraToObject(obj){
           const box = new THREE.Box3().setFromObject(obj);
@@ -340,10 +353,11 @@
           controls.update();
         }
 
+        let mesh = null;
+
         loader.load(stlPath, (geometry) => {
           geometry.computeVertexNormals();
-
-          const mesh = new THREE.Mesh(geometry, material);
+          mesh = new THREE.Mesh(geometry, material);
           scene.add(mesh);
 
           const box0 = new THREE.Box3().setFromObject(mesh);
@@ -352,6 +366,7 @@
 
           mesh.rotation.y += Math.PI / 2;
 
+          resize();
           fitCameraToObject(mesh);
         });
 
@@ -362,28 +377,52 @@
         }
         animate();
 
-        function onResize(){
-          const w = container.clientWidth;
-          const h = container.clientHeight;
-          if (!w || !h) return;
-          camera.aspect = w / h;
-          camera.updateProjectionMatrix();
-          renderer.setSize(w, h);
-        }
-
-        window.addEventListener("resize", onResize);
+        window.addEventListener("resize", () => {
+          resize();
+          if (mesh) fitCameraToObject(mesh);
+        });
 
         const panel = container.closest("[data-drop-panel]");
         if (panel){
-          const mo = new MutationObserver(() => onResize());
+          const mo = new MutationObserver(() => {
+            if (!panel.hidden){
+              requestAnimationFrame(() => {
+                resize();
+                if (mesh) fitCameraToObject(mesh);
+              });
+            }
+          });
           mo.observe(panel, { attributes: true, attributeFilter: ["hidden", "style", "class", "aria-hidden"] });
         }
+
+        resize();
+      }
+
+      function whenVisibleThenInit(container){
+        const panel = container.closest("[data-drop-panel]");
+        const tryInit = () => {
+          const r = container.getBoundingClientRect();
+          if (r.width > 2 && r.height > 2) initSTLViewer(container);
+        };
+
+        if (!panel || !panel.hidden){
+          requestAnimationFrame(tryInit);
+          return;
+        }
+
+        const mo = new MutationObserver(() => {
+          if (!panel.hidden){
+            requestAnimationFrame(() => {
+              tryInit();
+            });
+          }
+        });
+
+        mo.observe(panel, { attributes: true, attributeFilter: ["hidden", "style", "class", "aria-hidden"] });
       }
 
       document.querySelectorAll("[data-stl-viewer]").forEach((el) => {
-        if (el.dataset.inited === "1") return;
-        el.dataset.inited = "1";
-        initSTLViewer(el);
+        whenVisibleThenInit(el);
       });
     </script>
   </div>
