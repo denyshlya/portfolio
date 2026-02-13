@@ -562,7 +562,7 @@ A separate Arduino is dedicated to actuator control, managing the extension of a
       45,
       container.clientWidth / container.clientHeight,
       0.1,
-      10000
+      5000
     );
     camera.position.set(0, 0, 250);
 
@@ -587,7 +587,7 @@ A separate Arduino is dedicated to actuator control, managing the extension of a
     camLight.castShadow = true;
     camLight.shadow.mapSize.set(2048, 2048);
     camLight.shadow.camera.near = 0.1;
-    camLight.shadow.camera.far = 10000;
+    camLight.shadow.camera.far = 5000;
     camLight.shadow.camera.left = -300;
     camLight.shadow.camera.right = 300;
     camLight.shadow.camera.top = 300;
@@ -600,19 +600,20 @@ A separate Arduino is dedicated to actuator control, managing the extension of a
     camera.add(camLight.target);
     scene.add(camera);
 
+    // Controls (NO rotation limits)
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enablePan = false;
     controls.enableDamping = true;
     controls.dampingFactor = 0.08;
 
+    // remove orbit limits
     controls.minPolarAngle = 0;
     controls.maxPolarAngle = Math.PI;
     controls.minAzimuthAngle = -Infinity;
     controls.maxAzimuthAngle = Infinity;
 
-    // temp defaults; refined after mesh load
     controls.minDistance = 50;
-    controls.maxDistance = 4000;
+    controls.maxDistance = 2000;
 
     const material = new THREE.MeshStandardMaterial({
       color: 0xcfcfcf,
@@ -622,7 +623,11 @@ A separate Arduino is dedicated to actuator control, managing the extension of a
 
     const loader = new STLLoader();
 
+    // Rotate mesh in 90° steps so:
+    //  - smallest dimension becomes Y (thickness = "up")
+    //  - longest dimension becomes X (beam lays horizontally)
     function rotateToHorizontal(mesh){
+      // current dims
       const box0 = new THREE.Box3().setFromObject(mesh);
       const size0 = box0.getSize(new THREE.Vector3());
       const dims = [size0.x, size0.y, size0.z];
@@ -630,11 +635,89 @@ A separate Arduino is dedicated to actuator control, managing the extension of a
       const idxMin = dims.indexOf(Math.min(...dims)); // thickness axis
       const idxMax = dims.indexOf(Math.max(...dims)); // length axis
 
+      // Step 1: make thickness axis -> Y
+      // map axis indices: 0=x,1=y,2=z
       if (idxMin === 0){
+        // X -> Y : rotate around Z by -90deg
         mesh.rotation.z -= Math.PI / 2;
       } else if (idxMin === 2){
+        // Z -> Y : rotate around X by +90deg
         mesh.rotation.x += Math.PI / 2;
       }
+
+      // Step 2: recompute, then make length axis -> X (while keeping thickness ~Y)
+      const box1 = new THREE.Box3().setFromObject(mesh);
+      const size1 = box1.getSize(new THREE.Vector3());
+      const dims1 = [size1.x, size1.y, size1.z];
+      const idxMax2 = dims1.indexOf(Math.max(...dims1));
+
+      if (idxMax2 === 1){
+        // Y -> X : rotate around Z by +90deg
+        mesh.rotation.z += Math.PI / 2;
+      } else if (idxMax2 === 2){
+        // Z -> X : rotate around Y by +90deg
+        mesh.rotation.y += Math.PI / 2;
+      }
+    }
+
+    loader.load(stlPath, (geometry) => {
+      geometry.computeVertexNormals();
+
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      scene.add(mesh);
+
+      // Orient beam "horizontal" before centering / camera fit
+      rotateToHorizontal(mesh);
+
+      // center the mesh
+      const box = new THREE.Box3().setFromObject(mesh);
+      const center = box.getCenter(new THREE.Vector3());
+      mesh.position.sub(center);
+
+      // fit camera to object
+      const box2 = new THREE.Box3().setFromObject(mesh);
+      const size = box2.getSize(new THREE.Vector3());
+      const maxDim = Math.max(size.x, size.y, size.z);
+      const dist = maxDim * 1.9;
+
+      camera.position.set(0, 0, dist);
+      controls.target.set(0, 0, 0);
+      camera.lookAt(0, 0, 0);
+      controls.update();
+    });
+
+    function animate(){
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    const onResize = () => {
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+      if (!w || !h) return;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    };
+    window.addEventListener("resize", onResize);
+
+    const panel = container.closest("[data-drop-panel]");
+    if (panel){
+      const mo = new MutationObserver(() => onResize());
+      mo.observe(panel, { attributes: true, attributeFilter: ["hidden", "style", "class", "aria-hidden"] });
+    }
+  }
+
+  document.querySelectorAll("[data-stl-viewer]").forEach((el) => {
+    if (el.dataset.inited === "1") return;
+    el.dataset.inited = "1";
+    initSTLViewer(el, "/assets/stl/beam.stl");
+  });
+</script>
 
 
   </div>
