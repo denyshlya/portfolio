@@ -660,35 +660,56 @@ A separate Arduino is dedicated to actuator control, managing the extension of a
         mesh.rotation.y += Math.PI / 2;
       }
     }
+    //start
+loader.load(
+  stlPath,
+  (geometry) => {
+    console.timeEnd("STL load");
 
-    loader.load(stlPath, (geometry) => {
-      geometry.computeVertexNormals();
+    // If STL is massive, this can also be slow:
+    console.time("Normals");
+    geometry.computeVertexNormals();
+    console.timeEnd("Normals");
 
-      const mesh = new THREE.Mesh(geometry, material);
-      mesh.castShadow = true;
-      mesh.receiveShadow = true;
-      scene.add(mesh);
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    scene.add(mesh);
 
-      // Orient beam "horizontal" before centering / camera fit
-      rotateToHorizontal(mesh);
+    rotateToHorizontal(mesh);
 
-      // center the mesh
-      const box = new THREE.Box3().setFromObject(mesh);
-      const center = box.getCenter(new THREE.Vector3());
-      mesh.position.sub(center);
+    const box = new THREE.Box3().setFromObject(mesh);
+    const center = box.getCenter(new THREE.Vector3());
+    mesh.position.sub(center);
 
-      // fit camera to object
-      const box2 = new THREE.Box3().setFromObject(mesh);
-      const size = box2.getSize(new THREE.Vector3());
-      const maxDim = Math.max(size.x, size.y, size.z);
-      const dist = maxDim * 1.9;
+    const box2 = new THREE.Box3().setFromObject(mesh);
+    const size = box2.getSize(new THREE.Vector3());
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const dist = maxDim * 1.9;
 
-camera.position.set(0, -dist, 0);
-controls.target.set(0, 0, 0);
-camera.lookAt(controls.target);
-controls.update();
-    });
+    camera.position.set(0, -dist, 0);
+    controls.target.set(0, 0, 0);
+    camera.lookAt(0, 0, 0);
+    controls.update();
 
+    // IMPORTANT: force a resize after load so it draws immediately
+    onResize();
+  },
+  (xhr) => {
+    if (xhr.lengthComputable) {
+      const pct = (xhr.loaded / xhr.total) * 100;
+      console.log(`STL downloading: ${pct.toFixed(1)}%`);
+    } else {
+      console.log(`STL downloading: ${xhr.loaded} bytes`);
+    }
+  },
+  (err) => {
+    console.error("STL load error:", err);
+  }
+);
+
+console.time("STL load");
+//fin
     function animate(){
       requestAnimationFrame(animate);
       controls.update();
@@ -714,10 +735,27 @@ controls.update();
   }
 
   document.querySelectorAll("[data-stl-viewer]").forEach((el) => {
+  if (el.dataset.inited === "1") return;
+
+  const panel = el.closest("[data-drop-panel]");
+  const btn = panel?.closest("[data-drop]")?.querySelector("[data-drop-btn]");
+
+  function tryInit(){
     if (el.dataset.inited === "1") return;
+
+    // only init when panel is visible
+    if (panel && panel.hidden) return;
+
     el.dataset.inited = "1";
     initSTLViewer(el, "/assets/stl/beam.stl");
-  });
+  }
+
+  // if already visible, init now
+  tryInit();
+
+  // init when user opens the dropdown
+  if (btn) btn.addEventListener("click", () => setTimeout(tryInit, 0));
+});
 </script>
 
 
