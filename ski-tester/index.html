@@ -564,6 +564,7 @@ A separate Arduino is dedicated to actuator control, managing the extension of a
       0.1,
       5000
     );
+    camera.up.set(0, 0, 1);
     camera.position.set(0, 0, 250);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
@@ -607,8 +608,8 @@ A separate Arduino is dedicated to actuator control, managing the extension of a
     controls.dampingFactor = 0.08;
 
     // remove orbit limits
-controls.minPolarAngle = 0.0001;
-controls.maxPolarAngle = Math.PI - 0.0001;
+    controls.minPolarAngle = 0;
+    controls.maxPolarAngle = Math.PI;
     controls.minAzimuthAngle = -Infinity;
     controls.maxAzimuthAngle = Infinity;
 
@@ -682,9 +683,9 @@ controls.maxPolarAngle = Math.PI - 0.0001;
       const maxDim = Math.max(size.x, size.y, size.z);
       const dist = maxDim * 1.9;
 
-camera.position.set(0, -dist, 0);   
+camera.position.set(0, -dist, 0);
 controls.target.set(0, 0, 0);
-camera.lookAt(0, 0, 0);
+camera.lookAt(controls.target);
 controls.update();
     });
 
