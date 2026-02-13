@@ -6,116 +6,78 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="/style.css" />
 
+  <!-- IMPORTANT: allows "three" and "three/addons/..." imports in the browser -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.161.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.161.0/examples/jsm/"
+    }
+  }
+  </script>
+
   <style>
-    body{
-      background: #ffffff;
-      color: #000;
-    }
-
-    .stats-table{
-      width: 100%;
-      max-width: 70ch;
-      margin: 0 auto;
-      border-collapse: collapse;
-      text-align: left;
-    }
-    .stats-table th,
-    .stats-table td{
-      padding: 10px 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.12);
-      vertical-align: top;
-    }
-    .stats-table th{
-      width: 42%;
-      font-weight: 600;
-      opacity: 0.9;
-    }
-    .stats-table td{
-      opacity: 0.95;
-    }
-
-    .schematics-list{
-      text-align: center;
-      margin-top: 8px;
-    }
-    .schematics-list .section-link{
-      display: block;
-      width: 100%;
-      margin: 14px 0 8px 0;
-    }
-    .schematics-list .drop-panel{
-      text-align: center;
-      margin: 0 auto 8px auto;
-      max-width: 70ch;
-    }
-    .schematics-list .drop-panel img{
-      margin: 0 auto;
-    }
-    .schematics-list .drop-panel p{
-      text-align: center;
-      margin-top: 10px;
-    }
+    body{ background:#fff; color:#000; }
 
     .top-link{
-      display: block;
-      width: fit-content;
-      margin: 14px 0 8px 0;
+      display:block;
+      width:fit-content;
+      margin:14px 0 8px 0;
     }
 
     .stl-viewer{
-      width: 100%;
-      max-width: 1200px;
-      margin: 14px auto 0;
-      position: relative;
-      height: 520px;
-      border: 1px solid rgba(0,0,0,0.12);
-      border-radius: 8px;
-      overflow: hidden;
-      background: #fafafa;
+      width:100%;
+      max-width:1200px;
+      margin:14px auto 0;
+      position:relative;
+      height:520px;
+      border:1px solid rgba(0,0,0,0.12);
+      border-radius:8px;
+      overflow:hidden;
+      background:#fafafa;
     }
 
     .rotate-hint{
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      padding: 8px 10px;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.88);
-      border: 1px solid rgba(0,0,0,0.12);
-      backdrop-filter: blur(6px);
-      font: inherit;
-      font-weight: 500;
-      pointer-events: none;
-      z-index: 2;
+      position:absolute;
+      top:10px; left:10px;
+      padding:8px 10px;
+      border-radius:10px;
+      background:rgba(255,255,255,0.88);
+      border:1px solid rgba(0,0,0,0.12);
+      backdrop-filter:blur(6px);
+      font:inherit;
+      font-weight:500;
+      pointer-events:none;
+      z-index:2;
     }
 
     .stl-viewer canvas{
-      display: block;
-      width: 100%;
-      height: 100%;
+      display:block;
+      width:100%;
+      height:100%;
     }
 
     .stl-error{
-      position: absolute;
-      inset: 0;
-      display: grid;
-      place-items: center;
-      z-index: 3;
-      pointer-events: none;
+      position:absolute;
+      inset:0;
+      display:grid;
+      place-items:center;
+      z-index:3;
+      pointer-events:none;
     }
     .stl-error > div{
-      pointer-events: auto;
-      background: #fff;
-      border: 1px solid rgba(0,0,0,0.12);
-      border-radius: 12px;
-      padding: 10px 12px;
-      max-width: 70ch;
-      margin: 0 14px;
-      font: inherit;
+      pointer-events:auto;
+      background:#fff;
+      border:1px solid rgba(0,0,0,0.12);
+      border-radius:12px;
+      padding:10px 12px;
+      max-width:70ch;
+      margin:0 14px;
+      font:inherit;
     }
     .stl-error code{
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 0.95em;
+      font-size:0.95em;
     }
   </style>
 </head>
@@ -133,28 +95,12 @@
 
       <div class="drop-panel" hidden aria-hidden="true" data-drop-panel>
         <div class="drop-inner">
-          <!-- IMPORTANT: keep data-stl path valid on your deployed site -->
-          <div
-            class="stl-viewer"
-            data-stl-viewer
-            data-stl="/assets/stl/beam.stl"
-          >
+          <div class="stl-viewer" data-stl-viewer data-stl="/assets/stl/beam.stl">
             <div class="rotate-hint" aria-hidden="true" title="Drag to rotate">⟳ Drag</div>
           </div>
 
           <p>
             This project is currently in progress, so related media and documentation are limited at this time as the system is still being developed, tested, and refined.
-          </p>
-
-          <h3>Technical Overview</h3>
-          <hr />
-
-          <p>
-            The ski pressure testing system uses distributed load-cell sensing to measure force distribution along a mounted ski. Each sensing module consists of a load cell connected to an HX711 analog-to-digital converter (ADC). Eight HX711 ADCs are connected to a single Arduino Nano, and a total of fifteen Arduino Nano boards are used to collect load-cell measurements across the system.
-          </p>
-
-          <p>
-            A separate Arduino is dedicated to actuator control, managing the extension of a linear actuator used to apply controlled force to the ski. All microcontrollers are connected to a laptop through a powered USB hub. The laptop software aggregates weight readings from the sensor network, generates a pressure-distribution graph of the ski, and monitors the applied force in real time during actuator extension to ensure the desired load is applied.
           </p>
         </div>
       </div>
@@ -163,9 +109,7 @@
     <script>
       function shiftToViewportCenter(el){
         const r = el.getBoundingClientRect();
-        const elCenter = r.left + r.width / 2;
-        const viewportCenter = window.innerWidth / 2;
-        return viewportCenter - elCenter;
+        return (window.innerWidth / 2) - (r.left + r.width / 2);
       }
 
       function waitForTransition(el, prop){
@@ -274,13 +218,12 @@
     </script>
 
     <script type="module">
-      import * as THREE from "https://unpkg.com/three@0.161.0/build/three.module.js";
-      import { OrbitControls } from "https://unpkg.com/three@0.161.0/examples/jsm/controls/OrbitControls.js";
-      import { STLLoader } from "https://unpkg.com/three@0.161.0/examples/jsm/loaders/STLLoader.js";
+      import * as THREE from "three";
+      import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+      import { STLLoader } from "three/addons/loaders/STLLoader.js";
 
       function showSTLError(container, stlPath, err){
         console.error("STL load failed:", stlPath, err);
-
         if (container.querySelector(".stl-error")) return;
 
         const msg = document.createElement("div");
@@ -290,8 +233,8 @@
             <div style="font-weight:600; margin-bottom:6px;">STL failed to load</div>
             <div style="margin-bottom:8px;">Path: <code>${stlPath}</code></div>
             <div style="opacity:0.9;">
-              Open DevTools → Network and check if the STL is 404 / blocked / wrong path.
-              Also try opening the STL directly in your browser.
+              Open DevTools → Network and confirm the STL is not 404.
+              Also try opening <code>${stlPath}</code> directly in your browser.
             </div>
           </div>
         `;
@@ -310,7 +253,7 @@
 
         const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 10000);
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setPixelRatio(window.devicePixelRatio || 1);
         renderer.outputColorSpace = THREE.SRGBColorSpace;
         container.appendChild(renderer.domElement);
@@ -323,8 +266,7 @@
         renderer.domElement.addEventListener("pointerdown", () => { if (hint) hint.style.display = "none"; }, { once: true });
         renderer.domElement.addEventListener("wheel", () => { if (hint) hint.style.display = "none"; }, { once: true });
 
-        const ambient = new THREE.AmbientLight(0xffffff, 0.75);
-        scene.add(ambient);
+        scene.add(new THREE.AmbientLight(0xffffff, 0.75));
 
         const dir = new THREE.DirectionalLight(0xffffff, 0.9);
         dir.position.set(120, -120, 240);
@@ -340,9 +282,10 @@
 
         function measure(){
           const r = container.getBoundingClientRect();
-          const w = Math.max(1, Math.round(r.width));
-          const h = Math.max(1, Math.round(r.height));
-          return { w, h };
+          return {
+            w: Math.max(1, Math.round(r.width)),
+            h: Math.max(1, Math.round(r.height))
+          };
         }
 
         function resize(){
@@ -383,12 +326,11 @@
             mesh = new THREE.Mesh(geometry, material);
             scene.add(mesh);
 
-            // Center object at origin
+            // center to origin
             const box0 = new THREE.Box3().setFromObject(mesh);
             const center0 = box0.getCenter(new THREE.Vector3());
             mesh.position.sub(center0);
 
-            // Optional rotate
             mesh.rotation.y += Math.PI / 2;
 
             resize();
@@ -410,7 +352,7 @@
           if (mesh) fitCameraToObject(mesh);
         });
 
-        // If inside a hidden dropdown, reflow when it opens
+        // if inside dropdown, reflow when opened
         const panel = container.closest("[data-drop-panel]");
         if (panel){
           const mo = new MutationObserver(() => {
@@ -441,9 +383,7 @@
         }
 
         const mo = new MutationObserver(() => {
-          if (!panel.hidden){
-            requestAnimationFrame(tryInit);
-          }
+          if (!panel.hidden) requestAnimationFrame(tryInit);
         });
 
         mo.observe(panel, { attributes: true, attributeFilter: ["hidden", "style", "class", "aria-hidden"] });
