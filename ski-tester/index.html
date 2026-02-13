@@ -68,6 +68,10 @@
       margin: 14px auto 0;
       position: relative;
       height: 520px;
+      border: 1px solid rgba(0,0,0,0.12);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fafafa;
     }
 
     .rotate-hint{
@@ -90,14 +94,37 @@
       width: 100%;
       height: 100%;
     }
+
+    .stl-error{
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      z-index: 3;
+      pointer-events: none;
+    }
+    .stl-error > div{
+      pointer-events: auto;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.12);
+      border-radius: 12px;
+      padding: 10px 12px;
+      max-width: 70ch;
+      margin: 0 14px;
+      font: inherit;
+    }
+    .stl-error code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.95em;
+    }
   </style>
 </head>
 
 <body>
   <div class="container">
     <a class="back" href="/projects/">← Back to Projects</a>
-    <h1>Ski Pressure Testing System</h1>
 
+    <h1>Ski Pressure Testing System</h1>
     <p></p>
     <hr />
 
@@ -106,7 +133,12 @@
 
       <div class="drop-panel" hidden aria-hidden="true" data-drop-panel>
         <div class="drop-inner">
-          <div class="stl-viewer" data-stl-viewer data-stl="/assets/stl/beam.stl">
+          <!-- IMPORTANT: keep data-stl path valid on your deployed site -->
+          <div
+            class="stl-viewer"
+            data-stl-viewer
+            data-stl="/assets/stl/beam.stl"
+          >
             <div class="rotate-hint" aria-hidden="true" title="Drag to rotate">⟳ Drag</div>
           </div>
 
@@ -127,36 +159,6 @@
         </div>
       </div>
     </section>
-
-    <!--<section class="drop" data-drop>
-      <a class="section-link top-link" href="#" data-drop-btn>Interactive System Architecture</a>
-      <div class="drop-panel" hidden aria-hidden="true" data-drop-panel>
-        <div class="drop-inner">
-          <div class="schematics-list"></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="drop" data-drop>
-      <a class="section-link top-link" href="#" data-drop-btn>Hardware Implementation</a>
-      <div class="drop-panel" hidden aria-hidden="true" data-drop-panel>
-        <div class="drop-inner"></div>
-      </div>
-    </section>
-
-    <section class="drop" data-drop>
-      <a class="section-link top-link" href="#" data-drop-btn>Control</a>
-      <div class="drop-panel" hidden aria-hidden="true" data-drop-panel>
-        <div class="drop-inner"></div>
-      </div>
-    </section>
-
-    <section class="drop" data-drop>
-      <a class="section-link top-link" href="#" data-drop-btn>Skills and Outcomes</a>
-      <div class="drop-panel" hidden aria-hidden="true" data-drop-panel>
-        <div class="drop-inner"></div>
-      </div>
-    </section>-->
 
     <script>
       function shiftToViewportCenter(el){
@@ -238,6 +240,7 @@
 
           topBtn.style.transform = "translateX(0px)";
           await waitForTransition(topBtn, "transform");
+
           sliding = false;
         }
 
@@ -275,6 +278,26 @@
       import { OrbitControls } from "https://unpkg.com/three@0.161.0/examples/jsm/controls/OrbitControls.js";
       import { STLLoader } from "https://unpkg.com/three@0.161.0/examples/jsm/loaders/STLLoader.js";
 
+      function showSTLError(container, stlPath, err){
+        console.error("STL load failed:", stlPath, err);
+
+        if (container.querySelector(".stl-error")) return;
+
+        const msg = document.createElement("div");
+        msg.className = "stl-error";
+        msg.innerHTML = `
+          <div>
+            <div style="font-weight:600; margin-bottom:6px;">STL failed to load</div>
+            <div style="margin-bottom:8px;">Path: <code>${stlPath}</code></div>
+            <div style="opacity:0.9;">
+              Open DevTools → Network and check if the STL is 404 / blocked / wrong path.
+              Also try opening the STL directly in your browser.
+            </div>
+          </div>
+        `;
+        container.appendChild(msg);
+      }
+
       function initSTLViewer(container){
         if (container.dataset.viewerInited === "1") return;
         container.dataset.viewerInited = "1";
@@ -287,18 +310,15 @@
 
         const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 10000);
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setPixelRatio(window.devicePixelRatio);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+        renderer.setPixelRatio(window.devicePixelRatio || 1);
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
         container.appendChild(renderer.domElement);
 
         const controls = new OrbitControls(camera, renderer.domElement);
         controls.enablePan = false;
         controls.enableDamping = true;
         controls.dampingFactor = 0.08;
-        controls.minPolarAngle = 0;
-        controls.maxPolarAngle = Math.PI;
-        controls.minAzimuthAngle = -Infinity;
-        controls.maxAzimuthAngle = Infinity;
 
         renderer.domElement.addEventListener("pointerdown", () => { if (hint) hint.style.display = "none"; }, { once: true });
         renderer.domElement.addEventListener("wheel", () => { if (hint) hint.style.display = "none"; }, { once: true });
@@ -339,36 +359,44 @@
 
           const maxDim = Math.max(size.x, size.y, size.z);
           const fov = camera.fov * (Math.PI / 180);
+
           let dist = (maxDim / 2) / Math.tan(fov / 2);
           dist *= 1.8;
 
           camera.position.set(center.x, center.y, center.z + dist);
           camera.near = Math.max(0.1, dist / 200);
-          camera.far = Math.max(10000, dist * 20);
+          camera.far  = Math.max(10000, dist * 20);
           camera.updateProjectionMatrix();
 
           controls.target.copy(center);
-          controls.minDistance = Math.max(20, maxDim * 0.35);
-          controls.maxDistance = Math.max(2000, maxDim * 12);
+          controls.minDistance = Math.max(0.001, maxDim * 0.35);
+          controls.maxDistance = Math.max(10, maxDim * 12);
           controls.update();
         }
 
         let mesh = null;
 
-        loader.load(stlPath, (geometry) => {
-          geometry.computeVertexNormals();
-          mesh = new THREE.Mesh(geometry, material);
-          scene.add(mesh);
+        loader.load(
+          stlPath,
+          (geometry) => {
+            geometry.computeVertexNormals();
+            mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
 
-          const box0 = new THREE.Box3().setFromObject(mesh);
-          const center0 = box0.getCenter(new THREE.Vector3());
-          mesh.position.sub(center0);
+            // Center object at origin
+            const box0 = new THREE.Box3().setFromObject(mesh);
+            const center0 = box0.getCenter(new THREE.Vector3());
+            mesh.position.sub(center0);
 
-          mesh.rotation.y += Math.PI / 2;
+            // Optional rotate
+            mesh.rotation.y += Math.PI / 2;
 
-          resize();
-          fitCameraToObject(mesh);
-        });
+            resize();
+            fitCameraToObject(mesh);
+          },
+          undefined,
+          (err) => showSTLError(container, stlPath, err)
+        );
 
         function animate(){
           requestAnimationFrame(animate);
@@ -382,6 +410,7 @@
           if (mesh) fitCameraToObject(mesh);
         });
 
+        // If inside a hidden dropdown, reflow when it opens
         const panel = container.closest("[data-drop-panel]");
         if (panel){
           const mo = new MutationObserver(() => {
@@ -400,6 +429,7 @@
 
       function whenVisibleThenInit(container){
         const panel = container.closest("[data-drop-panel]");
+
         const tryInit = () => {
           const r = container.getBoundingClientRect();
           if (r.width > 2 && r.height > 2) initSTLViewer(container);
@@ -412,9 +442,7 @@
 
         const mo = new MutationObserver(() => {
           if (!panel.hidden){
-            requestAnimationFrame(() => {
-              tryInit();
-            });
+            requestAnimationFrame(tryInit);
           }
         });
 
