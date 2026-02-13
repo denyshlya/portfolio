@@ -682,7 +682,7 @@ A separate Arduino is dedicated to actuator control, managing the extension of a
       const maxDim = Math.max(size.x, size.y, size.z);
       const dist = maxDim * 1.9;
 
-camera.position.set(0, dist, 0);   
+camera.position.set(0, -dist, 0);   
 controls.target.set(0, 0, 0);
 camera.lookAt(0, 0, 0);
 controls.update();
