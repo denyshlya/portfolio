@@ -607,8 +607,8 @@ A separate Arduino is dedicated to actuator control, managing the extension of a
     controls.dampingFactor = 0.08;
 
     // remove orbit limits
-    controls.minPolarAngle = 0;
-    controls.maxPolarAngle = Math.PI;
+controls.minPolarAngle = 0.0001;
+controls.maxPolarAngle = Math.PI - 0.0001;
     controls.minAzimuthAngle = -Infinity;
     controls.maxAzimuthAngle = Infinity;
 
