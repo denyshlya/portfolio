@@ -1,1 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ePortfolio | Denys Shlyakhtovskyy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    #aboutLink,
+    #projectLink,
+    #reflectionLink {
+      display: block;
+      width: fit-content;
+      margin: 14px 0 8px 0;
+    }
+
+    .eport-list {
+      text-align: left;
+      margin-top: 8px;
+    }
+    .eport-list .section-link {
+      display: block;
+      width: 100%;
+      margin: 14px 0 8px 0;
+    }
+    .eport-list .drop-panel {
+      text-align: left;
+      margin: 0 auto 8px auto;
+      max-width: 70ch;
+    }
+    .eport-list .drop-panel img {
+      margin: 0 auto;
+      display: block;
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+    .eport-list .drop-panel p {
+      text-align: left;
+      margin-top: 10px;
+    }
+
+    .info-table {
+      width: 100%;
+      max-width: 70ch;
+      margin: 0 auto;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    .info-table th,
+    .info-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(0,0,0,0.12);
+      vertical-align: top;
+    }
+    .info-table th {
+      font-weight: 600;
+    }
+    .info-table ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .caption {
+      font-size: 0.85em;
+      color: #666;
+      text-align: center;
+      margin-top: 6px;
+      font-style: italic;
+    }
+
+    .img-placeholder {
+      background: #e8e8e8;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 480px;
+      height: 240px;
+      margin: 16px auto 4px auto;
+      color: #999;
+      font-size: 0.9em;
+      border: 2px dashed #ccc;
+    }
+
+    .contact-list {
+      list-style: none;
+      padding: 0;
+      margin: 12px 0 0 0;
+    }
+    .contact-list li {
+      margin: 6px 0;
+    }
+    .contact-list a {
+      text-decoration: underline;
+    }
+
+    .reflection-body p {
+      margin-top: 14px;
+      line-height: 1.7;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <a class="back" href="/">← Back to Portfolio</a>
+
+    <h1>ePortfolio</h1>
+
+    <p>
+      Academic ePortfolio for ENGG 4XX Capstone — including a professional introduction,
+      a project entry documenting my capstone work, and a personal reflection on growth as an engineer.
+    </p>
+
+    <hr>
+
+    <!-- ── ABOUT ME ─────────────────────────────────────────────────── -->
+    <a class="section-link" id="aboutLink" href="#">About Me</a>
+
+    <div id="aboutPanel" class="drop-panel" hidden aria-hidden="true">
+      <div class="drop-inner">
+        <div class="eport-list">
+
+          <a class="section-link" href="#" data-about="bio">Professional Bio</a>
+          <div class="drop-panel" id="about-bio" hidden aria-hidden="true">
+            <div class="drop-inner">
+              <p>
+                I'm Denys Shlyakhtovskyy, a final-year Electrical Engineering student at the University of
+                [Your University], with a focus on RF systems, wireless communications, and embedded hardware.
+                Over the course of my degree I've been drawn to problems that sit at the intersection of
+                analog and digital — where signals leave the board and have to survive the real world.
+              </p>
+              <p>
+                My academic background spans electromagnetics, signal processing, power electronics, and
+                digital systems design. Outside of coursework I've pursued hands-on experience wherever I
+                could find it — from servicing mission-critical RF repeater infrastructure for Alberta Wildfire
+                Communications to diagnosing field faults on remote communications sites accessible only by helicopter.
+                That work reinforced something lectures can't fully teach: systems fail in unexpected ways, and
+                good engineering is as much about discipline and documentation as it is about design.
+              </p>
+              <p>
+                Professionally, I'm aiming toward a career in RF/wireless systems engineering — whether that's
+                in communications infrastructure, defence electronics, or emerging wireless standards.
+                I'm drawn to roles where the hardware and the physics still matter.
+              </p>
+
+              <!-- swap this placeholder for an actual headshot -->
+              <div class="img-placeholder">[ Headshot / Professional Photo ]</div>
+              <p class="caption">Denys Shlyakhtovskyy — Engineering Student, University of [Your University]</p>
+            </div>
+          </div>
+
+          <a class="section-link" href="#" data-about="interests">Personal Interests</a>
+          <div class="drop-panel" id="about-interests" hidden aria-hidden="true">
+            <div class="drop-inner">
+              <p>
+                Outside of engineering I spend a lot of time in the mountains — hiking, skiing, and the
+                occasional backcountry trip. Spending time in remote terrain gives me a genuine appreciation
+                for reliable communications systems; a broken link in the backcountry isn't an inconvenience,
+                it's a safety issue. That perspective bleeds directly into how I think about system reliability
+                and redundancy at work.
+              </p>
+              <p>
+                I'm also interested in amateur radio (currently working toward my Advanced license) and have a
+                general obsession with how information moves through space — antennas, propagation, modulation,
+                and all the invisible infrastructure that modern life depends on.
+              </p>
+            </div>
+          </div>
+
+          <a class="section-link" href="#" data-about="contact">Links &amp; Contact</a>
+          <div class="drop-panel" id="about-contact" hidden aria-hidden="true">
+            <div class="drop-inner">
+              <ul class="contact-list">
+                <li>📧 Email: <a href="mailto:your.email@university.ca">your.email@university.ca</a></li>
+                <li>🔗 LinkedIn: <a href="https://linkedin.com/in/yourprofile" target="_blank">linkedin.com/in/yourprofile</a></li>
+                <li>💻 GitHub: <a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a></li>
+                <li>📄 Resume: <a href="#">Download CV (PDF)</a></li>
+              </ul>
+              <p>
+                Feel free to reach out if you want to discuss the project, a collaboration, or just talk RF.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PROJECT ENTRY ─────────────────────────────────────────────── -->
+    <a class="section-link" id="projectLink" href="#">Capstone Project Entry</a>
+
+    <div id="projectPanel" class="drop-panel" hidden aria-hidden="true">
+      <div class="drop-inner">
+        <div class="eport-list">
+
+          <a class="section-link" href="#" data-proj="overview">Overview</a>
+          <div class="drop-panel" id="proj-overview" hidden aria-hidden="true">
+            <div class="drop-inner">
+              <p>
+                <strong>Project:</strong> [Your Capstone Project Title]<br>
+                <strong>Team:</strong> [Team Name / Members]<br>
+                <strong>Sponsor / Client:</strong> [Industry Sponsor if applicable]
+              </p>
+              <p>
+                In plain terms: [Write 2–3 sentences describing what your project does for someone with no
+                engineering background. Focus on the problem it solves and who benefits. Example: "Our team
+                designed a low-cost sensor system that monitors soil moisture in real time, helping small-scale
+                farmers reduce water usage without sacrificing crop yield."]
+              </p>
+              <p>
+                For engineers: [Write 2–3 sentences with the technical framing — what system, what
+                specifications, what constraints were the key challenges. Example: "The system integrates a
+                capacitive sensing front-end with an ultra-low-power microcontroller and LoRaWAN radio, targeting
+                &lt;10 mW average draw on a 6-month battery life at 15-minute reporting intervals."]
+              </p>
+
+              <!-- Replace with an actual system-level block diagram or photo -->
+              <div class="img-placeholder">[ System Overview Diagram / Photo ]</div>
+              <p class="caption">Figure 1 — High-level system architecture showing major subsystems and interfaces.</p>
+            </div>
+          </div>
+
+          <a class="section-link" href="#" data-proj="objectives">Objectives &amp; Motivation</a>
+          <div class="drop-panel" id="proj-objectives" hidden aria-hidden="true">
+            <div class="drop-inner">
+              <p>
+                The core problem we set out to solve was [describe the gap, pain point, or engineering challenge
+                that motivated the project]. This mattered because [explain the real-world consequence of the
+                problem — cost, safety, efficiency, environmental impact, etc.].
+              </p>
+              <p>
+                Our primary objectives were:
+              </p>
+              <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%; max-width: 700px;">
+                <tr>
+                  <th>Objective</th>
+                  <th>Target Specification</th>
+                  <th>Rationale</th>
+                </tr>
+                <tr>
+                  <td>[Objective 1 — e.g., Power Consumption]</td>
+                  <td>[e.g., &lt; 10 mW average]</td>
+                  <td>[Why this number? Where does it come from?]</td>
+                </tr>
+                <tr>
+                  <td>[Objective 2 — e.g., Measurement Accuracy]</td>
+                  <td>[e.g., ±2% relative humidity]</td>
+                  <td>[Derived from client/industry requirement or standard]</td>
+                </tr>
+                <tr>
+                  <td>[Objective 3 — e.g., Unit Cost]</td>
+                  <td>[e.g., &lt;$50 BOM]</td>
+                  <td>[Market viability / client constraint]</td>
+                </tr>
+              </table>
+              <p style="margin-top:12px;">
+                These targets were set through a combination of client consultation, literature review, and
+                benchmarking against existing solutions in the space.
+              </p>
+            </div>
+          </div>
+
+          <a class="section-link" href="#" data-proj="process">Design Process &amp; Iterations</a>
+          <div class="drop-panel" id="proj-process" hidden aria-hidden="true">
+            <div class="drop-inner">
+              <p>
+                We didn't arrive at the final design in one shot — the solution went through several meaningful
+                iterations before it worked the way we needed it to. Here's how that progression unfolded:
+              </p>
+
+              <p><strong>Iteration 1 — Initial Concept</strong></p>
+              <p>
+                Our first approach was [describe the initial concept — what assumptions you made, what architecture
+                you chose, and why]. At this stage we were working mostly on paper and in simulation, trying to
+                validate the feasibility of the core idea before committing to hardware.
+              </p>
+
+              <!-- Replace with sketch or concept diagram -->
+              <div class="img-placeholder">[ Concept Sketch / Initial Block Diagram ]</div>
+              <p class="caption">Figure 2 — Early concept sketch showing the original architecture. The design was later revised when [reason for change].</p>
+
+              <p><strong>Iteration 2 — First Prototype</strong></p>
+              <p>
+                Moving to a physical prototype exposed problems that simulation had hidden. Specifically,
+                [describe the first real failure mode or unexpected result — e.g., "the sensing element was
+                picking up thermal noise from the MCU at close proximity, pushing measurement error well
+                above our 2% target"]. This forced us to [describe the design change made in response].
+              </p>
+
+              <!-- Replace with prototype photo -->
+              <div class="img-placeholder">[ Prototype Photo / PCB / Test Setup ]</div>
+              <p class="caption">Figure 3 — First hardware prototype on breadboard. The layout issue identified here drove the PCB redesign in Iteration 3.</p>
+
+              <p><strong>Iteration 3 — Refined Design</strong></p>
+              <p>
+                The second prototype incorporated [describe the key changes — new component choices, layout
+                decisions, firmware changes, mechanical redesign, etc.]. Testing showed [quantify the improvement
+                — e.g., "measurement error dropped from 4.8% to 1.7%, comfortably meeting spec"]. At this point
+                the design was stable enough to move toward final integration and verification.
+              </p>
+
+              <!-- Replace with final prototype or PCB photo -->
+              <div class="img-placeholder">[ Final Prototype / Assembled System Photo ]</div>
+              <p class="caption">Figure 4 — Final assembled prototype. [Brief note on what changed from the previous revision and why it mattered.]</p>
+            </div>
+          </div>
+
+          <a class="section-link" href="#" data-proj="outcomes">Results &amp; Outcomes</a>
+          <div class="drop-panel" id="proj-outcomes" hidden aria-hidden="true">
+            <div class="drop-inner">
+              <p>
+                After verification testing against our original specifications, the final system achieved the following:
+              </p>
+              <table class="info-table">
+                <tr>
+                  <th>Metric</th>
+                  <th>Target</th>
+                  <th>Achieved</th>
+                  <th>Status</th>
+                </tr>
+                <tr>
+                  <td>[Metric 1]</td>
+                  <td>[Target value]</td>
+                  <td>[Measured value]</td>
+                  <td>✅ Met</td>
+                </tr>
+                <tr>
+                  <td>[Metric 2]</td>
+                  <td>[Target value]</td>
+                  <td>[Measured value]</td>
+                  <td>✅ Met</td>
+                </tr>
+                <tr>
+                  <td>[Metric 3]</td>
+                  <td>[Target value]</td>
+                  <td>[Measured value]</td>
+                  <td>⚠️ Partial</td>
+                </tr>
+              </table>
+              <p style="margin-top:12px;">
+                [Metric 3] fell slightly short of target because [explain the honest reason — design tradeoff,
+                time constraint, component availability, etc.]. If we were to continue the project,
+                [briefly describe what you would change or investigate next].
+              </p>
+              <p>
+                Overall, the project demonstrated that [summarize the key takeaway — what was proven,
+                what the system can now do, and what it means for the problem it was trying to solve].
+              </p>
+
+              <!-- Replace with results graph or test data screenshot -->
+              <div class="img-placeholder">[ Results Graph / Measurement Data Plot ]</div>
+              <p class="caption">Figure 5 — [Describe what is being shown and what conclusion to draw from it.]</p>
+
+              <p style="margin-top: 16px;">
+                🔗 <a href="https://github.com/yourusername/capstone-repo" target="_blank">View project repository on GitHub</a>
+              </p>
+            </div>
+          </div>
+
+          <a class="section-link" href="#" data-proj="contributions">My Contributions</a>
+          <div class="drop-panel" id="proj-contributions" hidden aria-hidden="true">
+            <div class="drop-inner">
+              <p>
+                On a team of [N], my primary ownership areas were:
+              </p>
+              <table class="info-table">
+                <tr>
+                  <th>Area</th>
+                  <th>What I Did</th>
+                </tr>
+                <tr>
+                  <td>[e.g., Analog Front-End]</td>
+                  <td>[e.g., Designed and characterized the sensing circuit, selected components, ran SPICE simulations, and validated against bench measurements across the full operating temperature range.]</td>
+                </tr>
+                <tr>
+                  <td>[e.g., PCB Layout]</td>
+                  <td>[e.g., Led the KiCad layout for both prototype revisions, with particular focus on noise isolation between the sensing and digital domains.]</td>
+                </tr>
+                <tr>
+                  <td>[e.g., Testing &amp; Verification]</td>
+                  <td>[e.g., Wrote the verification test plan, executed bench testing, and compiled results against the original design specifications.]</td>
+                </tr>
+              </table>
+              <p style="margin-top: 12px;">
+                Beyond the technical work, I was involved in [e.g., client meetings, weekly team standups,
+                final report writing, and presentation preparation]. Working on a team taught me as much
+                about engineering communication as it did about hardware.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ── REFLECTION ────────────────────────────────────────────────── -->
+    <a class="section-link" id="reflectionLink" href="#">Reflection</a>
+
+    <div id="reflectionPanel" class="drop-panel" hidden aria-hidden="true">
+      <div class="drop-inner">
+        <div class="eport-list">
+
+          <a class="section-link" href="#" data-ref="reflection">Personal Reflection</a>
+          <div class="drop-panel" id="ref-reflection" hidden aria-hidden="true">
+            <div class="drop-inner reflection-body">
+              <p>
+                Going into this course, I thought I had a decent understanding of what engineering design looked
+                like. Coming out of it, I realize I had a fairly idealized picture. The design process, at least
+                as I experienced it this term, is iterative in a way that's uncomfortable if you're expecting a
+                straight line from requirements to solution. You make a decision, test it, find out it doesn't
+                behave the way you expected, and then you adapt. That cycle repeated more times than I anticipated,
+                and I think that's the most honest thing I can say I learned: iteration isn't a sign that
+                something went wrong, it's just how engineering actually works.
+              </p>
+              <p>
+                As for what makes a good engineer — I used to put technical knowledge at the top of that list.
+                I still think it matters, but after this project I'd put communication and intellectual honesty
+                ahead of it. You have to be able to explain what you're doing and why, to your teammates, to
+                your client, and to yourself. And you have to be willing to say "this isn't working" early
+                enough to do something about it, rather than defending a design decision past the point where
+                it's clearly not serving the goal. Those turned out to be harder skills than any circuit I
+                had to design.
+              </p>
+              <p>
+                This project also shifted how I think about the professional engineer's role in society.
+                Engineers make decisions with real consequences — for safety, for the environment, for the
+                communities that use what we build. That sounds abstract until you're sitting across from an
+                industry client explaining why your prototype missed a spec. At that point it stops being
+                theoretical. The PE stamp exists for a reason, and I have more respect for what it represents
+                now than I did at the start of the program.
+              </p>
+              <p>
+                Looking at my own development, the strengths I'm most confident in are systematic
+                troubleshooting, attention to detail at the component and circuit level, and an ability to
+                work through ambiguity without needing everything mapped out in advance. Where I need to grow
+                is in project management — specifically, breaking large deliverables into smaller milestones
+                early enough that slippage in one area doesn't cascade. I also want to get better at
+                presenting technical work to non-technical audiences; that's a skill I've started developing
+                but haven't yet had enough practice with. Going forward, I plan to actively seek roles and
+                projects that put me in front of clients and mixed audiences so I can build that muscle
+                deliberately, rather than hoping it develops on its own.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function shiftToViewportCenter(el) {
+        const r = el.getBoundingClientRect();
+        const elCenter = r.left + r.width / 2;
+        const viewportCenter = window.innerWidth / 2;
+        return viewportCenter - elCenter;
+      }
+
+      function waitForTransition(el, prop) {
+        return new Promise((resolve) => {
+          const onEnd = (e) => {
+            if (e.propertyName !== prop) return;
+            el.removeEventListener("transitionend", onEnd);
+            resolve();
+          };
+          el.addEventListener("transitionend", onEnd);
+        });
+      }
+
+      async function openPanel(panel) {
+        panel.hidden = false;
+        panel.setAttribute("aria-hidden", "false");
+        panel.style.maxHeight = "0px";
+        panel.getBoundingClientRect();
+        panel.classList.add("is-open");
+        panel.style.maxHeight = panel.scrollHeight + "px";
+        await waitForTransition(panel, "max-height");
+        panel.style.maxHeight = "none";
+      }
+
+      async function closePanel(panel) {
+        panel.style.maxHeight = panel.scrollHeight + "px";
+        panel.getBoundingClientRect();
+        panel.classList.remove("is-open");
+        panel.style.maxHeight = "0px";
+        await waitForTransition(panel, "max-height");
+        panel.hidden = true;
+        panel.setAttribute("aria-hidden", "true");
+      }
+
+      function setupTopSlider(linkId, panelId, subAttr) {
+        const link  = document.getElementById(linkId);
+        const panel = document.getElementById(panelId);
+
+        let open = false;
+        let sliding = false;
+
+        async function slideToCenter() {
+          if (sliding) return;
+          sliding = true;
+          link.style.transform = "translateX(0px)";
+          link.getBoundingClientRect();
+          requestAnimationFrame(() => {
+            const shift = shiftToViewportCenter(link);
+            link.style.transform = `translateX(${shift}px)`;
+          });
+          await waitForTransition(link, "transform");
+          sliding = false;
+        }
+
+        async function slideBackLeft() {
+          if (sliding) return;
+          sliding = true;
+          link.style.transform = "translateX(0px)";
+          await waitForTransition(link, "transform");
+          sliding = false;
+        }
+
+        link.addEventListener("click", async (e) => {
+          e.preventDefault();
+          if (sliding) return;
+          open = !open;
+
+          if (open) {
+            link.classList.add("is-selected");
+            await slideToCenter();
+            await openPanel(panel);
+          } else {
+            panel.querySelectorAll(".drop-panel").forEach((p) => {
+              p.classList.remove("is-open");
+              p.style.maxHeight = "0px";
+              p.hidden = true;
+              p.setAttribute("aria-hidden", "true");
+            });
+            panel.querySelectorAll(".section-link").forEach((a) => a.classList.remove("is-selected"));
+            await closePanel(panel);
+            link.classList.remove("is-selected");
+            await slideBackLeft();
+          }
+        });
+
+        panel.querySelectorAll(`[${subAttr}]`).forEach((btn) => {
+          const key = btn.getAttribute(subAttr);
+          const subPanelId = `${subAttr.replace("data-", "")}-${key}`;
+          const subPanel = document.getElementById(subPanelId);
+          if (!subPanel) return;
+
+          btn.addEventListener("click", async (e) => {
+            e.preventDefault();
+            if (panel.hidden) return;
+            if (subPanel.hidden) {
+              btn.classList.add("is-selected");
+              await openPanel(subPanel);
+            } else {
+              await closePanel(subPanel);
+              btn.classList.remove("is-selected");
+            }
+          });
+        });
+
+        window.addEventListener("resize", () => {
+          if (!open) return;
+          link.style.transform = `translateX(${shiftToViewportCenter(link)}px)`;
+          if (!panel.hidden && panel.style.maxHeight !== "none") {
+            panel.style.maxHeight = panel.scrollHeight + "px";
+          }
+        });
+      }
+
+      setupTopSlider("aboutLink",      "aboutPanel",      "data-about");
+      setupTopSlider("projectLink",    "projectPanel",    "data-proj");
+      setupTopSlider("reflectionLink", "reflectionPanel", "data-ref");
+    </script>
+  </div>
+</body>
+</html>
 
