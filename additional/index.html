@@ -280,38 +280,35 @@ Testing showed a significant improvement in both resolution and accuracy. The sy
     </p>
   </div>
 </div>
-
-          <a class="section-link" href="#" data-proj="contributions">My Contributions</a>
-          <div class="drop-panel" id="proj-contributions" hidden aria-hidden="true">
-            <div class="drop-inner">
-              <p>
-                On a team of [N], my primary ownership areas were:
-              </p>
-              <table class="info-table">
-                <tr>
-                  <th>Area</th>
-                  <th>What I Did</th>
-                </tr>
-                <tr>
-                  <td>[e.g., Analog Front-End]</td>
-                  <td>[e.g., Designed and characterized the sensing circuit, selected components, ran SPICE simulations, and validated against bench measurements across the full operating temperature range.]</td>
-                </tr>
-                <tr>
-                  <td>[e.g., PCB Layout]</td>
-                  <td>[e.g., Led the KiCad layout for both prototype revisions, with particular focus on noise isolation between the sensing and digital domains.]</td>
-                </tr>
-                <tr>
-                  <td>[e.g., Testing &amp; Verification]</td>
-                  <td>[e.g., Wrote the verification test plan, executed bench testing, and compiled results against the original design specifications.]</td>
-                </tr>
-              </table>
-              <p style="margin-top: 12px;">
-                Beyond the technical work, I was involved in [e.g., client meetings, weekly team standups,
-                final report writing, and presentation preparation]. Working on a team taught me as much
-                about engineering communication as it did about hardware.
-              </p>
-            </div>
-          </div>
+<a class="section-link" href="#" data-proj="contributions">My Contributions</a>
+<div class="drop-panel" id="proj-contributions" hidden aria-hidden="true">
+  <div class="drop-inner">
+    <p>
+      On a team of 6, my primary ownership areas were:
+    </p>
+    <table class="info-table">
+      <tr>
+        <th>Area</th>
+        <th>What I Did</th>
+      </tr>
+      <tr>
+        <td>Electrical System Design</td>
+        <td>Selected and integrated system hardware including load cells, HX711 ADCs, microcontrollers, and communication architecture. Iterated the electrical design to balance modularity, reliability, and cost while supporting 120 sensors.</td>
+      </tr>
+      <tr>
+        <td>Firmware &amp; Software Development</td>
+        <td>Developed Arduino firmware for distributed data acquisition and actuator control. Built the PC-side Python application to handle parallelized data collection, calibration routines, real-time load control, and CSV data export.</td>
+      </tr>
+      <tr>
+        <td>Testing &amp; System Verification</td>
+        <td>Designed and executed tests to validate actuator performance, sensor accuracy, and full system functionality. Verified communication between all subsystems and ensured stable operation under full load conditions.</td>
+      </tr>
+    </table>
+    <p style="margin-top: 12px;">
+      Beyond the technical work, I contributed to system integration, workflow optimization for assembly, and multiple sections of the final report. I also participated in client discussions and design iteration decisions, ensuring the final system met both technical and practical requirements for deployment in a retail environment.
+    </p>
+  </div>
+</div>
 
         </div>
       </div>
@@ -324,48 +321,26 @@ Testing showed a significant improvement in both resolution and accuracy. The sy
       <div class="drop-inner">
         <div class="eport-list">
 
-          <a class="section-link" href="#" data-ref="reflection">Personal Reflection</a>
-          <div class="drop-panel" id="ref-reflection" hidden aria-hidden="true">
-            <div class="drop-inner reflection-body">
-              <p>
-                Going into this course, I thought I had a decent understanding of what engineering design looked
-                like. Coming out of it, I realize I had a fairly idealized picture. The design process, at least
-                as I experienced it this term, is iterative in a way that's uncomfortable if you're expecting a
-                straight line from requirements to solution. You make a decision, test it, find out it doesn't
-                behave the way you expected, and then you adapt. That cycle repeated more times than I anticipated,
-                and I think that's the most honest thing I can say I learned: iteration isn't a sign that
-                something went wrong, it's just how engineering actually works.
-              </p>
-              <p>
-                As for what makes a good engineer — I used to put technical knowledge at the top of that list.
-                I still think it matters, but after this project I'd put communication and intellectual honesty
-                ahead of it. You have to be able to explain what you're doing and why, to your teammates, to
-                your client, and to yourself. And you have to be willing to say "this isn't working" early
-                enough to do something about it, rather than defending a design decision past the point where
-                it's clearly not serving the goal. Those turned out to be harder skills than any circuit I
-                had to design.
-              </p>
-              <p>
-                This project also shifted how I think about the professional engineer's role in society.
-                Engineers make decisions with real consequences — for safety, for the environment, for the
-                communities that use what we build. That sounds abstract until you're sitting across from an
-                industry client explaining why your prototype missed a spec. At that point it stops being
-                theoretical. The PE stamp exists for a reason, and I have more respect for what it represents
-                now than I did at the start of the program.
-              </p>
-              <p>
-                Looking at my own development, the strengths I'm most confident in are systematic
-                troubleshooting, attention to detail at the component and circuit level, and an ability to
-                work through ambiguity without needing everything mapped out in advance. Where I need to grow
-                is in project management — specifically, breaking large deliverables into smaller milestones
-                early enough that slippage in one area doesn't cascade. I also want to get better at
-                presenting technical work to non-technical audiences; that's a skill I've started developing
-                but haven't yet had enough practice with. Going forward, I plan to actively seek roles and
-                projects that put me in front of clients and mixed audiences so I can build that muscle
-                deliberately, rather than hoping it develops on its own.
-              </p>
-            </div>
-          </div>
+<a class="section-link" href="#" data-ref="reflection">Personal Reflection</a>
+<div class="drop-panel" id="ref-reflection" hidden aria-hidden="true">
+  <div class="drop-inner reflection-body">
+    <p>
+      Going into this course, I thought engineering design was mostly about applying known methods to arrive at a clean solution. This project showed me that the reality is far more iterative and uncertain. Many of our initial ideas, particularly around sensing and system architecture, did not perform as expected when physically implemented. Instead of a linear process, the project consisted of repeated cycles of testing, identifying failure modes, and refining the design until it met the required performance.
+    </p>
+    <p>
+      One of the biggest takeaways for me was the importance of making decisions based on measured results rather than assumptions. The transition from the initial sensor concept to the final strain gauge system highlighted how critical it is to validate performance early and be willing to pivot when something does not meet requirements. This required both technical judgment and the ability to recognize when a design approach was fundamentally limited.
+    </p>
+    <p>
+      I also gained a stronger appreciation for system-level thinking. This project was not just an electrical or mechanical problem — it required integrating sensors, embedded systems, mechanical loading, and software into a single reliable system. Decisions in one area directly affected others, and achieving overall performance required balancing tradeoffs between cost, complexity, accuracy, and usability.
+    </p>
+    <p>
+      From a professional standpoint, working with a real client reinforced the importance of communication and accountability. The system needed to meet practical requirements for a retail environment, not just perform well in theory. Explaining design decisions, limitations, and tradeoffs clearly was just as important as the technical work itself.
+    </p>
+    <p>
+      In terms of my own development, I strengthened my skills in embedded systems, data acquisition, and debugging complex multi-component systems. I became more confident working with distributed hardware and writing software that interfaces with real-world sensors. Going forward, I would like to improve my ability to plan large systems earlier in the design process and reduce iteration cycles by identifying risks sooner, while continuing to build experience in designing robust, production-ready systems.
+    </p>
+  </div>
+</div>
 
         </div>
       </div>
