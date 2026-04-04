@@ -1,1 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ePortfolio - Reflection | Denys Shlyakhtovskyy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    #aboutLink,
+    #projectLink,
+    #reflectionLink {
+      display: block;
+      width: fit-content;
+      margin: 14px 0 8px 0;
+    }
 
+    .eport-list {
+      text-align: left;
+      margin-top: 8px;
+    }
+    .eport-list .section-link {
+      display: block;
+      width: 100%;
+      margin: 14px 0 8px 0;
+    }
+    .eport-list .drop-panel {
+      text-align: left;
+      margin: 0 auto 8px auto;
+      max-width: 70ch;
+    }
+    .eport-list .drop-panel img {
+      margin: 0 auto;
+      display: block;
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+    .eport-list .drop-panel p {
+      text-align: left;
+      margin-top: 10px;
+    }
+
+    .info-table {
+      width: 100%;
+      max-width: 70ch;
+      margin: 0 auto;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    .info-table th,
+    .info-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(0,0,0,0.12);
+      vertical-align: top;
+    }
+    .info-table th {
+      font-weight: 600;
+    }
+    .info-table ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .caption {
+      font-size: 0.85em;
+      color: #667;
+      text-align: center;
+      margin-top: 6px;
+      font-style: italic;
+    }
+
+    .img-placeholder {
+      background: #e8e8e8;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 480px;
+      height: 240px;
+      margin: 16px auto 4px auto;
+      color: #999;
+      font-size: 0.9em;
+      border: 2px dashed #ccc;
+    }
+
+    .contact-list {
+      list-style: none;
+      padding: 0;
+      margin: 12px 0 0 0;
+    }
+    .contact-list li {
+      margin: 6px 0;
+    }
+    .contact-list a {
+      text-decoration: underline;
+    }
+
+    .reflection-body p {
+      margin-top: 14px;
+      line-height: 1.7;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <a class="back" href="/">← Back to Portfolio</a>
+
+    <h1>ePortfolio</h1>
+
+    <p>
+      Academic ePortfolio for ENGR 499 Capstone — Reflection Page:
+    </p>
+
+    <hr>
+<a class="section-link" href="#" data-ref="reflection">Personal Reflection</a>
+<div class="drop-panel" id="ref-reflection" hidden aria-hidden="true">
+  <div class="drop-inner reflection-body">
+    <p>
+      Going into this course, I thought engineering design was mostly about applying known methods to arrive at a clean solution. This project showed me that the reality is far more iterative and uncertain. Many of our initial ideas, particularly around sensing and system architecture, did not perform as expected when physically implemented. Instead of a linear process, the project consisted of repeated cycles of testing, identifying failure modes, and refining the design until it met the required performance.
+    </p>
+    <p>
+      One of the biggest takeaways for me was the importance of making decisions based on measured results rather than assumptions. The transition from the initial sensor concept to the final strain gauge system highlighted how critical it is to validate performance early and be willing to pivot when something does not meet requirements. This required both technical judgment and the ability to recognize when a design approach was fundamentally limited.
+    </p>
+    <p>
+      I also gained a stronger appreciation for system-level thinking. This project was not just an electrical or mechanical problem — it required integrating sensors, embedded systems, mechanical loading, and software into a single reliable system. Decisions in one area directly affected others, and achieving overall performance required balancing tradeoffs between cost, complexity, accuracy, and usability.
+    </p>
+    <p>
+      From a professional standpoint, working with a real client reinforced the importance of communication and accountability. The system needed to meet practical requirements for a retail environment, not just perform well in theory. Explaining design decisions, limitations, and tradeoffs clearly was just as important as the technical work itself.
+    </p>
+    <p>
+      In terms of my own development, I strengthened my skills in embedded systems, data acquisition, and debugging complex multi-component systems. I became more confident working with distributed hardware and writing software that interfaces with real-world sensors. Going forward, I would like to improve my ability to plan large systems earlier in the design process and reduce iteration cycles by identifying risks sooner, while continuing to build experience in designing robust, production-ready systems.
+    </p>
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function shiftToViewportCenter(el) {
+        const r = el.getBoundingClientRect();
+        const elCenter = r.left + r.width / 2;
+        const viewportCenter = window.innerWidth / 2;
+        return viewportCenter - elCenter;
+      }
+
+      function waitForTransition(el, prop) {
+        return new Promise((resolve) => {
+          const onEnd = (e) => {
+            if (e.propertyName !== prop) return;
+            el.removeEventListener("transitionend", onEnd);
+            resolve();
+          };
+          el.addEventListener("transitionend", onEnd);
+        });
+      }
+
+      async function openPanel(panel) {
+        panel.hidden = false;
+        panel.setAttribute("aria-hidden", "false");
+        panel.style.maxHeight = "0px";
+        panel.getBoundingClientRect();
+        panel.classList.add("is-open");
+        panel.style.maxHeight = panel.scrollHeight + "px";
+        await waitForTransition(panel, "max-height");
+        panel.style.maxHeight = "none";
+      }
+
+      async function closePanel(panel) {
+        panel.style.maxHeight = panel.scrollHeight + "px";
+        panel.getBoundingClientRect();
+        panel.classList.remove("is-open");
+        panel.style.maxHeight = "0px";
+        await waitForTransition(panel, "max-height");
+        panel.hidden = true;
+        panel.setAttribute("aria-hidden", "true");
+      }
+
+      function setupTopSlider(linkId, panelId, subAttr) {
+        const link  = document.getElementById(linkId);
+        const panel = document.getElementById(panelId);
+
+        let open = false;
+        let sliding = false;
+
+        async function slideToCenter() {
+          if (sliding) return;
+          sliding = true;
+          link.style.transform = "translateX(0px)";
+          link.getBoundingClientRect();
+          requestAnimationFrame(() => {
+            const shift = shiftToViewportCenter(link);
+            link.style.transform = `translateX(${shift}px)`;
+          });
+          await waitForTransition(link, "transform");
+          sliding = false;
+        }
+
+        async function slideBackLeft() {
+          if (sliding) return;
+          sliding = true;
+          link.style.transform = "translateX(0px)";
+          await waitForTransition(link, "transform");
+          sliding = false;
+        }
+
+        link.addEventListener("click", async (e) => {
+          e.preventDefault();
+          if (sliding) return;
+          open = !open;
+
+          if (open) {
+            link.classList.add("is-selected");
+            await slideToCenter();
+            await openPanel(panel);
+          } else {
+            panel.querySelectorAll(".drop-panel").forEach((p) => {
+              p.classList.remove("is-open");
+              p.style.maxHeight = "0px";
+              p.hidden = true;
+              p.setAttribute("aria-hidden", "true");
+            });
+            panel.querySelectorAll(".section-link").forEach((a) => a.classList.remove("is-selected"));
+            await closePanel(panel);
+            link.classList.remove("is-selected");
+            await slideBackLeft();
+          }
+        });
+
+        panel.querySelectorAll(`[${subAttr}]`).forEach((btn) => {
+          const key = btn.getAttribute(subAttr);
+          const subPanelId = `${subAttr.replace("data-", "")}-${key}`;
+          const subPanel = document.getElementById(subPanelId);
+          if (!subPanel) return;
+
+          btn.addEventListener("click", async (e) => {
+            e.preventDefault();
+            if (panel.hidden) return;
+            if (subPanel.hidden) {
+              btn.classList.add("is-selected");
+              await openPanel(subPanel);
+            } else {
+              await closePanel(subPanel);
+              btn.classList.remove("is-selected");
+            }
+          });
+        });
+
+        window.addEventListener("resize", () => {
+          if (!open) return;
+          link.style.transform = `translateX(${shiftToViewportCenter(link)}px)`;
+          if (!panel.hidden && panel.style.maxHeight !== "none") {
+            panel.style.maxHeight = panel.scrollHeight + "px";
+          }
+        });
+      }
+
+      setupTopSlider("aboutLink",      "aboutPanel",      "data-about");
+      setupTopSlider("projectLink",    "projectPanel",    "data-proj");
+      setupTopSlider("reflectionLink", "reflectionPanel", "data-ref");
+    </script>
+  </div>
+</body>
+</html>
