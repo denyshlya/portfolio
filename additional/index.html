@@ -192,47 +192,20 @@
                 <strong>Group</strong> I-34 <br>
                 <strong>Sponsor / Client:</strong> Patrick Gallager, TrailSports Canmore
               </p>
-              <p> In plain terms: This project created a machine that tests how a cross-country ski bends and distributes weight when someone stands on it. Instead of relying on guesswork, it measures exactly how the ski behaves under load, helping ski shops match customers with the best skis for their weight and style. This benefits both recreational skiers and high-performance athletes by improving comfort, efficiency, and performance. :contentReference[oaicite:0]{index=0} </p> <p> For engineers: The system is a load-controlled test bench that applies up to 250 lb of force via a linkage-actuated mechanism and captures spatial pressure distribution using an array of 120 strain-gauge load cells (≈17.5 mm resolution). Signals are conditioned through HX711 ADCs and processed across a distributed Arduino architecture, with synchronized acquisition and CSV export handled by a Python-based interface. Key constraints included cost (&lt; CAD $2,500), portability, sensor resolution/accuracy (≈±0.05 g), and ensuring purely vertical loading without damaging the ski. :contentReference[oaicite:1]{index=1} </p>
-
-              <!-- Replace with an actual system-level block diagram or photo -->
-              <div class="img-placeholder">[ System Overview Diagram / Photo ]</div>
-              <p class="caption">Figure 1 — High-level system architecture showing major subsystems and interfaces.</p>
-            </div>
+              <p> This project created a machine that tests how a cross-country ski bends and distributes weight when someone stands on it. Instead of relying on guesswork, it measures exactly how the ski behaves under load, helping ski shops match customers with the best skis for their weight and style. This benefits both recreational skiers and high-performance athletes by improving comfort, efficiency, and performance. </p> <p> For engineers: The system is a load-controlled test bench that applies up to 250 lb of force via a linkage-actuated mechanism and captures spatial pressure distribution using an array of 120 strain-gauge load cells (≈17.5 mm resolution). Signals are conditioned through HX711 ADCs and processed across a distributed Arduino architecture, with synchronized acquisition and CSV export handled by a Python-based interface. Key constraints included cost (&lt; CAD $2,500), portability, sensor resolution/accuracy (≈±0.05 g), and ensuring purely vertical loading without damaging the ski. </p>
+              <p>  Please check the <a href="/ski-tester/index.html">project page</a> for a 3D model.</p>
+              
           </div>
 
           <a class="section-link" href="#" data-proj="objectives">Objectives &amp; Motivation</a>
           <div class="drop-panel" id="proj-objectives" hidden aria-hidden="true">
             <div class="drop-inner">
               <p>
-                The core problem we set out to solve was [describe the gap, pain point, or engineering challenge
-                that motivated the project]. This mattered because [explain the real-world consequence of the
-                problem — cost, safety, efficiency, environmental impact, etc.].
+The core problem we set out to solve was the lack of a standardized, accurate way to measure how a cross-country ski behaves under load, specifically how force is distributed along its length. Existing methods rely heavily on manual inspection, inconsistent manufacturer labels, and subjective judgment, which fail to capture the true performance characteristics of a ski.
+
+This mattered because it directly impacts how well a skier is matched to their equipment, affecting performance, efficiency, and overall experience. Inaccurate assessments can lead to poor ski selection, reducing performance for competitive athletes and limiting enjoyment for recreational users, while also making it difficult for ski shops to provide consistent, data-driven recommendations.
               </p>
-              <p>
-                Our primary objectives were:
-              </p>
-              <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%; max-width: 700px;">
-                <tr>
-                  <th>Objective</th>
-                  <th>Target Specification</th>
-                  <th>Rationale</th>
-                </tr>
-                <tr>
-                  <td>[Objective 1 — e.g., Power Consumption]</td>
-                  <td>[e.g., &lt; 10 mW average]</td>
-                  <td>[Why this number? Where does it come from?]</td>
-                </tr>
-                <tr>
-                  <td>[Objective 2 — e.g., Measurement Accuracy]</td>
-                  <td>[e.g., ±2% relative humidity]</td>
-                  <td>[Derived from client/industry requirement or standard]</td>
-                </tr>
-                <tr>
-                  <td>[Objective 3 — e.g., Unit Cost]</td>
-                  <td>[e.g., &lt;$50 BOM]</td>
-                  <td>[Market viability / client constraint]</td>
-                </tr>
-              </table>
+<p> Our primary objectives were: </p> <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%; max-width: 700px;"> <tr> <th>Objective</th> <th>Target Specification</th> <th>Rationale</th> </tr> <tr> <td>Measure load distribution along ski</td> <td>High spatial resolution (~17.5 mm sensor spacing, 120 sensors total)</td> <td>Required to accurately capture pressure distribution and identify camber characteristics for ski selection</td> </tr> <tr> <td>Apply controlled load to ski</td> <td>Up to 250 lb (≈113 kg) vertical force</td> <td>Represents expected skier weight range and client requirement for realistic loading conditions</td> </tr> <tr> <td>System cost constraint</td> <td>&lt; CAD $2,500 total cost</td> <td>Defined by combined project budget from UBC and client, ensuring feasibility for real-world deployment</td> </tr> </table>
               <p style="margin-top:12px;">
                 These targets were set through a combination of client consultation, literature review, and
                 benchmarking against existing solutions in the space.
@@ -244,46 +217,29 @@
           <div class="drop-panel" id="proj-process" hidden aria-hidden="true">
             <div class="drop-inner">
               <p>
-                We didn't arrive at the final design in one shot — the solution went through several meaningful
-                iterations before it worked the way we needed it to. Here's how that progression unfolded:
+               We didn’t arrive at the final design in one shot — the solution went through several meaningful iterations before it worked the way we needed it to. Here's how that progression unfolded:
+
+<strong>Iteration 1 — Initial Concept</strong>
+Our first approach was to utilize repurposed load cells from commercial kitchen scales arranged in a “piano key” configuration along the beam to measure load distribution. This concept was selected due to its low cost and perceived simplicity, as the load cells were already available and required minimal initial fabrication. At this stage, the design focused on validating the feasibility of capturing distributed force measurements along the ski while maintaining a simple mechanical mounting approach using extruded plastic supports. The system was still in an early prototyping phase, with the primary goal being to confirm that measurable and repeatable pressure data could be obtained before committing to a more complex and integrated design.
               </p>
 
-              <p><strong>Iteration 1 — Initial Concept</strong></p>
-              <p>
-                Our first approach was [describe the initial concept — what assumptions you made, what architecture
-                you chose, and why]. At this stage we were working mostly on paper and in simulation, trying to
-                validate the feasibility of the core idea before committing to hardware.
-              </p>
-
-              <!-- Replace with sketch or concept diagram -->
-              <div class="img-placeholder">[ Concept Sketch / Initial Block Diagram ]</div>
-              <p class="caption">Figure 2 — Early concept sketch showing the original architecture. The design was later revised when [reason for change].</p>
+            
 
               <p><strong>Iteration 2 — First Prototype</strong></p>
               <p>
-                Moving to a physical prototype exposed problems that simulation had hidden. Specifically,
-                [describe the first real failure mode or unexpected result — e.g., "the sensing element was
-                picking up thermal noise from the MCU at close proximity, pushing measurement error well
-                above our 2% target"]. This forced us to [describe the design change made in response].
+               Moving to a physical prototype exposed problems that simulation had hidden. Specifically, the initial “piano key” load cell configuration produced poor measurement resolution because multiple load cells were combined in a full Wheatstone bridge, reducing the ability to resolve localized pressure variations. In addition, the sensors exhibited drift and failed to return to their original baseline after loading, resulting in unreliable and inconsistent readings. This forced us to abandon the kitchen scale load cells entirely and transition to individual straight bar strain gauge load cells in a quarter-bridge configuration, allowing each sensor to provide independent, repeatable, and higher-resolution measurements along the ski.
               </p>
 
-              <!-- Replace with prototype photo -->
-              <div class="img-placeholder">[ Prototype Photo / PCB / Test Setup ]</div>
-              <p class="caption">Figure 3 — First hardware prototype on breadboard. The layout issue identified here drove the PCB redesign in Iteration 3.</p>
+              
 
               <p><strong>Iteration 3 — Refined Design</strong></p>
               <p>
-                The second prototype incorporated [describe the key changes — new component choices, layout
-                decisions, firmware changes, mechanical redesign, etc.]. Testing showed [quantify the improvement
-                — e.g., "measurement error dropped from 4.8% to 1.7%, comfortably meeting spec"]. At this point
-                the design was stable enough to move toward final integration and verification.
+The second prototype incorporated a complete redesign of the sensing system, replacing the initial kitchen scale load cells with 5 kg straight bar strain gauge load cells configured in a quarter Wheatstone bridge. Each sensor was paired with an HX711 amplifier and distributed across a modular architecture of 15 Arduino Nanos, allowing for independent, high-resolution measurements along the ski. In parallel, the mechanical system was refined to include a linkage-driven actuator capable of applying a controlled vertical load while minimizing horizontal force, and a standardized mounting approach was implemented to ensure consistent sensor preload.
+
+Testing showed a significant improvement in both resolution and accuracy. The system achieved a spatial resolution of approximately 17.5 mm across 120 sensors and a measurement error within ±0.05 g after calibration, with consistent return-to-zero behavior across all sensors. At this point, the design was stable enough to move toward final integration and verification.
               </p>
 
-              <!-- Replace with final prototype or PCB photo -->
-              <div class="img-placeholder">[ Final Prototype / Assembled System Photo ]</div>
-              <p class="caption">Figure 4 — Final assembled prototype. [Brief note on what changed from the previous revision and why it mattered.]</p>
-            </div>
-          </div>
+      
 
           <a class="section-link" href="#" data-proj="outcomes">Results &amp; Outcomes</a>
           <div class="drop-panel" id="proj-outcomes" hidden aria-hidden="true">
