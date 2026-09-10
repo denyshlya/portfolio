@@ -1,228 +1,355 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-TD5REX4RR8"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-TD5REX4RR8');
-</script>
   <meta charset="UTF-8" />
-  <title>Denys Shlyakhtovskyy | Electrical Engineering</title>
+  <title>Documents | Denys Shlyakhtovskyy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script type="importmap">
-  {
-    "imports": {
-      "three": "https://unpkg.com/three@0.161.0/build/three.module.js"
+  <!-- Unlisted page: not linked from nav anywhere else on the site, and excluded from search indexing. -->
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="/style.css">
+
+  <style>
+    .doc-grid-wrap{
+      max-width: 1000px;
+      margin: 0 auto;
     }
-  }
-  </script>
-    <link rel="stylesheet" href="style.css">
+
+    .doc-grid{
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      margin: 20px auto 0;
+      width: 100%;
+      list-style: none;
+      padding: 0;
+    }
+
+    .doc-card{
+      flex: 0 1 220px;
+      max-width: 260px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--card);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .doc-card:hover,
+    .doc-card:focus-visible{
+      transform: scale(1.03);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.10);
+    }
+
+    .doc-card:focus-visible{
+      outline: 2px solid var(--link);
+      outline-offset: 2px;
+    }
+
+    .doc-thumb{
+      position: relative;
+      width: 100%;
+      aspect-ratio: 8.5 / 11;
+      background: #fff;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .doc-thumb iframe{
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      /* Preview is decorative — clicks pass through to the card underneath,
+         and this keeps the tiny embedded viewer from being scrolled/zoomed. */
+      pointer-events: none;
+    }
+
+    .doc-badge{
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(0,0,0,0.65);
+      color: #fff;
+      font: 600 11px/1 system-ui, -apple-system, Segoe UI, sans-serif;
+      letter-spacing: 0.3px;
+      padding: 4px 7px;
+      border-radius: 6px;
+    }
+
+    .doc-label{
+      padding: 10px 12px 14px;
+    }
+
+    .doc-title{
+      font-weight: 600;
+      font-size: 0.98rem;
+      line-height: 1.3;
+      color: var(--text);
+    }
+
+    .doc-caption{
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-top: 3px;
+      line-height: 1.4;
+    }
+
+    /* ===== Fullscreen overlay ===== */
+
+    .doc-overlay{
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: rgba(0,0,0,0.55);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms ease;
+    }
+
+    .doc-overlay.is-open{
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .doc-overlay-panel{
+      width: min(920px, 96vw);
+      height: min(88vh, 1100px);
+      background: var(--bg);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transform: scale(0.97);
+      transition: transform 200ms ease;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.35);
+    }
+
+    .doc-overlay.is-open .doc-overlay-panel{
+      transform: scale(1);
+    }
+
+    .doc-overlay-header{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--card);
+    }
+
+    .doc-overlay-title{
+      font-weight: 600;
+      font-size: 1rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .doc-overlay-actions{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      flex: none;
+    }
+
+    .doc-overlay-actions a,
+    .doc-overlay-actions button{
+      font: inherit;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 10px;
+      cursor: pointer;
+      color: var(--text);
+    }
+
+    .doc-overlay-actions a{
+      text-decoration: none;
+    }
+
+    .doc-overlay-actions a:hover,
+    .doc-overlay-actions button:hover{
+      background: #fff;
+      text-decoration: none;
+    }
+
+    .doc-overlay-body{
+      flex: 1;
+      background: #525659;
+    }
+
+    .doc-overlay-body iframe{
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
+    .doc-empty{
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .doc-card, .doc-overlay, .doc-overlay-panel{
+        transition: none !important;
+      }
+    }
+  </style>
 </head>
+
 <body>
-
   <div class="container">
-  <h1>Denys Shlyakhtovskyy</h1>
-  <p>Electrical Engineering Student — Embedded & Instrumentation</p>
 
-  <nav>
-    <a href="/projects/">Projects</a>|
-    <a href="/experience/">Professional Experience</a>|
-    <a href="/lor/">Letter of Reference</a>|
-    <a href="/contact/">Contact</a>|
-    <a href="/additional/">Additional</a>
-  </nav>
+    <a class="back" href="/">← Back to Portfolio</a>
 
-    <div id="pcb-viewer">
-  <div class="rotate-hint" aria-hidden="true" title="Drag to rotate">
-    ⟳ Drag
+    <h1>Documents</h1>
+    <p>Reference letters, certifications, and other supporting documents. Click any item for a full-screen view.</p>
+
+    <hr>
+
+    <div class="doc-grid-wrap">
+      <div class="doc-grid" data-doc-grid role="list" aria-label="Document library"></div>
+    </div>
+
+    <!-- Fullscreen viewer -->
+    <div class="doc-overlay" data-doc-overlay aria-hidden="true">
+      <div class="doc-overlay-panel" data-doc-panel role="dialog" aria-modal="true" aria-labelledby="doc-overlay-title">
+        <div class="doc-overlay-header">
+          <div class="doc-overlay-title" id="doc-overlay-title" data-overlay-title></div>
+          <div class="doc-overlay-actions">
+            <a data-overlay-open-tab href="#" target="_blank" rel="noopener">Open in new tab ↗</a>
+            <button type="button" data-overlay-close aria-label="Close viewer">✕ Close</button>
+          </div>
+        </div>
+        <div class="doc-overlay-body">
+          <iframe data-overlay-iframe src="" title="Document viewer"></iframe>
+        </div>
+      </div>
+    </div>
+
   </div>
-</div>
- <script type="module">
-  import * as THREE from 'https://unpkg.com/three@0.161.0/build/three.module.js';
-  import { GLTFLoader } from 'https://unpkg.com/three@0.161.0/examples/jsm/loaders/GLTFLoader.js';
-  import { OrbitControls } from 'https://unpkg.com/three@0.161.0/examples/jsm/controls/OrbitControls.js';
 
+  <script>
+    /* =========================================================
+       To add a new document:
+         1. Drop the PDF into /assets/pdf/ (same folder as lor.pdf)
+         2. Add one entry to the array below
+         3. Commit + push
+       That's it — no other HTML to touch.
+    ========================================================== */
+    const DOCS = [
+      {
+        title: "Letter of Reference",
+        caption: "Government of Alberta — Wildfire Management",
+        file: "/assets/pdf/lor.pdf"
+      },
+      // {
+      //   title: "Example Certificate",
+      //   caption: "Issuing organization, year",
+      //   file: "/assets/pdf/example-certificate.pdf"
+      // },
+    ];
 
+    const grid = document.querySelector('[data-doc-grid]');
+    const overlay = document.querySelector('[data-doc-overlay]');
+    const overlayPanel = document.querySelector('[data-doc-panel]');
+    const overlayIframe = document.querySelector('[data-overlay-iframe]');
+    const overlayTitle = document.querySelector('[data-overlay-title]');
+    const overlayOpenTab = document.querySelector('[data-overlay-open-tab]');
+    const closeBtn = document.querySelector('[data-overlay-close]');
 
-  const scene = new THREE.Scene();
-  const mount = document.getElementById('pcb-viewer');
+    const VIEW_PARAMS = '#view=FitH&toolbar=0&navpanes=0';
+    let lastFocused = null;
 
-  scene.background = new THREE.Color(0xfafafa);
+    function renderGrid(){
+      if (!DOCS.length){
+        grid.innerHTML = '<p class="doc-empty">No documents yet — add entries to the DOCS array in this page.</p>';
+        return;
+      }
 
+      DOCS.forEach((doc) => {
+        const card = document.createElement('div');
+        card.className = 'doc-card';
+        card.setAttribute('role', 'listitem');
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-label', 'Open ' + doc.title);
 
-  const camera = new THREE.PerspectiveCamera(
-    45,
-    mount.clientWidth / mount.clientHeight,
+        const captionHtml = doc.caption
+          ? `<div class="doc-caption">${doc.caption}</div>`
+          : '';
 
-    0.1,
-    1000
-  );
-  camera.position.set(0, 0, 250);
+        card.innerHTML = `
+          <div class="doc-thumb">
+            <iframe src="${doc.file}${VIEW_PARAMS}" tabindex="-1" loading="lazy" title="${doc.title} preview"></iframe>
+            <span class="doc-badge">PDF</span>
+          </div>
+          <div class="doc-label">
+            <div class="doc-title">${doc.title}</div>
+            ${captionHtml}
+          </div>
+        `;
 
+        card.addEventListener('click', () => openDoc(doc, card));
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' '){
+            e.preventDefault();
+            openDoc(doc, card);
+          }
+        });
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-   renderer.shadowMap.enabled = true;                 
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  renderer.setSize(mount.clientWidth, mount.clientHeight);
-  renderer.setPixelRatio(window.devicePixelRatio);
-  mount.appendChild(renderer.domElement);
+        grid.appendChild(card);
+      });
+    }
 
-   const hint = document.querySelector('#pcb-viewer .rotate-hint');
-   const hideHint = () => { if (hint) hint.style.display = 'none'; };
+    function openDoc(doc, triggerEl){
+      lastFocused = triggerEl || document.activeElement;
 
-  renderer.domElement.addEventListener('pointerdown', hideHint, { once: true });
-  renderer.domElement.addEventListener('wheel', hideHint, { once: true });
+      overlayTitle.textContent = doc.title;
+      overlayOpenTab.href = doc.file;
+      overlayIframe.src = doc.file + VIEW_PARAMS;
 
+      overlay.classList.add('is-open');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
 
-  // Lighting (CAD-like)
-  const ambient = new THREE.AmbientLight(0xffffff, 0.6);
-  scene.add(ambient);
+      closeBtn.focus();
+    }
 
-  const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-  dirLight.position.set(100, -100, 200);
-  scene.add(dirLight);
+    function closeDoc(){
+      if (!overlay.classList.contains('is-open')) return;
 
-  // Camera-attached light (casts shadows from viewer direction)
-// Camera-attached light
-const camLight = new THREE.DirectionalLight(0xffffff, 1.2);
-camLight.castShadow = true;
+      overlay.classList.remove('is-open');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      overlayIframe.src = ''; // stop the PDF from rendering in the background
 
-camLight.shadow.mapSize.set(2048, 2048);
-camLight.shadow.camera.near = 0.1;
-camLight.shadow.camera.far = 2000;
-camLight.shadow.camera.left = -300;
-camLight.shadow.camera.right = 300;
-camLight.shadow.camera.top = 300;
-camLight.shadow.camera.bottom = -300;
+      if (lastFocused && typeof lastFocused.focus === 'function'){
+        lastFocused.focus();
+      }
+    }
 
-camLight.shadow.bias = -0.0002;
-camLight.shadow.normalBias = 0.02;
+    closeBtn.addEventListener('click', closeDoc);
 
-// Put the light slightly behind/above camera, point at center
-camLight.position.set(0, 0, 1);
-camLight.target.position.set(0, 0, 0);
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closeDoc();
+    });
 
-camera.add(camLight);
-camera.add(camLight.target);
-scene.add(camera);
+    overlayPanel.addEventListener('click', (e) => e.stopPropagation());
 
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeDoc();
+    });
 
-
-  // Controls
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.enablePan = false;
-  controls.minPolarAngle = THREE.MathUtils.degToRad(5);
-  controls.maxPolarAngle = THREE.MathUtils.degToRad(90);
-
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.08;
-  controls.minDistance = 120;
-  controls.maxDistance = 400;
-
-
-
-const loader = new GLTFLoader();
-loader.load('./assets/glb/PCB.glb', (gltf) => {
-  const model = gltf.scene;
-  scene.add(model);
-model.traverse((obj) => {
-  if (!obj.isMesh) return;
-
-  // Default: components + board can shadow
-  obj.castShadow = true;
-  obj.receiveShadow = true;
-
-  // If it's your PNG overlay (transparent material), DON'T shadow it
-  const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
-  const isTransparent = mats.some(m => m && m.transparent);
-  if (isTransparent) {
-    obj.castShadow = false;
-    obj.receiveShadow = false;
-  }
-});
-
-
-
-  // Center geometry at origin
-  const box = new THREE.Box3().setFromObject(model);
-  const center = box.getCenter(new THREE.Vector3());
-  model.position.sub(center);
-
-  // Recompute box after centering (important)
-  const box2 = new THREE.Box3().setFromObject(model);
-  const size = box2.getSize(new THREE.Vector3());
-
-  // Determine "board normal" as the axis with smallest dimension (thickness)
-  // axis = 0->x, 1->y, 2->z
-  let axis = 0;
-  if (size.y < size.x) axis = 1;
-  if (size.z < (axis === 0 ? size.x : size.y)) axis = 2;
-
-  // Camera distance based on board size
-  const maxDim = Math.max(size.x, size.y, size.z);
-  const dist = maxDim * 1.9;
-
-  // Put camera "above" the board along the thickness axis
-  const pos = new THREE.Vector3(0, 0, 0);
-  if (axis === 0) pos.set(dist, 0, 0);   // thickness is X -> look along +X
-  if (axis === 1) pos.set(0, dist, 0);   // thickness is Y -> look along +Y
-  if (axis === 2) pos.set(0, 0, dist);   // thickness is Z -> look along +Z
-
-  camera.position.copy(pos);
-  controls.target.set(0, 0, 0);
-  camera.lookAt(0, 0, 0);
-  controls.update();
-});
-
-
-
-  function animate() {
-    requestAnimationFrame(animate);
-    controls.update();
-    renderer.render(scene, camera);
-  }
-  animate();
-
-window.addEventListener('resize', () => {
-  const w = mount.clientWidth;
-  const h = mount.clientHeight;
-  camera.aspect = w / h;
-  camera.updateProjectionMatrix();
-  renderer.setSize(w, h);
-});
-</script>
-</div>
+    renderGrid();
+  </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
